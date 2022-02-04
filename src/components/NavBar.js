@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ToggleTheme from "utils/ToggleTheme";
 import Logo from 'assets/logo.png'
-
+import { Link as RouterLink } from "react-router-dom";
 import {
   chakra, Box, Flex, useColorModeValue, VisuallyHidden, HStack, Button,
   useDisclosure, VStack, IconButton, CloseButton, Image,
@@ -49,10 +49,12 @@ export default function NavBar() {
             >
               <VisuallyHidden>ChatPuppy</VisuallyHidden>
             </chakra.a>
-            <Image src={Logo} h="35px"/>
-            <chakra.h1 fontSize="xl" fontWeight="medium" ml="2">
-              ChatPuppy
-            </chakra.h1>
+            <HStack>
+              <Image src={Logo} h="60px"/>
+              <chakra.h1 fontSize="xl" fontWeight="medium" ml="2">
+                ChatPuppy
+              </chakra.h1>
+            </HStack>
           </Flex>
           <HStack display="flex" alignItems="center" spacing={1}>
             <HStack
@@ -61,11 +63,18 @@ export default function NavBar() {
               color="brand.500"
               display={{ base: "none", md: "inline-flex" }}
             >
-              <Button variant="ghost">Mint</Button>
-              <Button variant="ghost">Marketplace</Button>
+              <RouterLink to="/" style={{textDecoration: 'none'}}>
+                <Button variant="ghost">Home</Button>         
+              </RouterLink>
+              <RouterLink to="/mint" style={{textDecoration: 'none'}}>
+                <Button variant="ghost">Mint</Button>
+              </RouterLink>
+              <RouterLink to="/marketplace" style={{textDecoration: 'none'}}>
+                <Button variant="ghost">Marketplace</Button>
+              </RouterLink>
               <ToggleTheme />
             </HStack>
-            <Button size="md">
+            <Button size="md" bg="brand.100" color="white">
               Go To App
             </Button>
             <Box display={{ base: "inline-flex", md: "none" }}>
@@ -98,13 +107,19 @@ export default function NavBar() {
                   aria-label="Close menu"
                   onClick={mobileNav.onClose}
                 />
-
-                <Button w="full" variant="ghost">
-                  Mint
-                </Button>
-                <Button w="full" variant="ghost">
-                  Marketplace
-                </Button>
+                <RouterLink to="/" style={{textDecoration: 'none'}}>
+                  <Button w="full" variant="ghost">
+                    Home
+                  </Button>                </RouterLink>
+                <RouterLink to="/mint" style={{textDecoration: 'none'}}>
+                  <Button w="full" variant="ghost">
+                    Mint
+                  </Button>                </RouterLink>
+                <RouterLink to="/marketplace" style={{textDecoration: 'none'}}>
+                  <Button w="full" variant="ghost">
+                    Marketplace
+                  </Button>
+                </RouterLink>
                 <ToggleTheme />
               </VStack>
             </Box>

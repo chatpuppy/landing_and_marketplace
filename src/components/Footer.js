@@ -1,14 +1,8 @@
 import React from 'react';
+import { Link as RouterLink } from "react-router-dom";
 import {
-    Box,
-    chakra,
-    Container,
-    HStack,
-    Image,
-    Link,
-    Stack,
-    Text,
-    useColorModeValue,
+    Box, chakra, Container, HStack, Image, LinkBox,
+    LinkOverlay, Stack, Text, useColorModeValue,
     VisuallyHidden,
   } from '@chakra-ui/react';
 import { FaDiscord, FaTwitter, FaTelegramPlane, FaGithub } from 'react-icons/fa';
@@ -44,19 +38,21 @@ import Logo from "assets/logo.png"
   export default function Footer() {
     return (
       <Box
-        bg={useColorModeValue('gray.50', 'gray.900')}
+        bg={useColorModeValue('white', 'gray.900')}
         color={useColorModeValue('gray.700', 'gray.200')}>
         <Container as={Stack} maxW={'6xl'} py={4} spacing={4} justify={'center'} align={'center'}>
-            <HStack>
-            <Image src={Logo} h="35px"/> 
-            <chakra.h1 fontSize="xl" fontWeight="medium" ml="2">
-              ChatPuppy
-            </chakra.h1>
-            </HStack>
-            <Stack direction={'row'} spacing={6}>
-                <Link href={'#'}>Mint</Link>
-                <Link href={'#'}>Marketplace</Link>
-            </Stack>
+            <LinkBox>
+              <HStack>
+              <Image src={Logo} h="60px"/> 
+              <chakra.h1 fontSize="xl" fontWeight="medium" ml="2">
+                <RouterLink to="/" style={{textDecoration: 'none'}}>
+                  <LinkOverlay>
+                    ChatPuppy
+                  </LinkOverlay>
+                </RouterLink>
+              </chakra.h1>
+              </HStack>
+            </LinkBox>
         </Container>
         <Box
           borderTopWidth={1}
@@ -72,16 +68,16 @@ import Logo from "assets/logo.png"
             align={{ base: 'center', md: 'center' }}>
             <Text>© 2022 ChatPuppy. All rights reserved</Text>
             <Stack direction={'row'} spacing={6}>
-              <SocialButton label={'Twitter'} href={'#'}>
+              <SocialButton label={'Twitter'} href={'https://twitter.com/chatpuppynft'}>
                 <FaTwitter />
               </SocialButton>
-              <SocialButton label={'YouTube'} href={'#'}>
+              <SocialButton label={'YouTube'} href={'https://discord.gg/QN658sJWkk'}>
                 <FaDiscord />
               </SocialButton>
-              <SocialButton label={'Telegram'} href={'#'}>
+              <SocialButton label={'Telegram'} href={'https://t.me/chatpuppy'}>
                 <FaTelegramPlane />
               </SocialButton>
-              <SocialButton label={'Github'} href={'#'}>
+              <SocialButton label={'Github'} href={'https://github.com/chatpuppy'}>
                 <FaGithub />
               </SocialButton>
             </Stack>

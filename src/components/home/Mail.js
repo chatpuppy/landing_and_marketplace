@@ -35,7 +35,7 @@ export default function Mail() {
         shadow="xl"
         rounded="xl"
         justify="center"
-        bg={useColorModeValue("white", "gray.800")}
+        bg={useColorModeValue("brand.100", "gray.800")}
         w="full"
       >
         <Box
@@ -49,13 +49,13 @@ export default function Mail() {
             fontWeight="extrabold"
             letterSpacing="tight"
             lineHeight="shorter"
-            color={useColorModeValue("gray.900", "gray.100")}
+            color={useColorModeValue("gray.100", "gray.100")}
             mb={6}
           >
             <chakra.span display="block">Want to get new updates?</chakra.span>
             <chakra.span
               display="block"
-              color={useColorModeValue("brand.600", "gray.500")}
+              color={useColorModeValue("gray.400", "gray.500")}
             >
               Join the mail list today.
             </chakra.span>
@@ -77,6 +77,7 @@ export default function Mail() {
               type="email"
               placeholder="Enter your email..."
               required={true}
+              color="white"
             />
           </GridItem>
           <Button
@@ -98,7 +99,7 @@ export default function Mail() {
           mt={3}
           spacing={{ base: 2, md: 8 }}
           fontSize="xs"
-          color="gray.600"
+          color="gray.100"
         >
           <Feature>No Spam</Feature>
           <Feature>Latest Updates</Feature>

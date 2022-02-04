@@ -39,15 +39,13 @@ export default function FeaturesList() {
 
   return (
     <Flex
-      bg={useColorModeValue("#F9FAFB", "gray.700")}
-      p={20}
+    bg={useColorModeValue("white", "gray.800")}
+    p={20}
       w="auto"
       justifyContent="center"
       alignItems="center"
     >
       <Box
-        shadow="xl"
-        rounded="xl"
         bg={useColorModeValue("white", "gray.800")}
         px={8}
         py={20}
@@ -84,6 +82,7 @@ export default function FeaturesList() {
               variant="solid"
               w={{ base: "full", sm: "auto" }}
               size="lg"
+              bg="brand.100" color="white"
             >
               Start Now!
             </Button>
