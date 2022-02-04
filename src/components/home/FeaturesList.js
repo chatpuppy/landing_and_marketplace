@@ -94,12 +94,12 @@ export default function FeaturesList() {
             spacing={5}
             alignItems="start"
           >
-            <Feature>Supporting by xxnetwork</Feature>
-            <Feature>Messaging is fully decentralized encrypted and sent through random gateways all over the world</Feature>
+            <Feature>Supported on xxnetwork</Feature>
+            <Feature>Messaging is fully decentralized, encrypted and sent through random gateways all over the world</Feature>
             <Feature>Sending or recieving messages over multi-chains available</Feature>
             <Feature>No messages saved on blockchains. Fully peer-to-peer instant messaging</Feature>
             <Feature>Quantum secured encrypted algorithm protects messages</Feature>
-            <Feature>No servers, AI, companies or goverments can ineract with the messages</Feature>
+            <Feature>No servers, AI, companies or goverments can interact with the messages</Feature>
           </VStack>
         </SimpleGrid>
       </Box>

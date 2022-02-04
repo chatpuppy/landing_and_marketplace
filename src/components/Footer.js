@@ -54,10 +54,8 @@ import Logo from "assets/logo.png"
             </chakra.h1>
             </HStack>
             <Stack direction={'row'} spacing={6}>
-                <Link href={'#'}>Home</Link>
-                <Link href={'#'}>About</Link>
-                <Link href={'#'}>Blog</Link>
-                <Link href={'#'}>Contact</Link>
+                <Link href={'#'}>Mint</Link>
+                <Link href={'#'}>Marketplace</Link>
             </Stack>
         </Container>
         <Box

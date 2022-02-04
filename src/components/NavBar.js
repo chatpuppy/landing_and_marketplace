@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ToggleTheme from "utils/ToggleTheme";
 import Logo from 'assets/logo.png'
 
@@ -12,14 +12,32 @@ export default function NavBar() {
   const bg = useColorModeValue("white", "gray.800");
   const mobileNav = useDisclosure();
 
+  const [ shadow, setShadow ] = useState("");
+
+  const handleScroll = () => {
+      if(window.pageYOffset>50) {
+        setShadow("md")
+      } else setShadow("")
+  };
+
+  useEffect(() => {
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      return () => {
+          window.removeEventListener('scroll', handleScroll);
+      };
+  }, []);
+
   return (
-    <React.Fragment>
-      <chakra.header
+    <React.Fragment >
+      <chakra.header 
+        style={{position: "sticky",
+        top: 0}}
         bg={bg}
         w="full"
         px={{ base: 2, sm: 4 }}
         py={4}
-        shadow="md"
+        shadow={shadow}
+        zIndex={1}
       >
         <Flex alignItems="center" justifyContent="space-between" mx="auto">
           <Flex>

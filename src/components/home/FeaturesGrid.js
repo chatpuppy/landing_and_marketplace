@@ -42,7 +42,7 @@ export default function FeaturesGrid() {
           >
             {props.title}
           </chakra.dt>
-          <chakra.dd mt={2} color={useColorModeValue("gray.500", "gray.400")}>
+          <chakra.dd mt={1} color={useColorModeValue("gray.500", "gray.400")}>
             {props.children}
           </chakra.dd>
         </Box>

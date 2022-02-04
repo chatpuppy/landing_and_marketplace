@@ -1,10 +1,28 @@
 import React from "react";
 import {
   chakra, Box, Flex, useColorModeValue, SimpleGrid, GridItem, Input, Button,
-  VisuallyHidden
+  VisuallyHidden, Icon, Stack
 } from "@chakra-ui/react";
 
 export default function Mail() {
+  const Feature = (props) => (
+    <Flex alignItems="center" color={useColorModeValue(null, "white")}>
+      <Icon
+        boxSize={4}
+        mr={1}
+        color="green.600"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fillRule="evenodd"
+          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+          clipRule="evenodd"
+        ></path>
+      </Icon>
+      {props.children}
+    </Flex>
+  );
   return (
     <Flex
       bg={useColorModeValue("#F9FAFB", "gray.700")}
@@ -73,7 +91,21 @@ export default function Mail() {
             Subscribe
           </Button>
         </SimpleGrid>
+        <Stack
+          display="flex"
+          direction={{ base: "column", md: "row" }}
+          justifyContent={{ base: "start", md: "center" }}
+          mt={3}
+          spacing={{ base: 2, md: 8 }}
+          fontSize="xs"
+          color="gray.600"
+        >
+          <Feature>No Spam</Feature>
+          <Feature>Latest Updates</Feature>
+          <Feature>Cancel anytime</Feature>
+        </Stack>
         </Box>
+        
       </Flex>
     </Flex>
   );
