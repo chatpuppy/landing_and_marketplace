@@ -7,13 +7,15 @@ import {
 export default function Mail() {
   return (
     <Flex
-      bg={useColorModeValue("#F9FAFB", "gray.600")}
+      bg={useColorModeValue("#F9FAFB", "gray.700")}
       p={50}
       w="full"
       alignItems="center"
       justifyContent="center"
     >
       <Flex
+        shadow="xl"
+        rounded="xl"
         justify="center"
         bg={useColorModeValue("white", "gray.800")}
         w="full"
@@ -56,7 +58,7 @@ export default function Mail() {
               size="lg"
               type="email"
               placeholder="Enter your email..."
-              required="true"
+              required={true}
             />
           </GridItem>
           <Button
