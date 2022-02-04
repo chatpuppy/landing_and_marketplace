@@ -25,7 +25,7 @@ export default function Mail() {
   );
   return (
     <Flex
-      bg={useColorModeValue("#F9FAFB", "gray.700")}
+      bg={useColorModeValue("#F9FAFB", "gray.800")}
       p={50}
       w="full"
       alignItems="center"
@@ -35,7 +35,7 @@ export default function Mail() {
         shadow="xl"
         rounded="xl"
         justify="center"
-        bg={useColorModeValue("brand.100", "gray.800")}
+        bg="brand.100"
         w="full"
       >
         <Box

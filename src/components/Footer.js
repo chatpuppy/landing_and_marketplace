@@ -41,18 +41,14 @@ import Logo from "assets/logo.png"
         bg={useColorModeValue('white', 'gray.900')}
         color={useColorModeValue('gray.700', 'gray.200')}>
         <Container as={Stack} maxW={'6xl'} py={4} spacing={4} justify={'center'} align={'center'}>
-            <LinkBox>
+          <RouterLink to="/" style={{textDecoration: 'none'}}>
               <HStack>
               <Image src={Logo} h="60px"/> 
               <chakra.h1 fontSize="xl" fontWeight="medium" ml="2">
-                <RouterLink to="/" style={{textDecoration: 'none'}}>
-                  <LinkOverlay>
                     ChatPuppy
-                  </LinkOverlay>
-                </RouterLink>
               </chakra.h1>
               </HStack>
-            </LinkBox>
+            </RouterLink>
         </Container>
         <Box
           borderTopWidth={1}

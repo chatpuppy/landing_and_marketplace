@@ -19,7 +19,7 @@ export default function FeaturesGrid() {
             h={12}
             w={12}
             rounded="md"
-            bg={useColorModeValue("gray.500")}
+            bg={useColorModeValue("brand.100")}
             color="white"
           >
             <Icon
@@ -28,6 +28,7 @@ export default function FeaturesGrid() {
               viewBox="0 0 24 24"
               stroke="currentColor"
               aria-hidden="true"
+              
             >
               {props.icon}
             </Icon>
@@ -51,13 +52,13 @@ export default function FeaturesGrid() {
   };
   return (
     <Flex
-      bg={useColorModeValue("#F9FAFB", "gray.700")}
+      bg={useColorModeValue("#F9FAFB", "gray.800")}
       p={20}
       w="auto"
       justifyContent="center"
       alignItems="center"
     >
-      <Box shadow="xl" py={12} bg={useColorModeValue("white", "gray.800")} rounded="xl">
+      <Box shadow={useColorModeValue("xl", "none")} py={12} bg={useColorModeValue("white", "gray.800")} rounded="xl">
         <Box maxW="7xl" mx="auto" px={{ base: 4, lg: 8 }}>
           <Box textAlign={{ lg: "center" }}>
             <chakra.h2
