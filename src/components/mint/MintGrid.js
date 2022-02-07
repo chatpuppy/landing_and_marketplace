@@ -1,6 +1,6 @@
 import {
     Box, Stack, Heading, Text, Container, Input,
-    Button, SimpleGrid, useBreakpointValue, Icon, HStack, useNumberInput, Image
+    Button, SimpleGrid, useBreakpointValue, Icon, HStack, useNumberInput, Image, useColorModeValue
 } from '@chakra-ui/react';
 
 export default function MintGrid() {
@@ -32,7 +32,7 @@ return (
             />
         </Stack>
         <Stack
-        bg={'gray.50'}
+        bg={useColorModeValue('gray.100', 'gray.200')}
         rounded={'xl'}
         p={{ base: 4, sm: 6, md: 8 }}
         spacing={{ base: 8 }}
@@ -58,9 +58,23 @@ return (
         <Box as={'form'} mt={10}>
             <Stack spacing={4}>
                 <HStack maxW='320px'>
-                <Button {...dec}>-</Button>
-                <Input {...input} />
-                <Button {...inc}>+</Button>
+                <Button bg="gray.300" color="black" {...dec}
+                _hover={{
+                    bg:"gray.400"
+                }}
+                _active={{
+                    bg:"gray.300"
+                }}
+                >-</Button>
+                <Input color="black" outlineColor="gray.300" {...input} />
+                <Button bg="gray.300" color="black"  {...inc}
+                _hover={{
+                    bg:"gray.400"
+                }}
+                _active={{
+                    bg:"gray.300"
+                }}
+                >+</Button>
                 </HStack>
             </Stack>
             <Button
@@ -72,7 +86,13 @@ return (
             _hover={{
                 bgGradient: 'linear(to-r, red.400,pink.400)',
                 boxShadow: 'xl',
-            }}>
+            }}
+            _active={{
+                bgGradient: 'linear(to-r, red.200,pink.200)',
+                boxShadow: 'xl',
+            }}
+            >
+            
             Mint
             </Button>
         </Box>

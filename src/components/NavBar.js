@@ -49,12 +49,14 @@ export default function NavBar() {
             >
               <VisuallyHidden>ChatPuppy</VisuallyHidden>
             </chakra.a>
-            <HStack>
-              <Image src={Logo} h="60px"/>
-              <chakra.h1 fontSize="xl" fontWeight="medium" ml="2">
-                ChatPuppy
-              </chakra.h1>
-            </HStack>
+            <RouterLink to="/" style={{textDecoration: 'none'}}>
+                <HStack>
+                <Image src={Logo} h="60px"/>
+                <chakra.h1 fontSize="xl" fontWeight="medium" ml="2">
+                  ChatPuppy
+                </chakra.h1>
+                </HStack>
+            </RouterLink>
           </Flex>
           <HStack display="flex" alignItems="center" spacing={1}>
             <HStack
