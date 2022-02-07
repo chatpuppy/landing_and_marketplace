@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link as RouterLink } from "react-router-dom";
 import {
-    Box, chakra, Container, HStack, Image, LinkBox,
-    LinkOverlay, Stack, Text, useColorModeValue,
+    Box, chakra, Container, HStack, Image, Stack, Text, useColorModeValue,
     VisuallyHidden,
   } from '@chakra-ui/react';
 import { FaDiscord, FaTwitter, FaTelegramPlane, FaGithub } from 'react-icons/fa';
