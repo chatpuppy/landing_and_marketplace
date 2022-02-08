@@ -1,9 +1,14 @@
 import {
-    Box, Stack, Heading, Text, Container, Input,
-    Button, SimpleGrid, useBreakpointValue, Icon, HStack, useNumberInput, Image, useColorModeValue
+    Box, Stack, Heading, Text, Container, Input, Button, SimpleGrid, 
+    useBreakpointValue, Icon, HStack, useNumberInput, Image, useColorModeValue,
+    Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody,
+    ModalCloseButton, useDisclosure
 } from '@chakra-ui/react';
+import MintModal from './MintModal';
 
 export default function MintGrid() {
+
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
     useNumberInput({
@@ -16,7 +21,6 @@ export default function MintGrid() {
     const inc = getIncrementButtonProps()
     const dec = getDecrementButtonProps()
     const input = getInputProps({ isReadOnly: false })
-    console.log(input)
 
 return (
     <Box position={'relative'}>
@@ -32,7 +36,8 @@ return (
             />
         </Stack>
         <Stack
-        bg={useColorModeValue('gray.100', 'gray.200')}
+        bg={useColorModeValue('gray.50', 'white')}
+        border="2px"
         rounded={'xl'}
         p={{ base: 4, sm: 6, md: 8 }}
         spacing={{ base: 8 }}
@@ -91,6 +96,7 @@ return (
                 bgGradient: 'linear(to-r, red.200,pink.200)',
                 boxShadow: 'xl',
             }}
+            onClick={onOpen}
             >
             
             Mint
@@ -104,6 +110,16 @@ return (
         left={-10}
         style={{ filter: 'blur(70px)' }}
     />
+    <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Confirmation</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <MintModal count={input.value}/>
+          </ModalBody>
+        </ModalContent>
+    </Modal>
     </Box>
 );
 }

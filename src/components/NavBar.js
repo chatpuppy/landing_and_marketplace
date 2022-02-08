@@ -32,7 +32,7 @@ export default function NavBar() {
       <chakra.header 
         style={{position: "sticky",
         top: 0}}
-        bg={bg}
+        bg={shadow==="md"? bg : ""}
         w="full"
         px={{ base: 2, sm: 4 }}
         py={4}
