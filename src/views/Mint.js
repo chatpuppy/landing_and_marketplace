@@ -12,6 +12,11 @@ export default function Mint() {
 
   const { currentAccount, setCurrentAccount } = useAuth();
   
+  const handleLogin = async() => {
+    const addr = await connectWallet();
+    setCurrentAccount(addr)
+  }
+
   useEffect(() => {
     const getAccount = async() => {
       setCurrentAccount(await checkIfWalletIsConnected());
@@ -24,7 +29,7 @@ export default function Mint() {
         <>
         <NavBar />
         <Center h='100px'>
-          <Button onClick={connectWallet}>
+          <Button onClick={handleLogin}>
             { currentAccount ? currentAccount : "Log In"}
           </Button>
         </Center>

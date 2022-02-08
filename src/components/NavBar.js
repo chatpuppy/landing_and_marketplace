@@ -74,6 +74,9 @@ export default function NavBar() {
               <RouterLink to="/marketplace" style={{textDecoration: 'none'}}>
                 <Button variant="ghost">Marketplace</Button>
               </RouterLink>
+              <RouterLink to="/account" style={{textDecoration: 'none'}}>
+                <Button variant="ghost">Account</Button>
+              </RouterLink>
               <ToggleTheme />
             </HStack>
             <Button size="md" bg="brand.100" color="white">
@@ -120,6 +123,11 @@ export default function NavBar() {
                 <RouterLink to="/marketplace" style={{textDecoration: 'none'}}>
                   <Button w="full" variant="ghost">
                     Marketplace
+                  </Button>
+                </RouterLink>
+                <RouterLink to="/account" style={{textDecoration: 'none'}}>
+                  <Button w="full" variant="ghost">
+                    Account
                   </Button>
                 </RouterLink>
                 <ToggleTheme />

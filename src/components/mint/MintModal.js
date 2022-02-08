@@ -3,7 +3,7 @@ import { Box, Flex, Image, Badge, useColorModeValue, Button, Center, useToast } 
 import { StarIcon } from "@chakra-ui/icons";
 import BoxImageSrc from "assets/box.jpg"
 import { ethers } from "ethers";
-import abi from "abi/nft_manager_abi.json"
+import nft_manager_abi from "abi/nft_manager_abi"
 
 const MintModal = (props) => {
 
@@ -34,7 +34,7 @@ const MintModal = (props) => {
             const signer = provider.getSigner(); 
             //connects with the contract
             const options = {value: ethers.utils.parseEther("0.01")}
-            const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, abi, signer);
+            const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_abi, signer);
             NFTManagerConnectedContract.buyAndMint(1, options).then(()=>{
                 toast({
                     title: 'Minted!',
@@ -52,7 +52,6 @@ const MintModal = (props) => {
         } catch(err) {
             console.log(err)
         }
-
     }
 
     const mintAndUnbox = async() => {
@@ -64,7 +63,7 @@ const MintModal = (props) => {
             const signer = provider.getSigner();
             //connects with the contract
             const options = {value: ethers.utils.parseEther("0.01")}
-            const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, abi, signer);
+            const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_abi, signer);
             NFTManagerConnectedContract.buyMintAndUnbox(1, options).then(()=>{
                 toast({
                     title: 'Minted & Unboxed!',
