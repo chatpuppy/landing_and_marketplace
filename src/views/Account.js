@@ -103,7 +103,9 @@ export default function Account() {
             { currentAccount ? currentAccount : "Log In"}
           </Button>
         </Center>
-        {isLoading 
+        {
+        currentAccount ?
+        isLoading 
         ? 
         <Stack>
             <Skeleton height='20px' />
@@ -129,7 +131,25 @@ export default function Account() {
                 </TabPanel>
             </TabPanels>
         </Tabs>
-        
+        :
+        <Tabs rounded="lg" m="auto" isLazy isFitted bg={bg} variant="soft-rounded">
+            <TabList mb='1em'>
+                <Tab color="black">Mystery Boxes</Tab>
+                <Tab color="black">Unboxed NFTs</Tab>
+            </TabList>
+            <TabPanels>
+                <TabPanel>
+                    <SimpleGrid columns={[1, null, 3]} >
+                        EMPTY
+                    </SimpleGrid>
+                </TabPanel>
+                <TabPanel>
+                    <SimpleGrid columns={[1, null, 3]} >
+                        EMPTY
+                    </SimpleGrid>
+                </TabPanel>
+            </TabPanels>
+        </Tabs>
         }
         <Footer />
         </>
