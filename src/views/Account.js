@@ -4,10 +4,10 @@ import NavBar from 'components/NavBar';
 import { useAuth } from 'contexts/AuthContext';
 import { ethers } from "ethers";
 import nft_core_abi from "abi/nft_core_abi.json"
-import nft_manager_abi from "abi/nft_manager_abi"
+import nft_manager_abi from "abi/nft_manager_abi.json"
 import { checkIfWalletIsConnected, connectWallet } from 'services/walletConnections';
-import { Button, SimpleGrid, useColorModeValue,
-    Tabs, TabList, TabPanels, Tab, TabPanel, Center
+import { Button, SimpleGrid, useColorModeValue, Skeleton,
+    Tabs, TabList, TabPanels, Tab, TabPanel, Center, Stack
 } from '@chakra-ui/react';
 import NFTCard from 'components/account/NFTCard';
 
@@ -18,14 +18,14 @@ export default function Account() {
     const NFT_manager_contract_address = "0x0528E41841b8BEdD4293463FAa061DdFCC5E41bd"
 
     const [ isLoading, setIsLoading ] = useState(false);
-    const { currentAccount, ownedNFTs, setOwnedNFTs, setCurrentAccount } = useAuth();
-    const [ boxItems, setBoxItems ] = useState([]);
-    const [ unboxItems, setUnboxItems ] = useState([]);
+    const { currentAccount, setOwnedNFTs, setCurrentAccount } = useAuth();
+    const [ boxedItems, setBoxedItems ] = useState([]);
+    const [ unboxedItems, setUnboxedItems ] = useState([]);
 
-    console.log(ownedNFTs)
 
     const getOwnedTokens = useCallback(async() => {
         setIsLoading(true);
+        if(!currentAccount) return;
         try {
             const { ethereum } = window; //injected by metamask
             //connect to an ethereum node
@@ -38,37 +38,39 @@ export default function Account() {
             let count = await NFTCoreConnectedContract.balanceOf(currentAccount);
             count = parseInt(count["_hex"], 16);
             let _ownedNFTs = []
-            let _boxItems = []
-            let _unboxItems = []
+            let _boxedItems = []
+            let _unboxedItems = []
             for(let i=0; i<count; i++) {
                 let _id = await NFTCoreConnectedContract.tokenOfOwnerByIndex(currentAccount, i);
                 _id = parseInt(_id["_hex"], 16)
                 const _type = await NFTManagerConnectedContract.boxStatus(_id);
                 _ownedNFTs.push([_id, _type]);
-                if(_type===0) _unboxItems.push(_id);
-                else _boxItems.push(_id);
+                if(_type===0) _boxedItems.push(_id);
+                else _unboxedItems.push(_id);
             }
             setOwnedNFTs(_ownedNFTs)
-            if(boxItems.length===0) {
-                setBoxItems(boxItems.concat(Array.from({length: _boxItems.length}, (_, i) => i).map((number, index)=>
-                <NFTCard key={_boxItems[index]} number={_boxItems[index]}
-                    src={"https://www.larvalabs.com/cryptopunks/cryptopunk"+_boxItems[index]+".png"}
+            if(_boxedItems.length!==0 && boxedItems.length===0) {
+                setBoxedItems(boxedItems.concat(Array.from({length: _boxedItems.length}, (_, i) => i).map((number, index)=>
+                <NFTCard key={_boxedItems[index]} number={_boxedItems[index]} unboxed={false}
+                    src={"https://www.larvalabs.com/cryptopunks/cryptopunk"+_boxedItems[index]+".png"}
                 />
                 )))
             }
-            if(unboxItems.length===0) {
-                setUnboxItems(unboxItems.concat(Array.from({length: _unboxItems.length}, (_, i) => i).map((number, index)=>
-                <NFTCard key={_unboxItems[index]} number={_unboxItems[index]}
-                    src={"https://www.larvalabs.com/cryptopunks/cryptopunk"+_unboxItems[index]+".png"}
+            if(_unboxedItems.length!==0 && unboxedItems.length===0) {
+                setUnboxedItems(unboxedItems.concat(Array.from({length: _unboxedItems.length}, (_, i) => i).map((number, index)=>
+                <NFTCard key={_unboxedItems[index]} number={_unboxedItems[index]} unboxed={true}
+                    src={"https://www.larvalabs.com/cryptopunks/cryptopunk"+_unboxedItems[index]+".png"}
                 />
                 )))
             }
         } catch(err) {
             console.log(err)
         } finally {
-            setIsLoading(false)
+            setTimeout(() => {
+                setIsLoading(false)
+            }, 1000);
         }
-    }, [currentAccount, setOwnedNFTs, boxItems, unboxItems])
+    }, [currentAccount, setOwnedNFTs, boxedItems, unboxedItems])
 
     const handleLogin = async() => {
         const addr = await connectWallet();
@@ -102,22 +104,27 @@ export default function Account() {
           </Button>
         </Center>
         {isLoading 
-        ? <Button isLoading colorScheme='teal' variant='outline' ></Button> 
+        ? 
+        <Stack>
+            <Skeleton height='20px' />
+            <Skeleton height='60vh' />
+            <Skeleton height='20px' />
+        </Stack>
         : 
-        <Tabs isFitted variant='enclosed' bg={bg}>
+        <Tabs rounded="lg" m="auto" isLazy isFitted bg={bg} variant="soft-rounded">
             <TabList mb='1em'>
-                <Tab>Mystery Boxes</Tab>
-                <Tab>Unboxed NFTs</Tab>
+                <Tab color="black">Mystery Boxes</Tab>
+                <Tab color="black">Unboxed NFTs</Tab>
             </TabList>
             <TabPanels>
                 <TabPanel>
                     <SimpleGrid columns={[1, null, 3]} >
-                        {unboxItems}
+                        {boxedItems.length===0 ? "" : boxedItems}
                     </SimpleGrid>
                 </TabPanel>
                 <TabPanel>
                     <SimpleGrid columns={[1, null, 3]} >
-                        {boxItems}
+                        {unboxedItems.length===0 ? "" : unboxedItems}
                     </SimpleGrid>
                 </TabPanel>
             </TabPanels>
