@@ -50,20 +50,21 @@ const MintModal = (props) => {
           //connects with the contract
           const options = {value: ethers.utils.parseEther("0.01")}
           const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_abi, signer);
-          NFTManagerConnectedContract.buyAndMint(1, options).then(()=>{
-              toast({
-                  title: 'Minted!',
-                  description: "Got a Mystery Box!",
-                  status: 'success',
-                  duration: 4000,
-                  isClosable: true,
-              })
-              setTimeout(()=>{
-                  setIsLoading(false);
-                  window.location.reload();
-              }, 5000)
-          });
-          console.log("minted")
+          try {
+            await NFTManagerConnectedContract.buyAndMint(1, options)
+            toast({
+              title: 'Minted!',
+              description: "Got a Mystery Box!",
+              status: 'success',
+              duration: 4000,
+              isClosable: true,
+            })
+            setTimeout(()=>{
+                window.location.reload();
+            }, 5000)
+          } catch(err) {
+            setIsLoading(false);
+          }
       } catch(err) {
           console.log(err)
       }
@@ -94,20 +95,21 @@ const MintModal = (props) => {
           //connects with the contract
           const options = {value: ethers.utils.parseEther("0.01")}
           const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_abi, signer);
-          NFTManagerConnectedContract.buyMintAndUnbox(1, options).then(()=>{
-              toast({
-                  title: 'Minted & Unboxed!',
-                  description: "Unboxed a Mystery Box!",
-                  status: 'success',
-                  duration: 4000,
-                  isClosable: true,
-              })
-              setTimeout(()=>{
-                  setIsLoading(false);
-                  window.location.reload();
-              }, 5000)
-          });
-          console.log("minted")
+          try {
+            await NFTManagerConnectedContract.buyMintAndUnbox(1, options);
+            toast({
+              title: 'Minted & Unboxed!',
+              description: "Unboxed a Mystery Box!",
+              status: 'success',
+              duration: 4000,
+              isClosable: true,
+            })
+            setTimeout(()=>{
+                window.location.reload();
+            }, 5000)
+          } catch(err) {
+            setIsLoading(false);
+          }
       } catch(err) {
           console.log(err)
       }
