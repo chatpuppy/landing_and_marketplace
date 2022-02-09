@@ -44,19 +44,23 @@ const NFTCard = (props) => {
           duration: 2000,
           isClosable: true,
         })
+        setIsLoading(false);
       } else if(_type===0) {
-        await NFTManagerConnectedContract.unbox(number);
-        toast({
-          title: 'Transaction Succesful',
-          description: "Unboxed your NFT",
-          status: 'success',
-          duration: 2000,
-          isClosable: true,
-        })
-        setTimeout(()=>{
-          setIsLoading(false);
-          window.location.reload();
-        }, 3000)
+        try {
+          await NFTManagerConnectedContract.unbox(number);
+          toast({
+            title: 'Transaction Succesful',
+            description: "Unboxed your NFT",
+            status: 'success',
+            duration: 2000,
+            isClosable: true,
+          })
+          setTimeout(()=>{
+            window.location.reload();
+          }, 3000)
+        } catch(err) {
+          setIsLoading(false)
+        }
       } else if(_type===1) {
         toast({
           title: 'Error',
@@ -65,11 +69,10 @@ const NFTCard = (props) => {
           duration: 2000,
           isClosable: true,
         })
+        setIsLoading(false);
       }
     } catch(err) {
       console.log(err)
-    } finally {
-      setIsLoading(false)
     }
   }
 
