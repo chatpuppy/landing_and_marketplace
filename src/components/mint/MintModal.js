@@ -12,6 +12,7 @@ const MintModal = (props) => {
     const NFT_manager_contract_address = "0x0528E41841b8BEdD4293463FAa061DdFCC5E41bd"
     const toast = useToast()
     const { count } = props;
+    const id = 'toast'
 
     const property = {
         imageUrl: BoxImageSrc,
@@ -24,63 +25,92 @@ const MintModal = (props) => {
     
     const mint = async() => {
 
-        setIsLoading(true);
-
-        try {
-            const { ethereum } = window; //injected by metamask
-            //connect to an ethereum node
-            const provider = new ethers.providers.Web3Provider(ethereum); 
-            //gets the account
-            const signer = provider.getSigner(); 
-            //connects with the contract
-            const options = {value: ethers.utils.parseEther("0.01")}
-            const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_abi, signer);
-            NFTManagerConnectedContract.buyAndMint(1, options).then(()=>{
-                toast({
-                    title: 'Minted!',
-                    description: "Got a Mystery Box!",
-                    status: 'success',
-                    duration: 4000,
-                    isClosable: true,
-                })
-                setTimeout(()=>{
-                    setIsLoading(false);
-                    window.location.reload();
-                }, 5000)
-            });
-            console.log("minted")
-        } catch(err) {
-            console.log(err)
+      if(!window.ethereum) {
+        if (!toast.isActive(id)) {
+          toast({
+            id,
+            title: 'No wallet found',
+            description: "Please install Metamask",
+            status: 'error',
+            duration: 4000,
+            isClosable: true,
+          })
         }
+        return;
+      } 
+
+      setIsLoading(true);
+
+      try {
+          const { ethereum } = window; //injected by metamask
+          //connect to an ethereum node
+          const provider = new ethers.providers.Web3Provider(ethereum); 
+          //gets the account
+          const signer = provider.getSigner(); 
+          //connects with the contract
+          const options = {value: ethers.utils.parseEther("0.01")}
+          const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_abi, signer);
+          NFTManagerConnectedContract.buyAndMint(1, options).then(()=>{
+              toast({
+                  title: 'Minted!',
+                  description: "Got a Mystery Box!",
+                  status: 'success',
+                  duration: 4000,
+                  isClosable: true,
+              })
+              setTimeout(()=>{
+                  setIsLoading(false);
+                  window.location.reload();
+              }, 5000)
+          });
+          console.log("minted")
+      } catch(err) {
+          console.log(err)
+      }
     }
 
     const mintAndUnbox = async() => {
-        try {
-            const { ethereum } = window; //injected by metamask
-            //connect to an ethereum node
-            const provider = new ethers.providers.Web3Provider(ethereum); 
-            //gets the account
-            const signer = provider.getSigner();
-            //connects with the contract
-            const options = {value: ethers.utils.parseEther("0.01")}
-            const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_abi, signer);
-            NFTManagerConnectedContract.buyMintAndUnbox(1, options).then(()=>{
-                toast({
-                    title: 'Minted & Unboxed!',
-                    description: "Unboxed a Mystery Box!",
-                    status: 'success',
-                    duration: 4000,
-                    isClosable: true,
-                })
-                setTimeout(()=>{
-                    setIsLoading(false);
-                    window.location.reload();
-                }, 5000)
-            });
-            console.log("minted")
-        } catch(err) {
-            console.log(err)
+
+      if(!window.ethereum) {
+        if (!toast.isActive(id)) {
+          toast({
+            id,
+            title: 'No wallet found',
+            description: "Please install Metamask",
+            status: 'error',
+            duration: 4000,
+            isClosable: true,
+          })
         }
+        return;
+      } 
+      
+      try {
+          const { ethereum } = window; //injected by metamask
+          //connect to an ethereum node
+          const provider = new ethers.providers.Web3Provider(ethereum); 
+          //gets the account
+          const signer = provider.getSigner();
+          //connects with the contract
+          const options = {value: ethers.utils.parseEther("0.01")}
+          const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_abi, signer);
+          NFTManagerConnectedContract.buyMintAndUnbox(1, options).then(()=>{
+              toast({
+                  title: 'Minted & Unboxed!',
+                  description: "Unboxed a Mystery Box!",
+                  status: 'success',
+                  duration: 4000,
+                  isClosable: true,
+              })
+              setTimeout(()=>{
+                  setIsLoading(false);
+                  window.location.reload();
+              }, 5000)
+          });
+          console.log("minted")
+      } catch(err) {
+          console.log(err)
+      }
     }
 
     return (

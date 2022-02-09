@@ -39,8 +39,8 @@ export default function FeaturesList() {
 
   return (
     <Flex
-    bg={useColorModeValue("white", "gray.800")}
-    p={20}
+      bg={useColorModeValue("white", "gray.800")}
+      p={{base: "", md: "20"}}
       w="auto"
       justifyContent="center"
       alignItems="center"

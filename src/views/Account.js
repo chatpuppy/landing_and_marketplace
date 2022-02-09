@@ -6,13 +6,16 @@ import { ethers } from "ethers";
 import nft_core_abi from "abi/nft_core_abi.json"
 import nft_manager_abi from "abi/nft_manager_abi.json"
 import { checkIfWalletIsConnected, connectWallet } from 'services/walletConnections';
-import { Button, SimpleGrid, useColorModeValue, Skeleton,
+import { Button, SimpleGrid, useColorModeValue, Skeleton, useToast,
     Tabs, TabList, TabPanels, Tab, TabPanel, Center, Stack
 } from '@chakra-ui/react';
 import NFTCard from 'components/account/NFTCard';
 
+import { AiOutlineStar } from "react-icons/ai"
+import { BsBoxSeam } from "react-icons/bs"
 
 export default function Account() {
+
 
     const NFT_core_contract_address = "0xAb50F84DC1c8Ef1464b6F29153E06280b38fA754"
     const NFT_manager_contract_address = "0x0528E41841b8BEdD4293463FAa061DdFCC5E41bd"
@@ -22,6 +25,8 @@ export default function Account() {
     const [ boxedItems, setBoxedItems ] = useState([]);
     const [ unboxedItems, setUnboxedItems ] = useState([]);
 
+    const toast = useToast();
+    const id = 'toast'
 
     const getOwnedTokens = useCallback(async() => {
         setIsLoading(true);
@@ -66,15 +71,29 @@ export default function Account() {
         } catch(err) {
             console.log(err)
         } finally {
-            setTimeout(() => {
-                setIsLoading(false)
-            }, 1000);
+            setIsLoading(false)
         }
     }, [currentAccount, setOwnedNFTs, boxedItems, unboxedItems])
 
     const handleLogin = async() => {
-        const addr = await connectWallet();
-        setCurrentAccount(addr)
+        if(!window.ethereum) {
+            if (!toast.isActive(id)) {
+              toast({
+                id,
+                title: 'No wallet found',
+                description: "Please install Metamask",
+                status: 'error',
+                duration: 4000,
+                isClosable: true,
+              })
+            }
+            return;
+        } else {
+            if(currentAccount) return;
+            const addr = await connectWallet();
+            setCurrentAccount(addr)
+        }
+        
     }
     
     useEffect(() => {
@@ -84,16 +103,28 @@ export default function Account() {
             getOwnedTokens()
         }
         if(!isConnected) {
+            if(!window.ethereum) {
+                if (!toast.isActive(id)) {
+                  toast({
+                    id,
+                    title: 'No wallet found',
+                    description: "Please install Metamask",
+                    status: 'error',
+                    duration: 4000,
+                    isClosable: true,
+                  })
+                }
+                return;
+            }
             setAccountInfo()
         }
 
         return () => {
             isConnected = true;
         };
-
-    }, [setCurrentAccount, getOwnedTokens]);
+    }, [setCurrentAccount, getOwnedTokens, toast]);
     
-    const bg = useColorModeValue("gray.50", "gray.600")
+    const color = useColorModeValue("black", "white")
 
     return (
         <>
@@ -107,16 +138,23 @@ export default function Account() {
         currentAccount ?
         isLoading 
         ? 
-        <Stack>
-            <Skeleton height='20px' />
-            <Skeleton height='60vh' />
-            <Skeleton height='20px' />
+        <Stack >
+            <Skeleton bg="gray.400" height='20px' />
+            <Skeleton bg="gray.400" height='60vh' />
+            <Skeleton bg="gray.400" height='20px' />
         </Stack>
         : 
-        <Tabs rounded="lg" m="auto" isLazy isFitted bg={bg} variant="soft-rounded">
-            <TabList mb='1em'>
-                <Tab color="black">Mystery Boxes</Tab>
-                <Tab color="black">Unboxed NFTs</Tab>
+        <Tabs rounded="lg" m="auto" isLazy isFitted colorScheme="blue">
+            <TabList mb='1em' m="auto" w="80%">
+                <Tab _focus={{outline: "none"}} color={color}>
+                    <BsBoxSeam pr="2"/>
+                    <span style={{marginLeft: "10px"}}>Mystery Boxes</span>
+                    
+                </Tab>
+                <Tab _focus={{outline: "none"}} color={color}>
+                    <AiOutlineStar />
+                    <span style={{marginLeft: "10px"}}>NFTs</span>
+                </Tab>
             </TabList>
             <TabPanels>
                 <TabPanel>
@@ -132,10 +170,17 @@ export default function Account() {
             </TabPanels>
         </Tabs>
         :
-        <Tabs rounded="lg" m="auto" isLazy isFitted bg={bg} variant="soft-rounded">
-            <TabList mb='1em'>
-                <Tab color="black">Mystery Boxes</Tab>
-                <Tab color="black">Unboxed NFTs</Tab>
+        <Tabs rounded="lg" m="auto" isLazy isFitted colorScheme="blue">
+            <TabList mb='1em' m="auto" w="80%">
+                <Tab _focus={{outline: "none"}} color={color}>
+                    <BsBoxSeam pr="2"/>
+                    <span style={{marginLeft: "10px"}}>Mystery Box</span>
+                    
+                </Tab>
+                <Tab _focus={{outline: "none"}} color={color}>
+                    <AiOutlineStar />
+                    <span style={{marginLeft: "10px"}}>NFTs</span>
+                </Tab>
             </TabList>
             <TabPanels>
                 <TabPanel>

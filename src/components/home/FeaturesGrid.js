@@ -53,7 +53,7 @@ export default function FeaturesGrid() {
   return (
     <Flex
       bg={useColorModeValue("#F9FAFB", "gray.800")}
-      p={20}
+      p={{base: "", md: "20"}}
       w="auto"
       justifyContent="center"
       alignItems="center"

@@ -37,7 +37,7 @@ export default function NavBar() {
         px={{ base: 2, sm: 4 }}
         py={4}
         shadow={shadow}
-        zIndex={1}
+        zIndex={2}
       >
         <Flex alignItems="center" justifyContent="space-between" mx="auto">
           <Flex>

@@ -5,6 +5,8 @@ import {
 } from "@chakra-ui/react";
 
 export default function Mail() {
+
+
   const Feature = (props) => (
     <Flex alignItems="center" color={useColorModeValue(null, "white")}>
       <Icon
@@ -26,14 +28,14 @@ export default function Mail() {
   return (
     <Flex
       bg={useColorModeValue("#F9FAFB", "gray.800")}
-      p={50}
+      p={{base: "", md: "50"}}
       w="full"
       alignItems="center"
       justifyContent="center"
     >
       <Flex
         shadow="xl"
-        rounded="xl"
+        rounded={{base: "", sm: "xl"}}
         justify="center"
         bg="brand.100"
         w="full"

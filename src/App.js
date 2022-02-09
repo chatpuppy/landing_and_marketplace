@@ -11,21 +11,22 @@ function App() {
   const { setCurrentAccount } = useAuth()
 
   useEffect(() => {
-    window.ethereum.on('accountsChanged', function (accounts) {
-      // Time to reload your interface with accounts[0]!
-      console.log(accounts[0]);
-      setCurrentAccount(accounts[0]);
-      window.location.reload();
-    })
-    
-    window.ethereum.on('chainChanged', function (chainId) {
-      // Time to reload your interface with the new chainId
-      console.log(chainId)
-    })
-  
-    return () => {
+    try {
+      window.ethereum.on('accountsChanged', function (accounts) {
+        // Time to reload your interface with accounts[0]!
+        console.log(accounts[0]);
+        setCurrentAccount(accounts[0]);
+        window.location.reload();
+      })
       
-    };
+      window.ethereum.on('chainChanged', function (chainId) {
+        // Time to reload your interface with the new chainId
+        console.log(chainId)
+      })
+    } catch(err) {
+      console.log(err)
+    }
+
   }, [setCurrentAccount]);
   
 

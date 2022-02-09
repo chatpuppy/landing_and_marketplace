@@ -17,8 +17,8 @@ const NFTCard = (props) => {
   const { currentAccount } = useAuth()
 
   const { src, number, unboxed } = props;
-  const bg = useColorModeValue("white", "gray.900")
-  const buttonbg = useColorModeValue("gray.900", "white")
+  const bg = useColorModeValue("gray.700", "gray.200")
+  const buttonbg = useColorModeValue("white", "gray.900")
 
   const [isOpen, setIsOpen] = React.useState(false)
   const onClose = () => setIsOpen(false)
@@ -67,7 +67,7 @@ const NFTCard = (props) => {
 
   return (
   <Flex
-    bg={useColorModeValue("#F9FAFB", "gray.600")}
+    bg={useColorModeValue("white", "gray.800")}
     p={50}
     w="full"
     alignItems="center"
@@ -76,13 +76,13 @@ const NFTCard = (props) => {
     <Box
       maxW="xs"
       mx="auto"
-      bg={useColorModeValue("white", "gray.800")}
+      bg={useColorModeValue("gray.700", "gray.200")}
       shadow="lg"
       rounded="lg"
     >
       <Box px={4} py={2}>
         <chakra.h1
-          color={useColorModeValue("gray.800", "white")}
+          color={useColorModeValue("white", "gray.800")}
           fontWeight="bold"
           fontSize="3xl"
           textTransform="uppercase"
@@ -92,7 +92,7 @@ const NFTCard = (props) => {
         <chakra.p
           mt={1}
           fontSize="sm"
-          color={useColorModeValue("gray.600", "gray.400")}
+          color={useColorModeValue("white", "gray.900")}
         >
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi quos
           quidem sequi illum facere recusandae voluptatibus
@@ -100,9 +100,9 @@ const NFTCard = (props) => {
       </Box>
 
       <Image
-        h={48}
         w="full"
         fit="cover"
+        h="40vh"
         mt={2}
         src={src}
         alt="TITLE"
@@ -111,9 +111,9 @@ const NFTCard = (props) => {
       {unboxed ? 
       <></>
       :
-      <Center my={2} bg={bg} roundedBottom="lg"
+      <Center py={2} bg={bg} roundedBottom="lg"
       >
-        <Button size="md"  py={1} bg={buttonbg} color={bg}
+        <Button size="md" bg={buttonbg} color={bg}
           fontWeight="bold" rounded="lg" textTransform="uppercase"
           _hover={{
             bg: "gray.500",
