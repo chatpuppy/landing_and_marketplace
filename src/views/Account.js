@@ -121,12 +121,12 @@ export default function Account() {
             <TabPanels>
                 <TabPanel>
                     <SimpleGrid columns={[1, null, 3]} >
-                        {boxedItems.length===0 ? "" : boxedItems}
+                        {boxedItems.length===0 ? "EMPTY" : boxedItems}
                     </SimpleGrid>
                 </TabPanel>
                 <TabPanel>
                     <SimpleGrid columns={[1, null, 3]} >
-                        {unboxedItems.length===0 ? "" : unboxedItems}
+                        {unboxedItems.length===0 ? "EMPTY" : unboxedItems}
                     </SimpleGrid>
                 </TabPanel>
             </TabPanels>
