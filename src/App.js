@@ -8,28 +8,34 @@ import { useAuth } from "contexts/AuthContext";
 
 function App() {
 
-  const { setCurrentAccount } = useAuth()
+  const { setCurrentAccount, setCurrentNetwork } = useAuth()
 
   useEffect(() => {
-    try {
-      window.ethereum.on('accountsChanged', function (accounts) {
-        // Time to reload your interface with accounts[0]!
-        console.log(accounts[0]);
-        setCurrentAccount(accounts[0]);
-        window.location.reload();
-      })
-      
-      window.ethereum.on('chainChanged', function (chainId) {
-        // Time to reload your interface with the new chainId
-        console.log(chainId)
-      })
-    } catch(err) {
-      console.log(err)
-    }
 
-  }, [setCurrentAccount]);
+    const initialCheck = async() => {
+      try {
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        setCurrentNetwork(parseInt(chainId, 16))
   
+        window.ethereum.on('accountsChanged', function (accounts) {
+          // Time to reload your interface with accounts[0]!
+          setCurrentAccount(accounts[0]);
+          window.location.reload()
+        })
+        
+        window.ethereum.on('chainChanged', function (chainId) {
+          // Time to reload your interface with the new chainId
+          setCurrentNetwork(parseInt(chainId, 16))
+          window.location.reload()
+        })
+      } catch(err) {
+        console.log(err)
+      }
+    }
+    initialCheck();
 
+  }, [setCurrentAccount, setCurrentNetwork]);
+  
   return (
     <Router>
         <Routes>

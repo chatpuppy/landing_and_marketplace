@@ -4,10 +4,13 @@ import { StarIcon } from "@chakra-ui/icons";
 import BoxImageSrc from "assets/box.jpg"
 import { ethers } from "ethers";
 import nft_manager_abi from "abi/nft_manager_abi"
+import { useAuth } from "contexts/AuthContext";
 
 const MintModal = (props) => {
 
     const [ isLoading, setIsLoading ] = useState(false);
+
+    const { currentAccount, currentNetwork } = useAuth()
 
     const NFT_manager_contract_address = "0x0528E41841b8BEdD4293463FAa061DdFCC5E41bd"
     const toast = useToast()
@@ -21,7 +24,6 @@ const MintModal = (props) => {
         formattedPrice: (count*0.1).toString()+" ETH ",
         rating: 4,
     };
-
     
     const mint = async() => {
 
@@ -38,6 +40,34 @@ const MintModal = (props) => {
         }
         return;
       } 
+
+      if(!currentAccount) {
+        if (!toast.isActive(id)) {
+          toast({
+            id,
+            title: 'Not connected',
+            description: "Please connect an account",
+            status: 'error',
+            duration: 4000,
+            isClosable: true,
+          })
+        }
+        return;
+      }
+
+      if(currentNetwork!==42) {
+        if (!toast.isActive(id)) {
+          toast({
+            id,
+            title: 'Wrong network',
+            description: "Please change network to Kovan Testnet",
+            status: 'error',
+            duration: 4000,
+            isClosable: true,
+          })
+        }
+        return;
+      }
 
       setIsLoading(true);
 
@@ -85,6 +115,34 @@ const MintModal = (props) => {
         }
         return;
       } 
+
+      if(!currentAccount) {
+        if (!toast.isActive(id)) {
+          toast({
+            id,
+            title: 'Not connected',
+            description: "Please connect an account",
+            status: 'error',
+            duration: 4000,
+            isClosable: true,
+          })
+        }
+        return;
+      }
+
+      if(currentNetwork!==42) {
+        if (!toast.isActive(id)) {
+          toast({
+            id,
+            title: 'Wrong network',
+            description: "Please change network to Kovan Testnet",
+            status: 'error',
+            duration: 4000,
+            isClosable: true,
+          })
+        }
+        return;
+      }
       
       try {
           const { ethereum } = window; //injected by metamask

@@ -71,7 +71,10 @@ export default function Account() {
         } catch(err) {
             console.log(err)
         } finally {
-            setIsLoading(false)
+            setTimeout(() => {
+                setIsLoading(false)
+            }, 400);
+           
         }
     }, [currentAccount, setOwnedNFTs, boxedItems, unboxedItems])
 

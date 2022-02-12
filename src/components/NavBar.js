@@ -4,13 +4,17 @@ import Logo from 'assets/logo.png'
 import { Link as RouterLink } from "react-router-dom";
 import {
   chakra, Box, Flex, useColorModeValue, VisuallyHidden, HStack, Button,
-  useDisclosure, VStack, IconButton, CloseButton, Image,
+  useDisclosure, VStack, IconButton, CloseButton, Image, Alert,
+  AlertIcon, AlertTitle, AlertDescription,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
+import { useAuth } from "contexts/AuthContext";
 
 export default function NavBar() {
   const bg = useColorModeValue("white", "gray.800");
   const mobileNav = useDisclosure();
+
+  const { currentNetwork } = useAuth();
 
   const [ shadow, setShadow ] = useState("");
 
@@ -28,7 +32,17 @@ export default function NavBar() {
   }, []);
 
   return (
+    
     <React.Fragment >
+      {
+        currentNetwork!==42 ?
+        <Alert status='error'>
+          <AlertIcon />
+          <AlertTitle mr={2}>Different network detected!</AlertTitle>
+          <AlertDescription>Please change network to Kovan.</AlertDescription>
+        </Alert>
+        : <></>
+      }
       <chakra.header 
         style={{position: "sticky",
         top: 0}}

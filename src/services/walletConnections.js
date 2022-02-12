@@ -24,6 +24,6 @@ export const connectWallet = async () => {
 
     const provider = new ethers.providers.Web3Provider(instance);
     const signer = provider.getSigner();
-    return await signer.getAddress();
+    return signer.getAddress();
 }
 

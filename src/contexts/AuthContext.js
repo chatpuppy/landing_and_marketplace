@@ -10,10 +10,12 @@ export function AuthProvider({ children }) {
 
     const [ currentAccount, setCurrentAccount] = useState()
     const [ ownedNFTs, setOwnedNFTs] = useState();
+    const [ currentNetwork, setCurrentNetwork ] = useState()
 
     const value = {
         currentAccount, setCurrentAccount,
-        ownedNFTs, setOwnedNFTs
+        ownedNFTs, setOwnedNFTs,
+        currentNetwork, setCurrentNetwork
     }
 
     return (
