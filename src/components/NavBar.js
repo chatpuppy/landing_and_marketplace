@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { useAuth } from "contexts/AuthContext";
+import LoginButton from "components/LoginButton";
 
 export default function NavBar() {
   const bg = useColorModeValue("white", "gray.800");
@@ -96,6 +97,7 @@ export default function NavBar() {
             <Button size="md" bg="brand.100" color="white">
               Go To App
             </Button>
+            <LoginButton />
             <Box display={{ base: "inline-flex", md: "none" }}>
               <IconButton
                 display={{ base: "flex", md: "none" }}

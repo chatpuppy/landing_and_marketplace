@@ -5,9 +5,8 @@ import { useAuth } from 'contexts/AuthContext';
 import { ethers } from "ethers";
 import nft_core_abi from "abi/nft_core_abi.json"
 import nft_manager_abi from "abi/nft_manager_abi.json"
-import { checkIfWalletIsConnected, connectWallet } from 'services/walletConnections';
-import { Button, SimpleGrid, useColorModeValue, Skeleton, useToast,
-    Tabs, TabList, TabPanels, Tab, TabPanel, Center, Stack
+import { SimpleGrid, useColorModeValue, Skeleton, useToast,
+    Tabs, TabList, TabPanels, Tab, TabPanel, Stack
 } from '@chakra-ui/react';
 import NFTCard from 'components/account/NFTCard';
 
@@ -21,7 +20,7 @@ export default function Account() {
     const NFT_manager_contract_address = "0x0528E41841b8BEdD4293463FAa061DdFCC5E41bd"
 
     const [ isLoading, setIsLoading ] = useState(false);
-    const { currentAccount, setOwnedNFTs, setCurrentAccount } = useAuth();
+    const { currentAccount, setOwnedNFTs } = useAuth();
     const [ boxedItems, setBoxedItems ] = useState([]);
     const [ unboxedItems, setUnboxedItems ] = useState([]);
 
@@ -77,32 +76,10 @@ export default function Account() {
            
         }
     }, [currentAccount, setOwnedNFTs, boxedItems, unboxedItems])
-
-    const handleLogin = async() => {
-        if(!window.ethereum) {
-            if (!toast.isActive(id)) {
-              toast({
-                id,
-                title: 'No wallet found',
-                description: "Please install Metamask",
-                status: 'error',
-                duration: 4000,
-                isClosable: true,
-              })
-            }
-            return;
-        } else {
-            if(currentAccount) return;
-            const addr = await connectWallet();
-            setCurrentAccount(addr)
-        }
-        
-    }
     
     useEffect(() => {
         let isConnected = false;
         const setAccountInfo = async() => {
-            setCurrentAccount(await checkIfWalletIsConnected());
             getOwnedTokens()
         }
         if(!isConnected) {
@@ -125,18 +102,13 @@ export default function Account() {
         return () => {
             isConnected = true;
         };
-    }, [setCurrentAccount, getOwnedTokens, toast]);
+    }, [getOwnedTokens, toast]);
     
     const color = useColorModeValue("black", "white")
 
     return (
         <>
         <NavBar />
-        <Center h='100px'>
-          <Button onClick={handleLogin}>
-            { currentAccount ? currentAccount : "Log In"}
-          </Button>
-        </Center>
         {
         currentAccount ?
         isLoading 
