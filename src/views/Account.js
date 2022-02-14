@@ -15,7 +15,6 @@ import { BsBoxSeam } from "react-icons/bs"
 
 export default function Account() {
 
-
     const NFT_core_contract_address = "0xAb50F84DC1c8Ef1464b6F29153E06280b38fA754"
     const NFT_manager_contract_address = "0x0528E41841b8BEdD4293463FAa061DdFCC5E41bd"
 
@@ -23,7 +22,7 @@ export default function Account() {
     const { currentAccount, setOwnedNFTs } = useAuth();
     const [ boxedItems, setBoxedItems ] = useState([]);
     const [ unboxedItems, setUnboxedItems ] = useState([]);
-
+    console.log(boxedItems)
     const toast = useToast();
     const id = 'toast'
 
@@ -79,9 +78,6 @@ export default function Account() {
     
     useEffect(() => {
         let isConnected = false;
-        const setAccountInfo = async() => {
-            getOwnedTokens()
-        }
         if(!isConnected) {
             if(!window.ethereum) {
                 if (!toast.isActive(id)) {
@@ -96,7 +92,7 @@ export default function Account() {
                 }
                 return;
             }
-            setAccountInfo()
+            getOwnedTokens()
         }
 
         return () => {
