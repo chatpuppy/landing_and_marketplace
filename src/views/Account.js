@@ -22,7 +22,6 @@ export default function Account() {
     const { currentAccount, setOwnedNFTs } = useAuth();
     const [ boxedItems, setBoxedItems ] = useState([]);
     const [ unboxedItems, setUnboxedItems ] = useState([]);
-    console.log(boxedItems)
     const toast = useToast();
     const id = 'toast'
 

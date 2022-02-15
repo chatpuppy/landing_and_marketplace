@@ -1,6 +1,8 @@
-import React from "react";
-import { chakra, Box, Image, Flex, useColorModeValue, Button } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { chakra, Box, Image, Flex, useColorModeValue, Button, useToast } from "@chakra-ui/react";
 import { useAuth } from "contexts/AuthContext";
+import { ethers } from "ethers";
+import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
 
 const ListedCard = (props) => {
 
@@ -8,6 +10,40 @@ const ListedCard = (props) => {
     const { currentAccount } = useAuth();
     const bg = useColorModeValue("gray.700", "gray.200")
     const buttonbg = useColorModeValue("white", "gray.900")
+    const NFT_marketplace_contract_address = "0xc60a6AE3a85838D3bAAf359219131B1e33103560"
+    const [ isLoading, setIsLoading ] = useState(false);
+    const toast = useToast()
+
+    const unlistNFT = async() => {
+      setIsLoading(true)
+      if(!currentAccount) return;
+      try {
+          const { ethereum } = window; //injected by metamask
+          //connect to an ethereum node
+          const provider = new ethers.providers.Web3Provider(ethereum); 
+          //gets the account
+          const signer = provider.getSigner(); 
+          //connects with the contract
+          const NFTMarketplaceConnectedContract = new ethers.Contract(NFT_marketplace_contract_address, nft_marketplace_abi, signer);
+          
+          //need to get orderID instead of tokenID
+          //await NFTMarketplaceConnectedContract.cancelOrder();
+          toast({
+            title: 'Unlisted!',
+            description: "Check your account!",
+            status: 'success',
+            duration: 4000,
+            isClosable: true,
+          })
+          setTimeout(()=>{
+              window.location.reload();
+          }, 5000)
+      } catch(err) {
+          console.log(err)
+      } finally {
+          setIsLoading(false)
+      }
+    }
 
     return (
     <Flex
@@ -51,7 +87,6 @@ const ListedCard = (props) => {
           src={"https://www.larvalabs.com/cryptopunks/cryptopunk"+id+".png"}
           alt="NIKE AIR"
         />
-
         <Flex
           alignItems="center"
           justifyContent="space-between"
@@ -60,7 +95,9 @@ const ListedCard = (props) => {
           bg={bg}
           roundedBottom="lg"
         >
-          <Button size="md" bg={buttonbg} color={bg}
+            {currentAccount.toLowerCase()===owner.toLowerCase() ? 
+            <>
+            <Button size="md" bg={buttonbg} color={bg}
             fontWeight="bold" rounded="lg" textTransform="uppercase"
             _hover={{
                 bg: "gray.500",
@@ -69,9 +106,9 @@ const ListedCard = (props) => {
                 bg: "gray.600",
             }}
             >
-            Unbox
+                EDIT
             </Button>
-          <Button size="md" bg={buttonbg} color={bg}
+            <Button size="md" bg={buttonbg} color={bg}
             fontWeight="bold" rounded="lg" textTransform="uppercase"
             _hover={{
                 bg: "gray.500",
@@ -79,9 +116,14 @@ const ListedCard = (props) => {
             _focus={{
                 bg: "gray.600",
             }}
+            onClick={unlistNFT}
+            isLoading={isLoading}
             >
-            Unbox
+                UNLIST
             </Button>
+            </>
+            : <></>}
+            
         </Flex>
       </Box>
     </Flex>

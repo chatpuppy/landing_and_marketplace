@@ -86,7 +86,7 @@ export default function Marketplace() {
             <Skeleton bg="gray.400" height='20px' />
         </Stack>
         : 
-        <Tabs rounded="lg" m="auto" isLazy isFitted colorScheme="blue">
+        <Tabs rounded="lg" m="auto" isLazy isFitted colorScheme="blue" defaultIndex={1}>
             <TabList mb='1em' m="auto" w="80%">
                 <Tab _focus={{outline: "none"}} color={color}>
                     <BsBoxSeam pr="2"/>
@@ -111,7 +111,7 @@ export default function Marketplace() {
             </TabPanels>
         </Tabs>
         :
-        <Tabs rounded="lg" m="auto" isLazy isFitted colorScheme="blue">
+        <Tabs rounded="lg" m="auto" isLazy isFitted colorScheme="blue" defaultIndex={1}>
             <TabList mb='1em' m="auto" w="80%">
                 <Tab _focus={{outline: "none"}} color={color}>
                     <BsBoxSeam pr="2"/>

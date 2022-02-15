@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { chakra, Box, Image, Flex, useColorModeValue, Center, Button,
+import React, { useState, useRef } from "react";
+import { chakra, Box, Image, Flex, useColorModeValue, Button,
   AlertDialog, AlertDialogBody, AlertDialogFooter,
   AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, useToast
 } from "@chakra-ui/react";
 import nft_manager_abi from "abi/nft_manager_abi.json";
 import { useAuth } from "contexts/AuthContext";
 import { ethers } from "ethers";
+import ListNFT from "./ListNFT";
 
 const NFTCard = (props) => {
 
@@ -20,9 +21,9 @@ const NFTCard = (props) => {
   const bg = useColorModeValue("gray.700", "gray.200")
   const buttonbg = useColorModeValue("white", "gray.900")
 
-  const [isOpen, setIsOpen] = React.useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const onClose = () => setIsOpen(false)
-  const cancelRef = React.useRef()
+  const cancelRef = useRef()
 
   const unboxNFT = async() => {
     setIsLoading(true);
@@ -76,6 +77,8 @@ const NFTCard = (props) => {
     }
   }
 
+  
+
   return (
   <Flex
     bg={useColorModeValue("white", "gray.800")}
@@ -122,7 +125,13 @@ const NFTCard = (props) => {
       {unboxed ? 
       <></>
       :
-      <Center py={2} bg={bg} roundedBottom="lg"
+      <Flex
+          alignItems="center"
+          justifyContent="space-between"
+          px={4}
+          py={2}
+          bg={bg}
+          roundedBottom="lg"
       >
         <Button size="md" bg={buttonbg} color={bg}
           fontWeight="bold" rounded="lg" textTransform="uppercase"
@@ -136,7 +145,8 @@ const NFTCard = (props) => {
         >
           Unbox
         </Button>
-      </Center>
+        <ListNFT number={number}/>
+      </Flex>
       }
     </Box>
     <AlertDialog
