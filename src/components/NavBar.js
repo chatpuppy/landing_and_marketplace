@@ -15,6 +15,8 @@ export default function NavBar() {
   const bg = useColorModeValue("white", "gray.800");
   const mobileNav = useDisclosure();
 
+  const [ path, setPath ] = useState("");
+
   const { currentNetwork } = useAuth();
 
   const [ shadow, setShadow ] = useState("");
@@ -26,11 +28,13 @@ export default function NavBar() {
   };
 
   useEffect(() => {
-      window.addEventListener('scroll', handleScroll, { passive: true });
-      return () => {
-          window.removeEventListener('scroll', handleScroll);
-      };
-  }, []);
+    
+    setPath(window.location.pathname)
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+        window.removeEventListener('scroll', handleScroll);
+    };
+  }, [setPath]);
 
   return (
     
@@ -84,20 +88,21 @@ export default function NavBar() {
                 <Button variant="ghost">Home</Button>         
               </RouterLink>
               <RouterLink to="/mint" style={{textDecoration: 'none'}}>
-                <Button variant="ghost">Mint</Button>
+                <Button variant={path==="/mint" ? "solid" : "ghost"}>Mint</Button>
               </RouterLink>
               <RouterLink to="/marketplace" style={{textDecoration: 'none'}}>
-                <Button variant="ghost">Marketplace</Button>
+                <Button variant={path==="/marketplace" ? "solid" : "ghost"}>Marketplace</Button>
               </RouterLink>
               <RouterLink to="/account" style={{textDecoration: 'none'}}>
-                <Button variant="ghost">Account</Button>
+                <Button variant={path==="/account" ? "solid" : "ghost"}>Account</Button>
               </RouterLink>
               <ToggleTheme />
+              <LoginButton />
             </HStack>
             <Button size="md" bg="brand.100" color="white">
               Go To App
             </Button>
-            <LoginButton />
+            
             <Box display={{ base: "inline-flex", md: "none" }}>
               <IconButton
                 display={{ base: "flex", md: "none" }}
@@ -133,19 +138,20 @@ export default function NavBar() {
                     Home
                   </Button>                </RouterLink>
                 <RouterLink to="/mint" style={{textDecoration: 'none'}}>
-                  <Button w="full" variant="ghost">
+                  <Button w="full" variant={path==="/mint" ? "solid" : "ghost"}>
                     Mint
                   </Button>                </RouterLink>
                 <RouterLink to="/marketplace" style={{textDecoration: 'none'}}>
-                  <Button w="full" variant="ghost">
+                  <Button w="full" variant={path==="/marketplace" ? "solid" : "ghost"}>
                     Marketplace
                   </Button>
                 </RouterLink>
                 <RouterLink to="/account" style={{textDecoration: 'none'}}>
-                  <Button w="full" variant="ghost">
+                  <Button w="full" variant={path==="/account" ? "solid" : "ghost"}>
                     Account
                   </Button>
                 </RouterLink>
+                <LoginButton />
                 <ToggleTheme />
               </VStack>
             </Box>

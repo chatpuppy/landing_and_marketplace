@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { chakra, Box, Image, Flex, useColorModeValue, Button,
   AlertDialog, AlertDialogBody, AlertDialogFooter,
-  AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, useToast
+  AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, useToast, Center
 } from "@chakra-ui/react";
 import nft_manager_abi from "abi/nft_manager_abi.json";
 import { useAuth } from "contexts/AuthContext";
@@ -77,8 +77,6 @@ const NFTCard = (props) => {
     }
   }
 
-  
-
   return (
   <Flex
     bg={useColorModeValue("white", "gray.800")}
@@ -94,6 +92,15 @@ const NFTCard = (props) => {
       shadow="lg"
       rounded="lg"
     >
+      <Image
+        w="full"
+        fit="cover"
+        h="40vh"
+        roundedTop="lg"
+        src={src}
+        alt="TITLE"
+        roundedBottom={unboxed ? "lg" : ""}
+      />
       <Box px={4} py={2}>
         <chakra.h1
           color={useColorModeValue("white", "gray.800")}
@@ -103,27 +110,12 @@ const NFTCard = (props) => {
         >
           ID #{number}
         </chakra.h1>
-        <chakra.p
-          mt={1}
-          fontSize="sm"
-          color={useColorModeValue("white", "gray.900")}
-        >
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi quos
-          quidem sequi illum facere recusandae voluptatibus
-        </chakra.p>
       </Box>
-
-      <Image
-        w="full"
-        fit="cover"
-        h="40vh"
-        mt={2}
-        src={src}
-        alt="TITLE"
-        roundedBottom={unboxed ? "lg" : ""}
-      />
       {unboxed ? 
-      <></>
+      <Center my="2"
+      >
+        <ListNFT number={number}/>
+      </Center>
       :
       <Flex
           alignItems="center"
@@ -148,6 +140,7 @@ const NFTCard = (props) => {
         <ListNFT number={number}/>
       </Flex>
       }
+      
     </Box>
     <AlertDialog
       isCentered={true}

@@ -9,17 +9,17 @@ import { SimpleGrid, useColorModeValue, Skeleton, useToast,
     Tabs, TabList, TabPanels, Tab, TabPanel, Stack
 } from '@chakra-ui/react';
 import NFTCard from 'components/account/NFTCard';
+import PageName from 'components/PageName';
 
 import { AiOutlineStar } from "react-icons/ai"
 import { BsBoxSeam } from "react-icons/bs"
 
 export default function Account() {
-
     const NFT_core_contract_address = "0xAb50F84DC1c8Ef1464b6F29153E06280b38fA754"
     const NFT_manager_contract_address = "0x0528E41841b8BEdD4293463FAa061DdFCC5E41bd"
 
     const [ isLoading, setIsLoading ] = useState(false);
-    const { currentAccount, setOwnedNFTs } = useAuth();
+    const { currentAccount, setOwnedNFTs, setApproved } = useAuth();
     const [ boxedItems, setBoxedItems ] = useState([]);
     const [ unboxedItems, setUnboxedItems ] = useState([]);
     const toast = useToast();
@@ -38,6 +38,8 @@ export default function Account() {
             const NFTCoreConnectedContract = new ethers.Contract(NFT_core_contract_address, nft_core_abi, signer);
             const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_abi, signer);
             let count = await NFTCoreConnectedContract.balanceOf(currentAccount);
+            let _approved = await NFTCoreConnectedContract.isApprovedForAll(currentAccount, "0xc60a6AE3a85838D3bAAf359219131B1e33103560");
+            setApproved(_approved);
             count = parseInt(count["_hex"], 16);
             let _ownedNFTs = []
             let _boxedItems = []
@@ -73,7 +75,7 @@ export default function Account() {
             }, 400);
            
         }
-    }, [currentAccount, setOwnedNFTs, boxedItems, unboxedItems])
+    }, [currentAccount, setOwnedNFTs, boxedItems, unboxedItems, setApproved])
     
     useEffect(() => {
         let isConnected = false;
@@ -104,6 +106,7 @@ export default function Account() {
     return (
         <>
         <NavBar />
+        <PageName name="Account" />
         {
         currentAccount ?
         isLoading 

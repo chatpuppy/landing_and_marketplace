@@ -12,6 +12,7 @@ import { ethers } from "ethers";
 import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
 import { useAuth } from 'contexts/AuthContext';
 import FAQ from 'components/FAQ';
+import PageName from 'components/PageName';
 
 export default function Marketplace() {
 
@@ -21,7 +22,7 @@ export default function Marketplace() {
   const { currentAccount, setListedNFTs } = useAuth()
   const toast = useToast()
   const id = 'toast'
-
+  
   const getListedNFTs = useCallback(async() => {
     setIsLoading(true)
     if(!currentAccount) return;
@@ -37,7 +38,9 @@ export default function Marketplace() {
         ordersArr = ordersArr.map(x=>parseInt(x["_hex"], 16))
         let listedOrdersArr = [];
         for(let i=0; i<ordersArr.length; i++) {
-          listedOrdersArr.push(await NFTMarketplaceConnectedContract.orders(ordersArr[i]));
+            let _order = Object.assign([], await NFTMarketplaceConnectedContract.orders(ordersArr[i]))
+            _order.push(ordersArr[i])
+            listedOrdersArr.push(_order);
         }
         setListedNFTs(listedOrdersArr)
     } catch(err) {
@@ -76,6 +79,7 @@ export default function Marketplace() {
   return (
       <>
       <NavBar />
+      <PageName name="Marketplace" />
       {
         currentAccount ?
         isLoading 
@@ -86,7 +90,7 @@ export default function Marketplace() {
             <Skeleton bg="gray.400" height='20px' />
         </Stack>
         : 
-        <Tabs rounded="lg" m="auto" isLazy isFitted colorScheme="blue" defaultIndex={1}>
+        <Tabs rounded="lg" m="auto" isLazy isFitted colorScheme="blue" defaultIndex={0}>
             <TabList mb='1em' m="auto" w="80%">
                 <Tab _focus={{outline: "none"}} color={color}>
                     <BsBoxSeam pr="2"/>

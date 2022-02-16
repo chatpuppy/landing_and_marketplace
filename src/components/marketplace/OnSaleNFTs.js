@@ -20,8 +20,10 @@ export default function OnSaleNFTs() {
             if(onSaleItems.length<_ownedListedNFTs.length) {
                 setOnSaleItems(onSaleItems.concat(Array.from({length: _ownedListedNFTs.length}, (_, i) => i).map((number, index)=>
                     <ListedCard key={parseInt(_ownedListedNFTs[index][2]["_hex"], 16)} 
-                    id={parseInt(_ownedListedNFTs[index][2]["_hex"], 16)} 
+                    tokenId={parseInt(_ownedListedNFTs[index][2]["_hex"], 16)} 
                     owner={_ownedListedNFTs[index][0]}
+                    orderId={_ownedListedNFTs[index][5]}
+                    price={parseInt(_ownedListedNFTs[index][4]["_hex"], 16)}
                     />
                 )))
             }
