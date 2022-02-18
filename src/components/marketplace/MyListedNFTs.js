@@ -2,13 +2,16 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { useAuth } from 'contexts/AuthContext';
 import ListedCard from './ListedCard';
 import { Stack, Skeleton } from '@chakra-ui/react';
+import EmptyList from 'components/EmptyList';
 
 export default function OnSaleNFTs() {
 
     const { currentAccount, listedNFTs } = useAuth()
     const [ onSaleItems, setOnSaleItems ] = useState([]);
+    const [ isLoading, setIsLoading ] = useState()
 
     const setOnSaleNFTs = useCallback(async() => {
+        setIsLoading(true);
         if(!currentAccount) return;
         let _ownedListedNFTs = [];
         try {
@@ -24,11 +27,13 @@ export default function OnSaleNFTs() {
                     owner={_ownedListedNFTs[index][0]}
                     orderId={_ownedListedNFTs[index][5]}
                     price={parseInt(_ownedListedNFTs[index][4]["_hex"], 16)}
-                />
+                    />
                 )))
             }
         } catch(err) {
             console.log(err)
+        } finally {
+            setIsLoading(false)
         }
     }, [currentAccount, listedNFTs, setOnSaleItems, onSaleItems])
 
@@ -49,11 +54,14 @@ export default function OnSaleNFTs() {
     return (
         <>
             {onSaleItems.length===0 ?
+            isLoading ?
             <Stack p={50}>
                 <Skeleton bg="gray.400" height='20px' />
                 <Skeleton bg="gray.400" height='60vh' />
                 <Skeleton bg="gray.400" height='20px' />
             </Stack>
+            :
+            <EmptyList />
             :
             onSaleItems
             }

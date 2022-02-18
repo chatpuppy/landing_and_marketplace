@@ -13,6 +13,7 @@ import PageName from 'components/PageName';
 
 import { AiOutlineStar } from "react-icons/ai"
 import { BsBoxSeam } from "react-icons/bs"
+import EmptyList from 'components/EmptyList';
 
 export default function Account() {
     const NFT_core_contract_address = "0xAb50F84DC1c8Ef1464b6F29153E06280b38fA754"
@@ -73,7 +74,6 @@ export default function Account() {
             setTimeout(() => {
                 setIsLoading(false)
             }, 400);
-           
         }
     }, [currentAccount, setOwnedNFTs, boxedItems, unboxedItems, setApproved])
     
@@ -132,12 +132,12 @@ export default function Account() {
             <TabPanels>
                 <TabPanel>
                     <SimpleGrid columns={[1, null, 3]} >
-                        {boxedItems.length===0 ? "EMPTY" : boxedItems}
+                        {boxedItems.length===0 ? <EmptyList /> : boxedItems}
                     </SimpleGrid>
                 </TabPanel>
                 <TabPanel>
                     <SimpleGrid columns={[1, null, 3]} >
-                        {unboxedItems.length===0 ? "EMPTY" : unboxedItems}
+                        {unboxedItems.length===0 ? <EmptyList /> : unboxedItems}
                     </SimpleGrid>
                 </TabPanel>
             </TabPanels>
@@ -158,12 +158,12 @@ export default function Account() {
             <TabPanels>
                 <TabPanel>
                     <SimpleGrid columns={[1, null, 3]} >
-                        EMPTY
+                        <EmptyList />
                     </SimpleGrid>
                 </TabPanel>
                 <TabPanel>
                     <SimpleGrid columns={[1, null, 3]} >
-                        EMPTY
+                        <EmptyList />
                     </SimpleGrid>
                 </TabPanel>
             </TabPanels>

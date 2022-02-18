@@ -23,7 +23,6 @@ export default function BuyDialog(props) {
     const cancelRef = useRef()
 
     const [ approved, setApproved ] = useState(false)
-    console.log(approved)
     const buyNFT = async() => {
         setIsLoading(true)
         if(!currentAccount) return;
@@ -41,7 +40,7 @@ export default function BuyDialog(props) {
             if(_bal<price) {
                 toast({
                     title: 'Error!',
-                    description: "Balance is low!",
+                    description: "Token balance is low!",
                     status: 'warning',
                     duration: 4000,
                     isClosable: true,
@@ -70,6 +69,8 @@ export default function BuyDialog(props) {
             }, 5000)
         } catch(err) {
             console.log(err);
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -87,7 +88,6 @@ export default function BuyDialog(props) {
             if(parseInt(_bal["_hex"],16) >= price) {
                 setApproved(true)
             }
-            console.log(parseInt(_bal["_hex"],16))
         } catch(err) {
             console.log(err)
         }

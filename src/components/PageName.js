@@ -1,5 +1,5 @@
 import React from 'react'
-import { Center, useColorModeValue, Heading } from '@chakra-ui/react';
+import { Center, Heading } from '@chakra-ui/react';
 
 export default function PageName(props) {
 
@@ -13,7 +13,7 @@ export default function PageName(props) {
             fontWeight="extrabold"
             letterSpacing="tight"
             lineHeight="shorter"
-            color={useColorModeValue("gray.100", "gray.100")}
+            color="gray.100"
             >
                 {name}
             </Heading>
