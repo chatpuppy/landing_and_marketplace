@@ -170,8 +170,6 @@ const NFTCard = (props) => {
       </AlertDialogOverlay>
     </AlertDialog>
   </Flex>
-
-    
   );
 };
 

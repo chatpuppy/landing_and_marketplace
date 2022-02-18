@@ -86,7 +86,6 @@ const ListedCard = (props) => {
     }
   }
 
-
   return (
   <Flex
       bg={useColorModeValue("white", "gray.800")}
@@ -163,7 +162,7 @@ const ListedCard = (props) => {
           </Button>
           </>
           : 
-          <BuyDialog price={price} tokenId={tokenId}/>
+          <BuyDialog price={price} tokenId={tokenId} orderId={orderId}/>
           }
         </Flex>
       </Box>
