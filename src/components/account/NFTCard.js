@@ -99,7 +99,6 @@ const NFTCard = (props) => {
         roundedTop="lg"
         src={src}
         alt="TITLE"
-        roundedBottom={unboxed ? "lg" : ""}
       />
       <Box px={4} py={2}>
         <chakra.h1

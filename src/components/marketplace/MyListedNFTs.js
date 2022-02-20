@@ -14,6 +14,7 @@ export default function OnSaleNFTs() {
         setIsLoading(true);
         if(!currentAccount) return;
         let _ownedListedNFTs = [];
+        
         try {
             for(let i=0; i<listedNFTs.length; i++) {
                 if(listedNFTs[i][0].toLowerCase()===currentAccount.toLowerCase()) {
@@ -26,7 +27,7 @@ export default function OnSaleNFTs() {
                     tokenId={parseInt(_ownedListedNFTs[index][2]["_hex"], 16)} 
                     owner={_ownedListedNFTs[index][0]}
                     orderId={_ownedListedNFTs[index][5]}
-                    price={parseInt(_ownedListedNFTs[index][4]["_hex"], 16)}
+                    price={_ownedListedNFTs[index][4]}
                     />
                 )))
             }

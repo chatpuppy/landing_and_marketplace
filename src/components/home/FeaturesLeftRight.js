@@ -1,6 +1,6 @@
 import React from "react";
-import Sample1 from "assets/sample_1.png";
-import Sample2 from "assets/sample_2.png";
+import Design2 from "assets/design2.png"
+import Design3 from "assets/design3.png"
 
 import {
   Box, Button, chakra, SimpleGrid, useColorModeValue,
@@ -54,8 +54,8 @@ export default function FeaturesLeftRight() {
               Learn More
             </Button>
           </Box>
-          <Image shadow="xl" rounded="xl"
-          src={Sample1} h={{base: "50vh", lg: "50vh"}} w={{base: "80vw", lg: "50vw"}}/>
+          <Image
+          src={Design2} h={{base: "50vh", lg: "50vh"}} w={{base: "80vw", lg: "50vw"}}/>
         </SimpleGrid>
         <SimpleGrid
           alignItems="center"
@@ -97,8 +97,8 @@ export default function FeaturesLeftRight() {
               Learn More
             </Button>
           </Box>
-          <Image shadow="xl" rounded="xl"
-          src={Sample2} h={{base: "50vh", lg: "50vh"}} w={{base: "80vw", lg: "50vw"}}/>
+          <Image
+          src={Design3} h={{base: "50vh", lg: "50vh"}} w={{base: "80vw", lg: "50vw"}}/>
         </SimpleGrid>
       </Box>
   );

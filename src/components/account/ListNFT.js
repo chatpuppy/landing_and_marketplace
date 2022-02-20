@@ -32,39 +32,39 @@ export default function ListNFT(props) {
     const NFT_marketplace_contract_address = "0xc60a6AE3a85838D3bAAf359219131B1e33103560"
     
     const listNFT = async(e) => {
-        e.preventDefault();
-        setIsLoading(true);
-        if(!currentAccount) return;
-        try {
-          const { ethereum } = window; //injected by metamask
-          //connect to an ethereum node
-          const provider = new ethers.providers.Web3Provider(ethereum); 
-          //gets the account
-          const signer = provider.getSigner(); 
-          //connects with the contract
-          const NFTMarketplaceConnectedContract = new ethers.Contract(NFT_marketplace_contract_address, nft_marketplace_abi, signer);
-          const NFTCoreConnectedContract = new ethers.Contract(NFT_core_contract_address, nft_core_abi, signer)
-          if(!approved) {
-            await NFTCoreConnectedContract.setApprovalForAll("0xc60a6AE3a85838D3bAAf359219131B1e33103560", true)
-          }
-          await NFTMarketplaceConnectedContract.addOrder(number, token, priceRef.current.value)
-          toast({
-            title: 'Listed!',
-            description: "Check marketplace!",
-            status: 'success',
-            duration: 4000,
-            isClosable: true,
-          })
-          setTimeout(()=>{
-            navigate("/marketplace", { replace: true });
-          }, 5000)
-        } catch(err) {
-            console.log(err)
-        } finally {
-          setTimeout(()=>{
-            setIsLoading(false)
-          }, 5000)
+      e.preventDefault();
+      setIsLoading(true);
+      if(!currentAccount) return;
+      try {
+        const { ethereum } = window; //injected by metamask
+        //connect to an ethereum node
+        const provider = new ethers.providers.Web3Provider(ethereum); 
+        //gets the account
+        const signer = provider.getSigner(); 
+        //connects with the contract
+        const NFTMarketplaceConnectedContract = new ethers.Contract(NFT_marketplace_contract_address, nft_marketplace_abi, signer);
+        const NFTCoreConnectedContract = new ethers.Contract(NFT_core_contract_address, nft_core_abi, signer)
+        if(!approved) {
+          await NFTCoreConnectedContract.setApprovalForAll("0xc60a6AE3a85838D3bAAf359219131B1e33103560", true)
         }
+        await NFTMarketplaceConnectedContract.addOrder(number, token, ethers.utils.parseEther(''+priceRef.current.value))
+        toast({
+          title: 'Listed!',
+          description: "Check marketplace!",
+          status: 'success',
+          duration: 4000,
+          isClosable: true,
+        })
+        setTimeout(()=>{
+          navigate("/marketplace", { replace: true });
+        }, 5000)
+      } catch(err) {
+          console.log(err)
+      } finally {
+        setTimeout(()=>{
+          setIsLoading(false)
+        }, 5000)
+      }
     }
 
     const handleTokenChange = (e) => {

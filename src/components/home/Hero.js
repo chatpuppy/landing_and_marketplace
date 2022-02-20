@@ -9,10 +9,11 @@ import {
   Text,
   Icon,
 } from "@chakra-ui/react";
+import Design1 from "assets/design1.png"
 
 const Hero = () => {
   return (
-    <Box px={8} py={24} mx="auto">
+    <Box px={8} pt={24} mx="auto">
       <Box
         w={{ base: "full", md: 11 / 12, xl: 9 / 12 }} mx="auto"
         textAlign={{ base: "left", md: "center" }}
@@ -72,10 +73,10 @@ const Hero = () => {
         </Stack>
       </Box>
       <Box
-        w={{ base: "full", md: 10 / 12 }} mx="auto" mt={20} textAlign="center"
+        w={{ base: "full", md: 10 / 12 }} mx="auto" textAlign="center"
       >
         <Image
-          w="full" rounded="lg" shadow="2xl" src="https://kutty.netlify.app/hero.jpg" alt="Screenshot"
+          w="100vw" src={Design1} alt="Screenshot"
         />
       </Box>
     </Box>

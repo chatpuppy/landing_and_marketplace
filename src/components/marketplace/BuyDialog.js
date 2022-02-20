@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react'
 import {
     AlertDialog, AlertDialogBody, AlertDialogFooter,
     AlertDialogHeader, AlertDialogContent, AlertDialogOverlay,
-    Button, useToast
+    Button, useToast, Progress,
 } from '@chakra-ui/react'
 import cpt_abi from "abi/cpt_abi.json"
 import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
@@ -37,7 +37,7 @@ export default function BuyDialog(props) {
             const NFTMarketplaceConnectedContract = new ethers.Contract(NFT_marketplace_contract_address, nft_marketplace_abi, signer);
             let _bal = await CPTConnectedContract.balanceOf(currentAccount)
             _bal = parseInt(_bal["_hex"], 16)
-            if(_bal<price) {
+            if(_bal<parseInt(price["_hex"], 16)) {
                 toast({
                     title: 'Error!',
                     description: "Token balance is low!",
@@ -85,7 +85,7 @@ export default function BuyDialog(props) {
             //connects with the contract
             const CPTConnectedContract = new ethers.Contract(cpt_contract_address, cpt_abi, signer);
             let _bal = await CPTConnectedContract.allowance(currentAccount, "0xc60a6AE3a85838D3bAAf359219131B1e33103560");
-            if(parseInt(_bal["_hex"],16) >= price) {
+            if(parseInt(_bal["_hex"],16) >= parseInt(price["_hex"], 16)) {
                 setApproved(true)
             }
         } catch(err) {
@@ -102,7 +102,6 @@ export default function BuyDialog(props) {
             isConnected = true;
         }
     }, [getApproved])
-    
 
     return (
         <>
@@ -119,11 +118,14 @@ export default function BuyDialog(props) {
             <AlertDialogOverlay>
             <AlertDialogContent>
                 <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                Confirm Purchase
+                    <Progress hasStripe isAnimated value={approved ? 50 : 0} colorScheme='blue' my="4"
+                    size="md" rounded="sm"
+                    />
+                    {approved ? 'Confirm Purchase' : 'Approve Purchase'}
                 </AlertDialogHeader>
 
                 <AlertDialogBody>
-                    Buy ID #{tokenId} for {price} CPT
+                {approved ? 'Buy' : 'Approve'} ID #{tokenId} for {parseInt(price["_hex"], 16)/ Math.pow(10, 18)} CPT
                 </AlertDialogBody>
 
                 <AlertDialogFooter>

@@ -29,9 +29,9 @@ const ListedCard = (props) => {
     try {
         const { ethereum } = window; //injected by metamask
         //connect to an ethereum node
-        const provider = new ethers.providers.Web3Provider(ethereum); 
+        const provider = new ethers.providers.Web3Provider(ethereum);
         //gets the account
-        const signer = provider.getSigner(); 
+        const signer = provider.getSigner();
         //connects with the contract
         const NFTMarketplaceConnectedContract = new ethers.Contract(NFT_marketplace_contract_address, nft_marketplace_abi, signer);
         await NFTMarketplaceConnectedContract.cancelOrder(orderId);
@@ -66,7 +66,7 @@ const ListedCard = (props) => {
         const signer = provider.getSigner(); 
         //connects with the contract
         const NFTMarketplaceConnectedContract = new ethers.Contract(NFT_marketplace_contract_address, nft_marketplace_abi, signer);
-        await NFTMarketplaceConnectedContract.updatePrice(orderId, priceRef.current.value)
+        await NFTMarketplaceConnectedContract.updatePrice(orderId, ethers.utils.parseEther(''+priceRef.current.value))
         toast({
           title: 'Updated!',
           description: "Price has been updated!",
@@ -122,7 +122,7 @@ const ListedCard = (props) => {
           color={useColorModeValue("white","gray.800")}
           fontSize="xl"
         >
-          Price: {price} CPT
+          Price: {parseInt(price["_hex"], 16)/Math.pow(10, 18)} CPT
         </chakra.span>
       </Box>
       <Flex
