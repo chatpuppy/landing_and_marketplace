@@ -4,19 +4,17 @@ import Footer from 'components/Footer';
 import Hero from 'components/home/Hero';
 import Mail from 'components/home/Mail';
 import FeaturesGrid from 'components/home/FeaturesGrid';
-import FeaturesList from 'components/home/FeaturesList';
-import FeaturesImage from 'components/home/FeaturesImage';
 import FeaturesLeftRight from 'components/home/FeaturesLeftRight';
+import FeaturesBox from 'components/home/FeaturesBox';
 
 export default function Home() {
   return (
     <>
         <NavBar />
         <Hero />
-        <FeaturesLeftRight />    
-        <FeaturesImage />    
+        <FeaturesLeftRight />
         <FeaturesGrid />
-        <FeaturesList />
+        <FeaturesBox />
         <Mail />
         <Footer />
     </>

@@ -5,7 +5,7 @@ import { Link as RouterLink } from "react-router-dom";
 import {
   chakra, Box, Flex, useColorModeValue, VisuallyHidden, HStack, Button,
   useDisclosure, VStack, IconButton, CloseButton, Image, Alert,
-  AlertIcon, AlertTitle, AlertDescription,
+  AlertIcon, AlertTitle, AlertDescription, Link, Icon
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { useAuth } from "contexts/AuthContext";
@@ -99,8 +99,22 @@ export default function NavBar() {
               <ToggleTheme />
               <LoginButton />
             </HStack>
-            <Button size="md" bg="brand.100" color="white">
-              Go To App
+            <Button size="md" bg="brand.100" color="white"
+            _hover={{
+              backgroundColor: "brand.200"
+            }}
+            >
+              <Link href='https://test.chatpuppy.com:9200' isExternal
+              style={{textDecoration: 'none'}}>
+                Go To App 
+                <Icon boxSize={4} ml={1} viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    fillRule="evenodd"
+                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </Icon>
+              </Link>
             </Button>
             
             <Box display={{ base: "inline-flex", md: "none" }}>
@@ -113,7 +127,6 @@ export default function NavBar() {
                 icon={<HamburgerIcon />}
                 onClick={mobileNav.onOpen}
               />
-
               <VStack
                 pos="absolute"
                 top={0}

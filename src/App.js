@@ -5,6 +5,7 @@ import Marketplace from "views/Marketplace"
 import Account from "views/Account";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useAuth } from "contexts/AuthContext";
+import './App.css'
 
 function App() {
 

@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
-import { Button, useToast, Menu, Box,
-    MenuButton, MenuList, MenuItem
+import { Button, Image, useToast, /*Menu, Box,
+    MenuButton, MenuList, MenuItem*/
 } from '@chakra-ui/react';
 import { checkIfWalletIsConnected ,connectWallet } from 'services/walletConnections';
 import { useAuth } from 'contexts/AuthContext';
-import { ChevronDownIcon } from '@chakra-ui/icons';
+//import { ChevronDownIcon } from '@chakra-ui/icons';
+import BNBLogo from "assets/bnb-logo.svg"
 
 export default function LoginButton() {
 
@@ -50,6 +51,11 @@ export default function LoginButton() {
     return (
             <>
             { currentAccount ? 
+            <Button>
+              <Image src={BNBLogo} h="15px" mr="2"/>
+              {currentAccount.substring(0, 5)+"...."+currentAccount.substring(currentAccount.length-6)}
+            </Button>
+            /*
             <Box>
             <Menu>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
@@ -59,10 +65,11 @@ export default function LoginButton() {
               <MenuItem>Sample</MenuItem>
             </MenuList>
             </Menu>
-            </Box>
+            </Box> 
+            */
              : 
              <Button onClick={handleLogin}>
-                Log In
+                Connect Wallet
              </Button>
             }
             </>

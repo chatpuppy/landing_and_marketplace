@@ -8,9 +8,15 @@ const theme = extendTheme({
   colors: {
     brand: {
       100: "#16318a",
+      200: "#204ad4"
     },
   },
+  config: {
+    initialColorMode: 'dark',
+  }
 })
+
+
 
 ReactDOM.render(
   <React.StrictMode>
