@@ -104,7 +104,7 @@ export default function NavBar() {
               backgroundColor: "brand.200"
             }}
             >
-              <Link href='https://test.chatpuppy.com:9200' isExternal
+              <Link href='http://test.chatpuppy.com:9200' isExternal
               style={{textDecoration: 'none'}}>
                 Go To App 
                 <Icon boxSize={4} ml={1} viewBox="0 0 20 20" fill="currentColor">

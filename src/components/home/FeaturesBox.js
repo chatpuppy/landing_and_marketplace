@@ -14,15 +14,12 @@ export default function FeaturesBox() {
         <Flex
           alignItems="center"
           justifyContent="center"
-          w={8}
-          h={8}
-          mb={4}
-          rounded="full"
-          color={useColorModeValue(`${props.color}.600`, `${props.color}.100`)}
-          bg={useColorModeValue(`${props.color}.100`, `${props.color}.600`)}
+          w={20}
+          h={20}
+          color="gray"
         >
           <Icon
-            boxSize={5}
+            boxSize={7}
             viewBox="0 0 20 20"
             fill="currentColor"
             aria-hidden="true"
@@ -31,7 +28,6 @@ export default function FeaturesBox() {
           </Icon>
         </Flex>
         <chakra.h3
-          mb={2}
           fontWeight="semibold"
           lineHeight="shorter"
           color={useColorModeValue("gray.900")}
@@ -42,7 +38,7 @@ export default function FeaturesBox() {
           fontSize="sm"
           color={useColorModeValue("gray.500", "gray.400")}
         >
-          {props.children}
+          
         </chakra.p>
       </Box>
     );
@@ -77,7 +73,7 @@ export default function FeaturesBox() {
         <SimpleGrid
           columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
           spacingX={{ base: 16, lg: 24 }}
-          spacingY={20}
+          spacingY={10}
           mt={10}
         >
           <Feature

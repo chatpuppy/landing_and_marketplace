@@ -6,13 +6,13 @@ import { checkIfWalletIsConnected ,connectWallet } from 'services/walletConnecti
 import { useAuth } from 'contexts/AuthContext';
 //import { ChevronDownIcon } from '@chakra-ui/icons';
 import BNBLogo from "assets/bnb-logo.svg"
+import ETHLogo from "assets/eth-logo.svg"
 
 export default function LoginButton() {
 
     const toast = useToast();
     const id = 'toast'
-    const { currentAccount, setCurrentAccount } = useAuth();
-
+    const { currentAccount, setCurrentAccount, currentNetwork } = useAuth();
     const handleLogin = async() => {
         if(!window.ethereum) {
           if (!toast.isActive(id)) {
@@ -52,7 +52,7 @@ export default function LoginButton() {
             <>
             { currentAccount ? 
             <Button>
-              <Image src={BNBLogo} h="15px" mr="2"/>
+              <Image src={currentNetwork === 56 || currentNetwork === 97 ? BNBLogo : ETHLogo} h="15px" mr="2"/>
               {currentAccount.substring(0, 5)+"...."+currentAccount.substring(currentAccount.length-6)}
             </Button>
             /*

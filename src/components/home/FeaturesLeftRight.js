@@ -13,6 +13,7 @@ export default function FeaturesLeftRight() {
         bg={useColorModeValue("white", "gray.800")}
         px={8}
         mx="auto"
+        mt="100"
       >
         <SimpleGrid
           alignItems="start"
@@ -34,7 +35,7 @@ export default function FeaturesLeftRight() {
             >
               NFT-Based
             </chakra.h2>
-            <chakra.p
+            <Box
               mb={5}
               textAlign={{ base: "center", sm: "left" }}
               color={useColorModeValue("gray.600", "gray.200")}
@@ -46,7 +47,7 @@ export default function FeaturesLeftRight() {
                 <li>Integrating 3rd-party NFTs. Ex. use CryptoPunk as avatar or artwork NFTs as themes.</li>
                 <li>Everyone can use, but NFT holders have advanced functionalities. Ex. minting own NFT avatar from your photos.</li>
               </ul>
-            </chakra.p>
+            </Box>
           </Box>
           <Image
           src={Design2} h={{base: "40vh", lg: "50vh"}} w={{base: "100vw", lg: "50vw"}}/>
@@ -72,7 +73,7 @@ export default function FeaturesLeftRight() {
             >
               Wallet-to-Wallet Instant Messaging &#38; Interact with Smart Contracts
             </chakra.h2>
-            <chakra.p
+            <Box
               mb={5}
               textAlign={{ base: "center", sm: "left" }}
               color={useColorModeValue("gray.600", "gray.200")}
@@ -84,7 +85,7 @@ export default function FeaturesLeftRight() {
                 <li>No messages are saved on blockchains, no gas fee, fully peer-to-peer instant messaging.</li>
                 <li>Send or recieve messages over different blockchains.</li>
               </ul>
-            </chakra.p>
+            </Box>
           </Box>
           <Image
           src={Design3} h={{base: "40vh", lg: "50vh"}} w={{base: "100vw", lg: "50vw"}}/>
@@ -109,7 +110,7 @@ export default function FeaturesLeftRight() {
             >
               Super Privacy Protection &#38; Decentralized
             </chakra.h2>
-            <chakra.p
+            <Box
               mb={5}
               textAlign={{ base: "center", sm: "left" }}
               color={useColorModeValue("gray.600", "gray.200")}
@@ -120,7 +121,7 @@ export default function FeaturesLeftRight() {
                 <li>Quantum-secured encrypt algorithm make your messages super safe.</li>
                 <li>No servers, AI, companies or goverments can see, inercept, save, anyalyze or modify your messages.</li>
               </ul>
-            </chakra.p>
+            </Box>
           </Box>
           <Image
           src={Design2} h={{base: "40vh", lg: "50vh"}} w={{base: "100vw", lg: "50vw"}}/>
