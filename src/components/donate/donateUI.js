@@ -104,22 +104,24 @@ export default function DonateUI() {
       return;
     }
     setIsLoading(true);
+
     try {
       const { ethereum } = window; //injected by metamask
       const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = provider.getSigner();
-      const address = ethers.utils.getAddress(await signer.getAddress());
-
+      const address = await signer.getAddress();
       const participant = saleID;
       const TokenVestingContract = new ethers.Contract(
         TOKEN_VESTING_ADDRESS,
         donateABI,
         signer
       );
-      const timestamp = Date.now();
+
+      // const timestamp = Date.now();
 
       try {
-        console.log(address);
+        const parseAddress = ethers.utils.getAddress(address);
+
         async function CrowdFundingParams() {
           const response = await TokenVestingContract.crowdFundingParams(
             participant
@@ -160,7 +162,7 @@ export default function DonateUI() {
         async function getIndex() {
           const response = await TokenVestingContract.getIndex(
             participant,
-            address
+            parseAddress
           );
           setUserIndex(response);
         }
@@ -284,7 +286,7 @@ export default function DonateUI() {
             <Tr>
               <Td>Price table</Td>
               <Td>
-                {/* {isLoading && priceRange ? <PriceRangeTable /> : "..wait"} */}
+                {priceRange ? <PriceRangeTable /> : "..wait"}
               </Td>
             </Tr>
             <Tr>
@@ -393,7 +395,6 @@ export default function DonateUI() {
         lg: "6",
       }}
     >
-      {console.log("ParticipantUI:", participantID)}
       <Stack
         spacing="4"
         direction={{
@@ -413,7 +414,7 @@ export default function DonateUI() {
         </Stack>
       </Stack>
       <Stack>
-        <Heading>{participant ? getNameSaleById(participantID) : ""}</Heading>
+        <Heading>{participantID ? getNameSaleById(participantID) : ""}</Heading>
       </Stack>
       <Stack
         spacing={{
@@ -433,10 +434,10 @@ export default function DonateUI() {
           </Card>
 
           <Card>
-            <Text lignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Beneficiary: {ethers.utils.formatEther(beneficiaryCount)}</Text>
+            <Text alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Beneficiary: {ethers.utils.formatEther(beneficiaryCount)}</Text>
           </Card>
           <Card>
-            {/* { isLoading && priceRange ? <PriceRangeComponent priceRange={priceRange} /> : '' } */}
+            { priceRange ? <PriceRangeComponent priceRange={priceRange} /> : '' }
           </Card>
         </SimpleGrid>
       </Stack>
