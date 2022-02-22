@@ -16,7 +16,7 @@ export default function FeaturesLeftRight() {
         bg={useColorModeValue("white", "gray.800")}
         px={8}
         mx="auto"
-        mt="100"
+        my="100"
       >
         <SimpleGrid
           alignItems="start"

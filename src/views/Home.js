@@ -15,9 +15,8 @@ export default function Home() {
         <NavBar />
         <Hero />
         <FeaturesLeftRight />
-        <FeaturesBox />
         <SupportedNetworks />
-        <Mail />
+        <FeaturesBox />
         <Center my="20">
           <chakra.p
                 fontSize={{ base: "3xl", sm: "4xl" }}
@@ -30,6 +29,7 @@ export default function Home() {
           </chakra.p>
         </Center>
         <Image w="100vw" src={Roadmap} />
+        <Mail />
         <Footer />
     </>
   )
