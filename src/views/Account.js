@@ -10,7 +10,7 @@ import { SimpleGrid, useColorModeValue, Skeleton, useToast,
 } from '@chakra-ui/react';
 import NFTCard from 'components/account/NFTCard';
 import PageName from 'components/PageName';
-
+import BoxImageSrc from "assets/mysteryBox.jpg"
 import { AiOutlineStar } from "react-icons/ai"
 import { BsBoxSeam } from "react-icons/bs"
 import EmptyList from 'components/EmptyList';
@@ -57,7 +57,7 @@ export default function Account() {
             if(_boxedItems.length!==0 && boxedItems.length===0) {
                 setBoxedItems(boxedItems.concat(Array.from({length: _boxedItems.length}, (_, i) => i).map((number, index)=>
                 <NFTCard key={_boxedItems[index]} number={_boxedItems[index]} unboxed={false}
-                    src={"https://www.larvalabs.com/cryptopunks/cryptopunk"+_boxedItems[index]+".png"}
+                    src={BoxImageSrc}
                 />
                 )))
             }

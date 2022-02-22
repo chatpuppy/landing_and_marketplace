@@ -1,6 +1,7 @@
 import React from "react";
 import { chakra, Box, Image, Flex, useColorModeValue, Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import BoxImageSrc from "assets/mysteryBox.jpg"
 
 const EmptyList = () => {
 
@@ -29,7 +30,7 @@ const EmptyList = () => {
         roundedTop="lg"
         fit="cover"
         h="40vh"
-        src={"https://images.unsplash.com/photo-1562698365-b312c8aa8626?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=388&q=80"}
+        src={BoxImageSrc}
         alt="NIKE AIR"
       />
       <Box px={4} py={2} bg={bg}>

@@ -43,7 +43,7 @@ export default function NavBar() {
         currentNetwork!==42 ?
         <Alert status='error'>
           <AlertIcon />
-          <AlertTitle mr={2}>Different network detected!</AlertTitle>
+          <AlertTitle mr={2}>Wrong network detected!</AlertTitle>
           <AlertDescription>Please change network to Kovan.</AlertDescription>
         </Alert>
         : <></>

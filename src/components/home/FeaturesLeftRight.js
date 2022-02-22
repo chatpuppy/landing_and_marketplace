@@ -65,13 +65,13 @@ export default function FeaturesLeftRight() {
             </ButtonGroup>
           </Box>
           <Image
-          src={Design2} h={{base: "40vh", lg: "50vh"}} w={{base: "100vw", lg: "50vw"}}/>
+          src={Design2} h={{base: "30vh", lg: "50vh"}} w={{base: "100vw", lg: "50vw"}}/>
         </SimpleGrid>
         <SimpleGrid
           alignItems="center"
           columns={{ base: 1, md: 2 }}
           flexDirection="column-reverse"
-          mb={{base: "0", md: "24"}}
+          mb="24"
           mx={{base: "", md:"40"}}
           spacingY={{ base: 10, md: 32 }}
           spacingX={{ base: 10, md: 24 }}
@@ -103,12 +103,11 @@ export default function FeaturesLeftRight() {
             </Box>
           </Box>
           <Image
-          src={Design3} h={{base: "40vh", lg: "50vh"}} w={{base: "100vw", lg: "50vw"}}/>
+          src={Design3} h={{base: "30vh", lg: "50vh"}} w={{base: "100vw", lg: "50vw"}}/>
         </SimpleGrid>
         <SimpleGrid
           alignItems="start"
           columns={{ base: 1, md: 2 }}
-          mb={24}
           mx={{base: "", md:"40"}}
           spacingY={{ base: 10, md: 32 }}
           spacingX={{ base: 10, md: 24 }}
@@ -139,7 +138,7 @@ export default function FeaturesLeftRight() {
             </Box>
           </Box>
           <Image
-          src={Design4} h={{base: "40vh", lg: "50vh"}} w={{base: "100vw", lg: "50vw"}}/>
+          src={Design4} h={{base: "30vh", lg: "50vh"}} w={{base: "100vw", lg: "50vw"}}/>
         </SimpleGrid>
       </Box>
   );

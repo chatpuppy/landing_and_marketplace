@@ -76,7 +76,7 @@ const NFTCard = (props) => {
       console.log(err)
     }
   }
-
+  console.log(src)
   return (
   <Flex
     bg={useColorModeValue("white", "gray.800")}
