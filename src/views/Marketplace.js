@@ -13,6 +13,7 @@ import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
 import { useAuth } from 'contexts/AuthContext';
 import FAQ from 'components/FAQ';
 import PageName from 'components/PageName';
+import EmptyList from 'components/EmptyList';
 
 export default function Marketplace() {
 
@@ -130,12 +131,12 @@ export default function Marketplace() {
             <TabPanels>
                 <TabPanel>
                     <SimpleGrid columns={[1, null, 3]} >
-                        EMPTY
+                        <EmptyList />
                     </SimpleGrid>
                 </TabPanel>
                 <TabPanel>
                     <SimpleGrid columns={[1, null, 3]} >
-                        EMPTY
+                        <EmptyList />
                     </SimpleGrid>
                 </TabPanel>
             </TabPanels>

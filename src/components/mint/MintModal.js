@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { Box, Flex, Image, Badge, useColorModeValue, Button, Center, useToast } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
-import BoxImageSrc from "assets/box.jpg"
+import BoxImageSrc from "assets/mysteryBox.jpg"
 import { ethers } from "ethers";
 import nft_manager_abi from "abi/nft_manager_abi"
 import { useAuth } from "contexts/AuthContext";
 
 const MintModal = (props) => {
 
-    const [ isLoading, setIsLoading ] = useState(false);
-
+    const [ isLoadingMint, setIsLoadingMint ] = useState(false);
+    const [ isLoadingMintAndUnbox, setIsLoadingMintAndUnbox ] = useState(false);
     const { currentAccount, currentNetwork } = useAuth()
 
     const NFT_manager_contract_address = "0x0528E41841b8BEdD4293463FAa061DdFCC5E41bd"
@@ -21,10 +21,10 @@ const MintModal = (props) => {
         imageUrl: BoxImageSrc,
         imageAlt: "Mystery Box",
         title: "Title Info about the product",
-        formattedPrice: (count*0.1).toString()+" ETH ",
+        formattedPrice: (count*0.01).toString()+" ETH ",
         rating: 4,
     };
-    
+
     const mint = async() => {
 
       if(!window.ethereum) {
@@ -69,7 +69,7 @@ const MintModal = (props) => {
         return;
       }
 
-      setIsLoading(true);
+      setIsLoadingMint(true);
 
       try {
           const { ethereum } = window; //injected by metamask
@@ -78,7 +78,7 @@ const MintModal = (props) => {
           //gets the account
           const signer = provider.getSigner(); 
           //connects with the contract
-          const options = {value: ethers.utils.parseEther("0.01")}
+          const options = {value: ethers.utils.parseEther((count*0.01).toString())}
           const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_abi, signer);
           try {
             await NFTManagerConnectedContract.buyAndMint(1, options)
@@ -93,7 +93,7 @@ const MintModal = (props) => {
                 window.location.reload();
             }, 5000)
           } catch(err) {
-            setIsLoading(false);
+            setIsLoadingMint(false);
           }
       } catch(err) {
           console.log(err)
@@ -143,6 +143,8 @@ const MintModal = (props) => {
         }
         return;
       }
+
+      setIsLoadingMintAndUnbox(true)
       
       try {
           const { ethereum } = window; //injected by metamask
@@ -151,7 +153,7 @@ const MintModal = (props) => {
           //gets the account
           const signer = provider.getSigner();
           //connects with the contract
-          const options = {value: ethers.utils.parseEther("0.01")}
+          const options = {value: ethers.utils.parseEther((count*0.01).toString())}
           const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_abi, signer);
           try {
             await NFTManagerConnectedContract.buyMintAndUnbox(1, options);
@@ -166,7 +168,7 @@ const MintModal = (props) => {
                 window.location.reload();
             }, 5000)
           } catch(err) {
-            setIsLoading(false);
+            setIsLoadingMintAndUnbox(false);
           }
       } catch(err) {
           console.log(err)
@@ -219,7 +221,7 @@ const MintModal = (props) => {
           <Box fontWeight="semibold">
             Price: {property.formattedPrice}
             <Box as="span" color={useColorModeValue("gray.600", "gray.200")} fontSize="sm">
-              for {count} NFT
+              for {count} {count==='1'? "NFT": "NFTs"}
             </Box>
           </Box>
 
@@ -252,7 +254,8 @@ const MintModal = (props) => {
                 boxShadow: 'xl',
             }}
             onClick={mint}
-            isLoading={isLoading}
+            isLoading={isLoadingMint}
+            isDisabled={isLoadingMintAndUnbox}
             >
             Mint
         </Button>
@@ -272,7 +275,8 @@ const MintModal = (props) => {
                 boxShadow: 'xl',
             }}
             onClick={mintAndUnbox}
-            isLoading={isLoading}
+            isLoading={isLoadingMintAndUnbox}
+            isDisabled={isLoadingMint}
             >
             Mint &#38; Unbox
         </Button>

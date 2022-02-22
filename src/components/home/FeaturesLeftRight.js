@@ -1,10 +1,12 @@
 import React from "react";
 import Design2 from "assets/design2.png"
 import Design3 from "assets/design3.png"
-
+import { Link as RouterLink } from "react-router-dom";
 import {
   Box, chakra, SimpleGrid, useColorModeValue,
-  Image
+  Image,
+  ButtonGroup,
+  Button
 } from "@chakra-ui/react";
 
 export default function FeaturesLeftRight() {
@@ -48,6 +50,14 @@ export default function FeaturesLeftRight() {
                 <li>Everyone can use, but NFT holders have advanced functionalities. Ex. minting own NFT avatar from your photos.</li>
               </ul>
             </Box>
+            <ButtonGroup>
+              <RouterLink to="/mint" style={{textDecoration: 'none'}}>
+                <Button colorScheme="blue">Mint</Button>
+              </RouterLink>
+              <RouterLink to="/marketplace" style={{textDecoration: 'none'}}>
+                <Button>Marketplace</Button>
+              </RouterLink>
+            </ButtonGroup>
           </Box>
           <Image
           src={Design2} h={{base: "40vh", lg: "50vh"}} w={{base: "100vw", lg: "50vw"}}/>

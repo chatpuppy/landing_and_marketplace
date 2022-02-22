@@ -1,15 +1,15 @@
 {
-  "staging": {
+  "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-amplify9611bb324f6b4-staging-84743-authRole",
-      "UnauthRoleArn": "arn:aws:iam::661907834231:role/amplify-amplify9611bb324f6b4-staging-84743-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::661907834231:role/amplify-amplify9611bb324f6b4-staging-84743-authRole",
+      "AuthRoleName": "amplify-chatpuppywebapp-dev-23444-authRole",
+      "UnauthRoleArn": "arn:aws:iam::661907834231:role/amplify-chatpuppywebapp-dev-23444-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::661907834231:role/amplify-chatpuppywebapp-dev-23444-authRole",
       "Region": "ap-south-1",
-      "DeploymentBucketName": "amplify-amplify9611bb324f6b4-staging-84743-deployment",
-      "UnauthRoleName": "amplify-amplify9611bb324f6b4-staging-84743-unauthRole",
-      "StackName": "amplify-amplify9611bb324f6b4-staging-84743",
-      "StackId": "arn:aws:cloudformation:ap-south-1:661907834231:stack/amplify-amplify9611bb324f6b4-staging-84743/ef92f7d0-92f2-11ec-a0e1-06b5fe744600",
-      "AmplifyAppId": "d1w0eo6x901z4t"
+      "DeploymentBucketName": "amplify-chatpuppywebapp-dev-23444-deployment",
+      "UnauthRoleName": "amplify-chatpuppywebapp-dev-23444-unauthRole",
+      "StackName": "amplify-chatpuppywebapp-dev-23444",
+      "StackId": "arn:aws:cloudformation:ap-south-1:661907834231:stack/amplify-chatpuppywebapp-dev-23444/e7bda2a0-9359-11ec-9b66-02eaa60e87a4",
+      "AmplifyAppId": "d7fa7nu99dq88"
     }
   }
 }

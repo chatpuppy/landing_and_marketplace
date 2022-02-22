@@ -7,7 +7,7 @@ import {
   useDisclosure, VStack, IconButton, CloseButton, Image, Alert,
   AlertIcon, AlertTitle, AlertDescription, Link, Icon
 } from "@chakra-ui/react";
-import { HamburgerIcon } from "@chakra-ui/icons";
+import { HamburgerIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { useAuth } from "contexts/AuthContext";
 import LoginButton from "components/LoginButton";
 
@@ -96,6 +96,9 @@ export default function NavBar() {
               <RouterLink to="/account" style={{textDecoration: 'none'}}>
                 <Button variant={path==="/account" ? "solid" : "ghost"}>Account</Button>
               </RouterLink>
+              <Button as="a" href="https://snapshot.org/#/chatpuppy.eth" target="_blank" variant="ghost"
+                rightIcon={<ExternalLinkIcon />}
+              >Governance</Button>
               <ToggleTheme />
               <LoginButton />
             </HStack>
