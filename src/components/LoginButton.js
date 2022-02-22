@@ -5,6 +5,7 @@ import { Button, useToast, Menu, Box,
 import { checkIfWalletIsConnected ,connectWallet } from 'services/walletConnections';
 import { useAuth } from 'contexts/AuthContext';
 import { ChevronDownIcon } from '@chakra-ui/icons';
+import { Link as RouterLink } from "react-router-dom";
 
 export default function LoginButton() {
 
@@ -56,7 +57,15 @@ export default function LoginButton() {
                 {currentAccount.substring(0, 5)+"...."+currentAccount.substring(currentAccount.length-6)}
             </MenuButton>
             <MenuList >
-              <MenuItem>Sample</MenuItem>
+            <RouterLink to="/donate">
+              <MenuItem >Donate</MenuItem>
+            </RouterLink>
+            <RouterLink to="/mint">
+              <MenuItem >Mint</MenuItem>
+            </RouterLink>          
+            <RouterLink to="/marketplace">
+              <MenuItem >Marketplace</MenuItem>
+            </RouterLink>          
             </MenuList>
             </Menu>
             </Box>
