@@ -352,7 +352,7 @@ export default function DonateUI() {
     }
   };
 
-  const Feature = ({ title, desc, onClick, ...rest }) => {
+  const Feature = ({ title, desc, onClick, status, ...rest }) => {
     return (
       <Box
         p={5}
@@ -364,7 +364,7 @@ export default function DonateUI() {
       >
         <Heading fontSize="xl">{title}</Heading>
         <Text mt={4}>{desc}</Text>
-        <Button onClick={onClick}> Donate </Button>
+        <Button onClick={onClick} isDisabled={status}> Donate </Button>
       </Box>
     );
   };
@@ -377,11 +377,13 @@ export default function DonateUI() {
             title="Public Sale"
             desc="Public sale Description"
             onClick={() => getDonateInfo(2)}
+            status={false}
           />
           <Feature
             title="Private Sale"
             desc="Description"
             onClick={() => getDonateInfo(1)}
+            status={true} // button for activated sale
           />
         </HStack>
       </Box>
