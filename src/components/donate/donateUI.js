@@ -36,7 +36,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-import {DonateModal} from './donateModal';
+import DonateModal from './donateModal';
 
 import { DateTime } from "luxon";
 
@@ -109,7 +109,6 @@ export default function DonateUI() {
       const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = provider.getSigner();
       const address = ethers.utils.getAddress(await signer.getAddress());
-      const formatAddress = ethers.utils.formatEther(address);
 
       const participant = saleID;
       const TokenVestingContract = new ethers.Contract(
@@ -161,7 +160,7 @@ export default function DonateUI() {
         async function getIndex() {
           const response = await TokenVestingContract.getIndex(
             participant,
-            formatAddress
+            address
           );
           setUserIndex(response);
         }
@@ -184,12 +183,6 @@ export default function DonateUI() {
           setBeneficiaryData(response);
         }
 
-        async function allRleasable() {
-          const response = await TokenVestingContract.releasable();
-          console.log(response);
-          // setReleasable(response)
-        }
-
         // async function donateStatus(){
         //   const status = donateData ? donateData.startTimestamp < timestamp ? false : timestamp > donateData.endTimestamp ? false : true : false
         //   setDonationStatus(status)
@@ -206,12 +199,11 @@ export default function DonateUI() {
         totalParticipant();
         particpantReleased();
         participantPriceRange();
-        // donateStatus()
         getBeneficiaryCountParticipant();
         getCap();
         getIndex();
         getBeneficiaryData();
-        // allRleasable()
+
       } catch (err) {
         setIsLoading(false);
       }
