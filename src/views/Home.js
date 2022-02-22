@@ -5,6 +5,7 @@ import Hero from 'components/home/Hero';
 import Mail from 'components/home/Mail';
 import FeaturesLeftRight from 'components/home/FeaturesLeftRight';
 import FeaturesBox from 'components/home/FeaturesBox';
+import SupportedNetworks from 'components/home/SupportedNetworks';
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
         <Hero />
         <FeaturesLeftRight />
         <FeaturesBox />
+        <SupportedNetworks />
         <Mail />
         <Footer />
     </>

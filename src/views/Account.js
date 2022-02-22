@@ -106,7 +106,7 @@ export default function Account() {
     return (
         <>
         <NavBar />
-        <PageName name="Account" />
+        <PageName name="My NFTs" />
         {
         currentAccount ?
         isLoading 

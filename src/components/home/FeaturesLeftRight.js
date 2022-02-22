@@ -1,6 +1,7 @@
 import React from "react";
 import Design2 from "assets/design2.png"
 import Design3 from "assets/design3.png"
+import Design4 from "assets/design4.png"
 import { Link as RouterLink } from "react-router-dom";
 import {
   Box, chakra, SimpleGrid, useColorModeValue,
@@ -52,7 +53,11 @@ export default function FeaturesLeftRight() {
             </Box>
             <ButtonGroup>
               <RouterLink to="/mint" style={{textDecoration: 'none'}}>
-                <Button colorScheme="blue">Mint</Button>
+                <Button bg="brand.100" color="white"
+                _hover={{
+                  backgroundColor: "brand.200"
+                }}
+                >Mint</Button>
               </RouterLink>
               <RouterLink to="/marketplace" style={{textDecoration: 'none'}}>
                 <Button>Marketplace</Button>
@@ -134,7 +139,7 @@ export default function FeaturesLeftRight() {
             </Box>
           </Box>
           <Image
-          src={Design2} h={{base: "40vh", lg: "50vh"}} w={{base: "100vw", lg: "50vw"}}/>
+          src={Design4} h={{base: "40vh", lg: "50vh"}} w={{base: "100vw", lg: "50vw"}}/>
         </SimpleGrid>
       </Box>
   );

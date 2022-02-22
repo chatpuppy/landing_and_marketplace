@@ -1,6 +1,6 @@
 import {
-    Box, Stack, Heading, Text, Container, Input, Button, SimpleGrid, 
-    useBreakpointValue, Icon, HStack, useNumberInput, useColorModeValue,
+    Box, Stack, Heading, Text, Container, Button, SimpleGrid, 
+    useBreakpointValue, Icon, useNumberInput, useColorModeValue,
     Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody,
     ModalCloseButton, useDisclosure
 } from '@chakra-ui/react';
@@ -21,16 +21,18 @@ export default function MintGrid() {
 
     const inc = getIncrementButtonProps()
     const dec = getDecrementButtonProps()
+    console.log(inc, dec)
     const input = getInputProps({ isReadOnly: false })
 
 return (
     <Box position={'relative'}>
     <Container
         as={SimpleGrid}
-        maxW={'7xl'}
         columns={{ base: 1, md: 1 }}
         spacing={{ base: 10, lg: 32 }}
-        py={{ base: 10, sm: 20, lg: 32 }}>
+        py={{ base: 10, sm: 20, lg: 32 }}
+        justify={'center'}
+        align={'center'}>
         <Stack
         bg={useColorModeValue('gray.50', 'white')}
         border="2px"
@@ -38,79 +40,79 @@ return (
         p={{ base: 4, sm: 6, md: 8 }}
         spacing={{ base: 8 }}
         maxW={{ lg: 'lg' }}>
-        <Stack spacing={4}>
-            <Heading
-            color={'gray.800'}
-            lineHeight={1.1}
-            fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}>
-            Mint mystery puppy avatars
-            <Text
-                as={'span'}
-                bgGradient="linear(to-r, red.400,pink.400)"
-                bgClip="text">
-                !
-            </Text>
-            </Heading>
-            <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-            Acquire NFTs for avatar in ChatPuppy, with which you can get premium access to ChatPuppy's exclusive features!
-            </Text>
-        </Stack>
-        <Box as={'form'} mt={10}>
             <Stack spacing={4}>
-                <HStack maxW='320px'>
-                <Button bg="gray.300" color="black" {...dec}
-                _hover={{
-                    bg:"gray.400"
-                }}
-                _active={{
-                    bg:"gray.300"
-                }}
-                >-</Button>
-                <Input color="black" outlineColor="gray.300" {...input} />
-                <Button bg="gray.300" color="black"  {...inc}
-                _hover={{
-                    bg:"gray.400"
-                }}
-                _active={{
-                    bg:"gray.300"
-                }}
-                >+</Button>
-                <p>Avatar{input.value==="1"? "": "s"}</p>
-                </HStack>
+                <Heading
+                color={'gray.800'}
+                lineHeight={1.1}
+                fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}>
+                Mint mystery puppy avatars
+                <Text
+                    as={'span'}
+                    bgGradient="linear(to-r, red.400,pink.400)"
+                    bgClip="text">
+                    !
+                </Text>
+                </Heading>
+                <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+                Acquire NFTs for avatar in ChatPuppy, with which you can get premium access to ChatPuppy's exclusive features!
+                </Text>
             </Stack>
-            <Button
-            fontFamily={'heading'}
-            mt={8}
-            w={'full'}
-            bgGradient="linear(to-r, red.400,pink.400)"
-            color={'white'}
-            _hover={{
-                bgGradient: 'linear(to-r, red.400,pink.400)',
-                boxShadow: 'xl',
-            }}
-            _active={{
-                bgGradient: 'linear(to-r, red.200,pink.200)',
-                boxShadow: 'xl',
-            }}
-            onClick={onOpen}
-            >
-            
-            Mint
-            </Button>
-        </Box>
-        <Stack spacing={2}>
-        <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-        &#9900; You can only mint a mystery avatar or mint &#38; unbox simultaneously. 
-        </Text>
-        <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-        &#9900; If you only mint, you will not know what the exact avatar is until it is unboxed.
-        </Text>
-        <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-        &#9900; The mystery avatars and NFTs are all available for selling.
-        </Text>
+            <Box as={'form'} mt={10}>
+                {/*
+                <Stack spacing={4}>
+                    <HStack maxW='320px'>
+                    <Button bg="gray.300" color="black" {...dec}
+                    _hover={{
+                        bg:"gray.400"
+                    }}
+                    _active={{
+                        bg:"gray.300"
+                    }}
+                    >-</Button>
+                    <Input color="black" outlineColor="gray.300" {...input} />
+                    <Button bg="gray.300" color="black"  {...inc}
+                    _hover={{
+                        bg:"gray.400"
+                    }}
+                    _active={{
+                        bg:"gray.300"
+                    }}
+                    >+</Button>
+                    <p>Avatar{input.value==="1"? "": "s"}</p>
+                    </HStack>
+                </Stack>
+                */}
+                <Button
+                fontFamily={'heading'}
+                w={'full'}
+                bgGradient="linear(to-r, red.400,pink.400)"
+                color={'white'}
+                _hover={{
+                    bgGradient: 'linear(to-r, red.400,pink.400)',
+                    boxShadow: 'xl',
+                }}
+                _active={{
+                    bgGradient: 'linear(to-r, red.200,pink.200)',
+                    boxShadow: 'xl',
+                }}
+                onClick={onOpen}
+                >
+                
+                Mint
+                </Button>
+            </Box>
+            <Stack spacing={2}>
+            <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+            &#9900; You can only mint a mystery avatar or mint &#38; unbox simultaneously. 
+            </Text>
+            <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+            &#9900; If you only mint, you will not know what the exact avatar is until it is unboxed.
+            </Text>
+            <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+            &#9900; The mystery avatars and NFTs are all available for selling.
+            </Text>
+            </Stack>
         </Stack>
-        </Stack>
-        
     </Container>
     <Blur
         position={'absolute'}

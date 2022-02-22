@@ -94,7 +94,7 @@ export default function NavBar() {
                 <Button variant={path==="/marketplace" ? "solid" : "ghost"}>Marketplace</Button>
               </RouterLink>
               <RouterLink to="/account" style={{textDecoration: 'none'}}>
-                <Button variant={path==="/account" ? "solid" : "ghost"}>Account</Button>
+                <Button variant={path==="/account" ? "solid" : "ghost"}>My NFTs</Button>
               </RouterLink>
               <Button as="a" href="https://snapshot.org/#/chatpuppy.eth" target="_blank" variant="ghost"
                 rightIcon={<ExternalLinkIcon />}
@@ -164,7 +164,7 @@ export default function NavBar() {
                 </RouterLink>
                 <RouterLink to="/account" style={{textDecoration: 'none'}}>
                   <Button w="full" variant={path==="/account" ? "solid" : "ghost"}>
-                    Account
+                    My NFTs
                   </Button>
                 </RouterLink>
                 <LoginButton />
