@@ -39,8 +39,13 @@ export default function NavBar() {
   return (
     
     <React.Fragment >
+      <Alert status='warning'>
+        <AlertIcon />
+        <AlertTitle mr={2}>Only Available on Kovan Testnet now!</AlertTitle> 
+        <AlertDescription>Please <Link isExternal style={{textDecoration: 'underline'}} href="https://discord.gg/QN658sJWkk">join our discord <ExternalLinkIcon /></Link> for more information.</AlertDescription>
+      </Alert>
       {
-        currentNetwork!==42 ?
+        currentNetwork!==42 && path!=="/" ?
         <Alert status='error'>
           <AlertIcon />
           <AlertTitle mr={2}>Wrong network detected!</AlertTitle>
@@ -100,7 +105,7 @@ export default function NavBar() {
                 rightIcon={<ExternalLinkIcon />}
               >Governance</Button>
               <ToggleTheme />
-              <LoginButton />
+              {path==="/" ? <></> : <LoginButton />}
             </HStack>
             <Button size="md" bg="brand.100" color="white"
             _hover={{
@@ -167,7 +172,7 @@ export default function NavBar() {
                     My NFTs
                   </Button>
                 </RouterLink>
-                <LoginButton />
+                {path==="/" ? <></> : <LoginButton />}
                 <ToggleTheme />
               </VStack>
             </Box>
