@@ -17,9 +17,6 @@ const DonateModal = (props) => {
 
     const { amount } = props;
 
-    // const opts = {
-
-    // }
 
     const sendDonate = async() => {
         if((!window.ethereum) || (!currentAccount)){

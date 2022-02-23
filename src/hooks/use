@@ -1,11 +1,14 @@
-Show the donation details
-Total issued: total()
-Issued amount of current participant type: getTotalAmountByParticipant(participant)
-Total beneficiary count: getBeneficiaryCount
-Beneficiary count of current participant type: getBeneficiaryCountParticipant
+ok Show the donation details
+ok Total issued: total()
+ok Issued amount of current participant type: getTotalAmountByParticipant(participant)
+
+ok Total beneficiary count: getBeneficiaryCount
+ok Beneficiary count of current participant type: getBeneficiaryCountParticipant
+
 All releasable: releasable()
 Releasable of current participant type: participantReleasable(participant)
 Released of current participant type: participantReleased(participant)
+
 RevokedAmount of all: revokedAmount
 Current rate(price) of current participant type: getPriceForAmount
 
@@ -39,3 +42,30 @@ participantReleasable
 participantReleased
 priceRange
 allReleasable
+
+
+{ethers.utils.formatEther(donateData.genesisTimestamp)}
+
+
+<p>
+           Genesis : {formatEther(donateData.genesisTimestamp)}
+           TGE Amount : {formatEther(donateData.tgeAmountRatio/100)}
+
+            Gliff: from: {formatEther(donateData.genesisTimestamp)}  to : {formatEther(donateData.genesisTimestamp + donateData.cliff)} 
+            Duration: from data.genesisTimestamp to data.genesisTimestamp + data.cliff + data.duration
+            Era Basis: data.eraBasis
+            Start time: data.startTimestamp
+            End time: data.endTimestamp
+            Higest of each donation: data.highest
+            Lowest of each donation: data.lowest
+            Allow redeem: data.allowRedeem
+            Accept donamtion if amount over cap: data.acceptOverCap
+            Price table for different raising amount range:{console.log("priceRange", priceRange)}
+            column 1: fromAmount
+            column 2: price
+            Cap: getCap(participant)
+            Input text field: input BNB/ETH amount
+            Button:
+            Donate: crowFunding(participant)
+
+         </p>

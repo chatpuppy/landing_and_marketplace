@@ -27,6 +27,10 @@ export function DonateProvider ({ children }) {
     const [dataCap, setCap] = useState();
     const [userIndex, setUserIndex ] = useState();
     const [beneficiaryData, setBeneficiaryData ] = useState();
+    const [userIndexHash, setUserIndexHash] = useState(false);
+    const [beneficiaryReleased, setBeneficiaryReleased] = useState()
+    const [beneficiaryReleasable, setBeneficiaryReleasable] = useState()
+    const [beneficiaryRedeem, setBeneficiaryRedeem] = useState()
     
     const value = { 
         totalAmount, setTotal,
@@ -47,6 +51,11 @@ export function DonateProvider ({ children }) {
         dataCap, setCap,
         userIndex, setUserIndex ,
         beneficiaryData, setBeneficiaryData,
+        userIndexHash, setUserIndexHash,
+        beneficiaryReleased, setBeneficiaryReleased,
+        beneficiaryReleasable, setBeneficiaryReleasable,
+        beneficiaryRedeem, setBeneficiaryRedeem,
+        
     }
 
     return (

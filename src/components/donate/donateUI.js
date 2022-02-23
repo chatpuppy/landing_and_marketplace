@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import {
   Box,
@@ -34,6 +34,11 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  TabPanels,
+  Tab, 
+  TabPanel,
+  TabList,
+  Tabs
 } from "@chakra-ui/react";
 
 import DonateModal from './donateModal';
@@ -42,40 +47,41 @@ import { DateTime } from "luxon";
 
 import { ethers } from "ethers";
 import { useAuth } from "contexts/AuthContext";
-
-import donateABI from "abi/TokensVesting_abi";
+import { useDonate } from "contexts/DonateContext";
 import { getNameSaleById } from "utils/getNameSaleById";
 
-import { TOKEN_VESTING_ADDRESS } from "constants";
 
 export default function DonateUI() {
-  const [isLoading, setIsLoading] = useState(false);
-  const { currentAccount, currentNetwork } = useAuth();
+  const [ isLoading, setIsLoading ] = useState(false);
+  const { setCurrentAccount,currentAccount, currentNetwork, tokenVestingContract } = useAuth();
+
+  const { setTotal, setReleasable, setDataDonate, setTotalParticipant, setParticipantReleasable, setAllReleasable,
+    setParticipantPriceRange, setParticipantID, setDonationStatus, setDonationTX , setDonateAmount, setParticipantReleased, 
+    participantReleasable,  participantReleased, priceRange,  allReleasable,  participantID,  donateStatus,  donateTX,  donateAmount, priceForAmount, setPriceForAmount, beneficiaryCount, setBeneficiaryCount, dataCap, setCap,
+    userIndex, setUserIndex,
+    beneficiaryData, setBeneficiaryData,
+    userIndexHash, setUserIndexHash,
+    beneficiaryReleased, setBeneficiaryReleased,
+    beneficiaryReleasable, setBeneficiaryReleasable,
+    beneficiaryRedeem, setBeneficiaryRedeem, donateData, totalAmount
+  } = useDonate;
+  
   const toast = useToast();
   const id = "toast";
 
+  console.log(participantID)
+
+  // useEffect(() => {
+  //   const initialVesting = async() => {
+
+  //   }
+  //   initialVesting();
+
+  // }, []);
+
   
 
-  const [totalAmount, setTotal] = useState(0);
-  const [releasable, setReleasable] = useState(0);
-  const [price, setPrice] = useState(0);
-  const [donateData, setDataDonate] = useState();
-  const [participantTotal, setTotalParticipant] = useState(0);
-  const [participantReleasable, setParticipantReleasable] = useState(0);
-  const [participantReleased, setParticipantReleased] = useState(0);
-  const [priceRange, setParticipantPriceRange] = useState(0);
-  const [allReleasable, setAllReleasable] = useState(0);
-  const [participantID, setParticipantID] = useState(0);
-  const [donateStatus, setDonationStatus] = useState(false);
-  const [donateTX, setDonationTX] = useState();
-  const [donateAmount, setDonateAmount] = useState();
-  const [priceForAmount, setPriceForAmount] = useState();
-  const [beneficiaryCount, setBeneficiaryCount] = useState();
-  const [dataCap, setCap] = useState();
-  const [userIndex, setUserIndex] = useState();
-  const [beneficiaryData, setBeneficiaryData] = useState();
-
-  const getDonateInfo = async (saleID) => {
+  const getDonateInfo = useCallback(async (saleID) => {
     if (!window.ethereum || !currentAccount) {
       if (!toast.isActive(id)) {
         toast({
@@ -106,36 +112,26 @@ export default function DonateUI() {
     setIsLoading(true);
 
     try {
-      const { ethereum } = window; //injected by metamask
-      const provider = new ethers.providers.Web3Provider(ethereum);
-      const signer = provider.getSigner();
-      const address = await signer.getAddress();
+      const address =  currentAccount
       const participant = saleID;
-      const TokenVestingContract = new ethers.Contract(
-        TOKEN_VESTING_ADDRESS,
-        donateABI,
-        signer
-      );
 
       // const timestamp = Date.now();
 
       try {
-        const parseAddress = ethers.utils.getAddress(address);
-
         async function CrowdFundingParams() {
-          const response = await TokenVestingContract.crowdFundingParams(
+          const response = await tokenVestingContract.crowdFundingParams(
             participant
           );
           setDataDonate(response);
         }
 
         async function totalAmount() {
-          const response = await TokenVestingContract.total();
+          const response = await tokenVestingContract.total();
           setTotal(response);
         }
 
         async function participantReleasable() {
-          const response = await TokenVestingContract.participantReleasable(
+          const response = await tokenVestingContract.participantReleasable(
             participant
           );
           setParticipantReleasable(response);
@@ -143,46 +139,69 @@ export default function DonateUI() {
 
         async function totalParticipant() {
           const response =
-            await TokenVestingContract.getTotalAmountByParticipant(participant);
+            await tokenVestingContract.getTotalAmountByParticipant(participant);
           setTotalParticipant(response);
         }
 
         async function particpantReleased() {
-          const response = await TokenVestingContract.participantReleased(
+          const response = await tokenVestingContract.participantReleased(
             participant
           );
           setParticipantReleased(response);
         }
 
         async function participantPriceRange() {
-          const response = await TokenVestingContract.priceRange(participant);
+          const response = await tokenVestingContract.priceRange(participant);
           setParticipantPriceRange(response);
-        }
-
-        async function getIndex() {
-          const response = await TokenVestingContract.getIndex(
-            participant,
-            parseAddress
-          );
-          setUserIndex(response);
         }
 
         async function getBeneficiaryCountParticipant() {
           const response =
-            await TokenVestingContract.getBeneficiaryCountParticipant(
+            await tokenVestingContract.getBeneficiaryCountParticipant(
               participant
             );
           setBeneficiaryCount(response);
         }
 
         async function getCap() {
-          const response = await TokenVestingContract.getCap(participant);
+          const response = await tokenVestingContract.getCap(participant);
           setCap(response);
         }
 
+        async function getIndex() {
+          const response = await tokenVestingContract.getIndex(
+            participant,
+            address
+          );
+          setUserIndexHash(response[0]);
+          setUserIndex(response[1]);
+        }
+
         async function getBeneficiaryData() {
-          const response = await TokenVestingContract.getBeneficiary(userIndex);
+          const response = await tokenVestingContract.getBeneficiary(userIndex);
           setBeneficiaryData(response);
+        }
+
+
+        async function released() {
+          const response = await tokenVestingContract.released();
+          setBeneficiaryReleased(response)
+        }
+
+
+        async function releasable() {
+          const response = await tokenVestingContract.releasable();
+           setBeneficiaryReleasable(response)
+        }
+
+        async function  getParticipantRedeem() {
+          const response = await tokenVestingContract.redeem(participant)
+          setBeneficiaryRedeem(response)
+        }
+
+        async function  getParticipantRelease() {
+          const response = await tokenVestingContract.release(participant)
+          setBeneficiaryReleasable(response)
         }
 
         // async function donateStatus(){
@@ -205,100 +224,21 @@ export default function DonateUI() {
         getCap();
         getIndex();
         getBeneficiaryData();
-
+        releasable();
+        released();
+        getParticipantRedeem();
+        getParticipantRelease();
+         
       } catch (err) {
         setIsLoading(false);
       }
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [currentAccount, currentNetwork, toast, tokenVestingContract, userIndex]);
    
-
-  const TableDonate = () => {
-    const data = donateData;
-
-    const genesisTimestamp = new DateTime(
-      ethers.utils.formatEther(data.genesisTimestamp)
-    ).toISODate();
-    const cliffTimeStamp = new DateTime(
-      data.genesisTimestamp + data.cliff
-    ).toISODate();
-    const tgeAmount = ethers.utils.formatEther(data.tgeAmountRatio.div(100));
-    const endDuration = new DateTime(
-      data.genesisTimestamp + data.cliff + data.duration
-    ).toISODate();
-    const eraBasis = ethers.utils.formatEther(data.eraBasis);
-    const startTime = new DateTime(data.startTimestamp).toISODate();
-    const endTime = new DateTime(data.endTimestamp).toISODate();
-    const higest = ethers.utils.formatEther(data.highest);
-    const lowest = ethers.utils.formatEther(data.lowest);
-    const showCap = ethers.utils.formatEther(dataCap);
-
-    if (data) {
-      return (
-        <Table variant="simple">
-          <Tbody>
-            <Tr>
-              <Td>Genesis:</Td>
-              <Td>{genesisTimestamp}</Td>
-            </Tr>
-            <Tr>
-              <Td>TGE Amount:</Td>
-              <Td>{tgeAmount}</Td>
-            </Tr>
-            <Tr>
-              <Td>Cliff:</Td>
-              <Td>{`from: ${genesisTimestamp} to ${cliffTimeStamp}`}</Td>
-            </Tr>
-            <Tr>
-              <Td>Duration:</Td>
-              <Td>{`from: ${genesisTimestamp} to ${endDuration}`}</Td>
-            </Tr>
-            <Tr>
-              <Td> Era Basis:</Td>
-              <Td> {eraBasis}</Td>
-            </Tr>
-            <Tr>
-              <Td> Start:</Td>
-              <Td>{startTime}</Td>
-            </Tr>
-            <Tr>
-              <Td> End:</Td>
-              <Td>{endTime}</Td>
-            </Tr>
-            <Tr>
-              <Td> Higest:</Td>
-              <Td>{higest}</Td>
-            </Tr>
-            <Tr>
-              <Td> Lowest:</Td>
-              <Td>{lowest}</Td>
-            </Tr>
-            <Tr>
-              <Td> Allow redeem:</Td>
-              <Td>{data.allowRedeem ? "True" : "False"}</Td>
-            </Tr>
-            <Tr>
-              <Td>Accept donation:</Td>
-              <Td>{data.acceptOverCap ? "True" : "False"}</Td>
-            </Tr>
-            <Tr>
-              <Td>Price table</Td>
-              <Td>
-                {priceRange ? <PriceRangeTable /> : "..wait"}
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>Cap:</Td>
-              <Td>{showCap}</Td>
-            </Tr>
-          </Tbody>
-        </Table>
-      );
-    }
-  };
-
+  
+  
   const PriceRangeTable = () => {
     return (
       <Table Table variant="simple">
@@ -314,42 +254,6 @@ export default function DonateUI() {
         </Tbody>
       </Table>
     );
-  };
-
-  const PriceRangeComponent = ({ priceRange }) => {
-    if (priceRange) {
-      return (
-        <Box
-          margin={{
-            base: "20px",
-            lg: "10px",
-          }}
-          direction={{
-            base: "column",
-            lg: "row",
-          }}
-        >
-          <Heading fontSize="xl" align="center">
-            Price Range
-          </Heading>
-          <List>
-            {priceRange
-              ? priceRange.map((range, idx) => (
-                  <li id={idx}>
-                    {" "}
-                    <ListItem>
-                      <Text align="left" fontSize="lg">
-                        {ethers.utils.formatEther(range.fromAmount)} for:{" "}
-                        {ethers.utils.formatEther(range.price)}{" "}
-                      </Text>
-                    </ListItem>
-                  </li>
-                ))
-              : "0.0"}
-          </List>
-        </Box>
-      );
-    }
   };
 
   const Feature = ({ title, desc, onClick, status, ...rest }) => {
@@ -390,7 +294,320 @@ export default function DonateUI() {
     );
   };
 
-  const ParticipantUI = (participant) => (
+  const PriceRangeComponent = ({ priceRange }) => {
+    if (priceRange) {
+      return (
+        <Box
+          margin={{
+            base: "20px",
+            lg: "10px",
+          }}
+          direction={{
+            base: "column",
+            lg: "row",
+          }}
+        >
+          <Heading fontSize="xl" align="center">
+            Price Range
+          </Heading>
+          <List>
+            {priceRange
+              ? priceRange.map((range, idx) => (
+                  <li id={idx}>
+                    {" "}
+                    <ListItem>
+                      <Text align="left" fontSize="lg">
+                        {ethers.utils.formatEther(range.fromAmount)} for:{" "}
+                        {ethers.utils.formatEther(range.price)}{" "}
+                      </Text>
+                    </ListItem>
+                  </li>
+                ))
+              : "0.0"}
+          </List>
+        </Box>
+      );
+    }
+  };
+
+  
+  const ParticipantUI = ({participant, data, dataCap, priceRange}) => {
+    return (
+      <Stack
+        spacing={{
+          base: "8",
+          lg: "6",
+        }}
+      >
+        <Stack
+          spacing="4"
+          direction={{
+            base: "column",
+            lg: "row",
+          }}
+          justify="space-between"
+        >
+          <Stack spacing="1">
+            <Heading
+              size={useBreakpointValue({
+                base: "xs",
+                lg: "sm",
+              })}
+              fontWeight="medium"
+            ></Heading>
+          </Stack>
+        </Stack>
+        <Stack>
+          <Heading>{participantID ? getNameSaleById(participantID) : ""}</Heading>
+        </Stack>
+        <Stack
+          spacing={{
+            base: "5",
+            lg: "6",
+          }}
+        >
+          <SimpleGrid
+            columns={{
+              base: 1,
+              md: 3,
+            }}
+            gap="6"
+          >
+            <Card>
+              <Text alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Total: {ethers.utils.formatEther(totalAmount)}</Text>
+            </Card>
+    
+            <Card>
+              <Text alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Beneficiary: {ethers.utils.formatEther(beneficiaryCount)}</Text>
+            </Card>
+            <Card>
+              {/* { priceRange ? <PriceRangeComponent priceRange={priceRange} /> : '' } */}
+            </Card>
+          </SimpleGrid>
+        </Stack>
+        <Stack>
+          <SimpleGrid
+            columns={{
+              base: 1,
+              md: 3,
+            }}
+            gap="6"
+          ></SimpleGrid>
+        </Stack>
+        <Card minH="xs">
+          <SimpleGrid columns={2} spacing={10}>
+            <Card>
+              {/* <TableDonate date={data} dataCap={dataCap} priceRange={priceRange}/> */}
+            </Card>
+            <Card>
+              <InputDonate />
+            </Card>
+          </SimpleGrid>
+        </Card>
+      </Stack>
+    )
+  }
+
+  
+  return (
+    <>
+      {participantID === 0 
+      ? (<CardParticipantType />) 
+      : participantID > 0 && donateData && isLoading 
+      ? <ParticipantUI participant={participantID} data={donateData} dataCap={dataCap} priceRange={priceRange} /> 
+      : userIndexHash && beneficiaryData && isLoading ? <BeneficiaryPage userIndexHash={userIndexHash} data={beneficiaryData} /> 
+      : (
+        <Stack
+          spacing={{
+            base: "8",
+            lg: "6",
+          }}
+        >
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            alignItems="center"
+            alignContent="center"
+            size="xl"
+          />
+        </Stack>
+      )}
+    </>
+  );
+
+  // back more late 
+  // return (<BeneficiaryPage userIndexHash={userIndexHash} data={beneficiaryData} /> )
+}
+
+
+const TableDonate = (data, dataCap, priceRange) => {
+  console.log("TableDonate:", data)
+
+  const genesisTimestamp = new DateTime(
+    ethers.utils.formatEther(data.genesisTimestamp)
+  ).toISODate();
+  const cliffTimeStamp = new DateTime(
+    data.genesisTimestamp + data.cliff
+  ).toISODate();
+  const tgeAmount = ethers.utils.formatEther(data.tgeAmountRatio.div(100));
+  const endDuration = new DateTime(
+    data.genesisTimestamp + data.cliff + data.duration
+  ).toISODate();
+  const eraBasis = ethers.utils.formatEther(data.eraBasis);
+  const startTime = new DateTime(data.startTimestamp).toISODate();
+  const endTime = new DateTime(data.endTimestamp).toISODate();
+  const higest = ethers.utils.formatEther(data.highest);
+  const lowest = ethers.utils.formatEther(data.lowest);
+  const showCap = ethers.utils.formatEther(dataCap);
+
+  return (
+    <Table variant="simple">
+      <Tbody>
+        <Tr>
+          <Td>Genesis:</Td>
+          <Td>{genesisTimestamp}</Td>
+        </Tr>
+        <Tr>
+          <Td>TGE Amount:</Td>
+          <Td>{tgeAmount}</Td>
+        </Tr>
+        <Tr>
+          <Td>Cliff:</Td>
+          <Td>{`from: ${genesisTimestamp} to ${cliffTimeStamp}`}</Td>
+        </Tr>
+        <Tr>
+          <Td>Duration:</Td>
+          <Td>{`from: ${genesisTimestamp} to ${endDuration}`}</Td>
+        </Tr>
+        <Tr>
+          <Td> Era Basis:</Td>
+          <Td> {eraBasis}</Td>
+        </Tr>
+        <Tr>
+          <Td> Start:</Td>
+          <Td>{startTime}</Td>
+        </Tr>
+        <Tr>
+          <Td> End:</Td>
+          <Td>{endTime}</Td>
+        </Tr>
+        <Tr>
+          <Td> Higest:</Td>
+          <Td>{higest}</Td>
+        </Tr>
+        <Tr>
+          <Td> Lowest:</Td>
+          <Td>{lowest}</Td>
+        </Tr>
+        <Tr>
+          <Td> Allow redeem:</Td>
+          <Td>{data.allowRedeem ? "True" : "False"}</Td>
+        </Tr>
+        <Tr>
+          <Td>Accept donation:</Td>
+          <Td>{data.acceptOverCap ? "True" : "False"}</Td>
+        </Tr>
+        <Tr>
+          <Td>Price table</Td>
+          <Td>
+            {priceRange ? <PriceRangeTable /> : "..wait"}
+          </Td>
+        </Tr>
+        <Tr>
+          <Td>Cap:</Td>
+          <Td>{showCap}</Td>
+        </Tr>
+      </Tbody>
+    </Table>
+  )
+};
+
+
+
+const TableDonated = (donateData, beneficiaryReleasable, beneficiaryReleased) => {
+  const data = donateData;
+  const donationAmount =  ethers.utils.formatEther(data.totalAmount / data.price)
+  const dataPrice = ethers.utils.formatEther(data.price)
+
+  const genesisTimestamp = new DateTime(
+    ethers.utils.formatEther(data.genesisTimestamp)
+  ).toISODate();
+  const cliffTimeStamp = new DateTime(
+    data.genesisTimestamp + data.cliff
+  ).toISODate();
+  const tgeAmount = ethers.utils.formatEther(data.tgeAmountRatio.div(100));
+  const endDuration = new DateTime(
+    data.genesisTimestamp + data.cliff + data.duration
+  ).toISODate();
+  const eraBasis = ethers.utils.formatEther(data.eraBasis);
+  const startTime = new DateTime(data.startTimestamp).toISODate();
+  const endTime = new DateTime(data.endTimestamp).toISODate();
+  
+  
+  
+
+  return (
+    <Table variant="simple">
+      <Tbody>
+        <Tr>
+          <Td>Genesis:</Td>
+          <Td>{genesisTimestamp}</Td>
+        </Tr>
+        <Tr>
+          <Td>Date and time:</Td>
+          <Td>{new DateTime(data.timestamp).toISODate()}</Td>
+        </Tr>
+        <Tr>
+          <Td>Total token amount:</Td>
+          <Td>{ethers.utils.formatEther(data.totalAmount)}</Td>
+        </Tr>
+        <Tr>
+          <Td>TGE Amount:</Td>
+          <Td>{tgeAmount}</Td>
+        </Tr>
+        <Tr>
+          <Td>Cliff:</Td>
+          <Td>{`from: ${genesisTimestamp} to ${cliffTimeStamp}`}</Td>
+        </Tr>
+        <Tr>
+          <Td>Duration:</Td>
+          <Td>{`from: ${genesisTimestamp} to ${endDuration}`}</Td>
+        </Tr>
+        <Tr>
+          <Td> Era Basis:</Td>
+          <Td> {eraBasis}</Td>
+        </Tr>
+        <Tr>
+          <Td> Status:</Td>
+          <Td>{data.status ? "True" : "False"}</Td>
+        </Tr>
+        <Tr>
+          <Td>rate(price):</Td>
+          <Td>{data.Price }</Td>
+        </Tr>
+        <Tr>
+          <Td>Donation amount(BNB/ETH): </Td>
+          <Td>{ethers.utils.formatEther(data.totalAmount / data.price)}</Td>
+        </Tr>
+        <Tr>
+          <Td>releasable:</Td>
+          <Td>
+            {beneficiaryReleasable}
+          </Td>
+          <Td>released:</Td>
+          <Td>
+            {beneficiaryReleased}
+          </Td>
+        </Tr>
+      </Tbody>
+    </Table>
+  )
+};
+
+const BeneficiaryPage = ({data,  userIndexHash, participantID, totalAmount}) => {
+  return (
     <Stack
       spacing={{
         base: "8",
@@ -416,7 +633,7 @@ export default function DonateUI() {
         </Stack>
       </Stack>
       <Stack>
-        <Heading>{participantID ? getNameSaleById(participantID) : ""}</Heading>
+        <Heading>Beneficiary on {participantID ? getNameSaleById(participantID) : ""}</Heading>
       </Stack>
       <Stack
         spacing={{
@@ -434,12 +651,12 @@ export default function DonateUI() {
           <Card>
             <Text alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Total: {ethers.utils.formatEther(totalAmount)}</Text>
           </Card>
-
+  
           <Card>
-            <Text alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Beneficiary: {ethers.utils.formatEther(beneficiaryCount)}</Text>
+            {/* <Text alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Beneficiary: {ethers.utils.formatEther(beneficiaryCount)}</Text> */}
           </Card>
           <Card>
-            { priceRange ? <PriceRangeComponent priceRange={priceRange} /> : '' }
+            {/* { priceRange ? <PriceRangeComponent priceRange={priceRange} /> : '' } */}
           </Card>
         </SimpleGrid>
       </Stack>
@@ -455,43 +672,58 @@ export default function DonateUI() {
       <Card minH="xs">
         <SimpleGrid columns={2} spacing={10}>
           <Card>
-            <TableDonate />
+            {/* <TableDonated /> */}
           </Card>
           <Card>
-            <InputDonate />
+             <DonatedButtons />
           </Card>
         </SimpleGrid>
       </Card>
     </Stack>
-  );
-
-  return (
-    <>
-      {participantID === 0 ? (
-        <CardParticipantType />
-      ) : participantID > 0 && donateData && isLoading ? (
-        <ParticipantUI participant={participantID} />
-      ) : (
-        <Stack
-          spacing={{
-            base: "8",
-            lg: "6",
-          }}
-        >
-          <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="blue.500"
-            alignItems="center"
-            alignContent="center"
-            size="xl"
-          />
-        </Stack>
-      )}
-    </>
-  );
+      
+  )
 }
+
+
+const DonatedButtons = () => (
+  <Box
+  justifyContent={"center"}
+  textAlign={"center"}
+  as={"form"}
+  mt={10}
+  mr={10}
+  borderRight={20}
+>
+  <Button
+    fontFamily={"heading"}
+    mt={8}
+    w={"full"}
+    bgGradient="linear(to-r, red.400,pink.400)"
+    color={"white"}
+    _hover={{
+      bgGradient: "linear(to-r, red.400,pink.400)",
+      boxShadow: "xl",
+    }}
+    onClick={() => console.log('release')}
+  >
+    Release
+  </Button>
+  <Button
+    fontFamily={"heading"}
+    mt={8}
+    w={"full"}
+    bgGradient="linear(to-r, red.400,pink.400)"
+    color={"white"}
+    _hover={{
+      bgGradient: "linear(to-r, red.400,pink.400)",
+      boxShadow: "xl",
+    }}
+    onClick={() => console.log('Reedeem')}
+  >
+    Reedeem
+  </Button>
+</Box>
+)
 
 const InputDonate = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -512,7 +744,7 @@ const InputDonate = () => {
   return (
     <>
       <Box
-        justifyContet={"center"}
+        justifyContent={"center"}
         textAlign={"center"}
         as={"form"}
         mt={10}
@@ -591,3 +823,5 @@ const Card = (props) => (
     {...props}
   />
 );
+
+

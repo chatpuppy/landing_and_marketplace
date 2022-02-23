@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Home from "views/Home";
 import Mint from "views/Mint";
 import Marketplace from "views/Marketplace"
@@ -6,11 +6,15 @@ import Account from "views/Account";
 import Donate from "views/Donate";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useAuth } from "contexts/AuthContext";
+import { ethers } from "ethers";
+import donateABI from "abi/TokensVesting_abi";
+
+import { TOKEN_VESTING_ADDRESS } from "constants";
 
 function App() {
 
-  const { setCurrentAccount, setCurrentNetwork } = useAuth()
-
+  const { setCurrentAccount, setCurrentNetwork, setTokenVestingContract } = useAuth()
+  
   useEffect(() => {
 
     const initialCheck = async() => {
@@ -30,13 +34,25 @@ function App() {
           setCurrentNetwork(parseInt(chainId, 16))
           window.location.reload()
         })
+
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+
+        const TokenVestingContract = new ethers.Contract(
+          TOKEN_VESTING_ADDRESS,
+          donateABI,
+          signer
+        );
+
+        setTokenVestingContract(TokenVestingContract)
+
       } catch(err) {
         console.log(err)
       }
     }
     initialCheck();
 
-  }, [setCurrentAccount, setCurrentNetwork]);
+  }, [setCurrentAccount, setCurrentNetwork,  setTokenVestingContract]);
   
   return (
     <Router>
