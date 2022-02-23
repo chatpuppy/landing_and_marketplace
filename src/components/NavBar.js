@@ -39,17 +39,19 @@ export default function NavBar() {
   return (
     
     <React.Fragment >
-      <Alert status='warning'>
+      <Alert status='warning' justifyContent='center'>
         <AlertIcon />
         <AlertTitle mr={2}>Only Available on Kovan Testnet now!</AlertTitle> 
         <AlertDescription>Please <Link isExternal style={{textDecoration: 'underline'}} href="https://discord.gg/QN658sJWkk">join our discord <ExternalLinkIcon /></Link> for more information.</AlertDescription>
+        <CloseButton position='absolute' right='8px' top='8px' />
       </Alert>
       {
         currentNetwork!==42 && path!=="/" ?
-        <Alert status='error'>
+        <Alert status='error' justifyContent='center'>
           <AlertIcon />
           <AlertTitle mr={2}>Wrong network detected!</AlertTitle>
           <AlertDescription>Please change network to Kovan.</AlertDescription>
+          <CloseButton position='absolute' right='8px' top='8px' />
         </Alert>
         : <></>
       }
