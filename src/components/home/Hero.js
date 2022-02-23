@@ -4,6 +4,7 @@ import {
   Text, Icon, Link
 } from "@chakra-ui/react";
 import Design1 from "assets/design1.png"
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 const Hero = () => {
   return (
@@ -57,7 +58,7 @@ const Hero = () => {
           </Button>
           <Button
             as="a" href="https://discord.gg/QN658sJWkk" target="_blank" variant="solid" display="inline-flex" alignItems="center" justifyContent="center"
-            w={{ base: "full", sm: "auto" }} mb={{ base: 2, sm: 0 }} size="lg" cursor="pointer"
+            w={{ base: "full", sm: "auto" }} mb={{ base: 2, sm: 0 }} size="lg" cursor="pointer" rightIcon={<ExternalLinkIcon />}
           >
             Discord
           </Button>
