@@ -134,6 +134,7 @@ export default function FeaturesLeftRight() {
                 <li>Gateways of messaging are fully decentralized, each message is encrypted, mixed, and sent through random gateways all over the world</li>
                 <li>Quantum-secured encrypt algorithm make your messages super safe.</li>
                 <li>No servers, AI, companies or goverments can see, inercept, save, anyalyze or modify your messages.</li>
+                <li>Supported by <a href="https://xx.network" target="_blank" rel="noreferrer">xxnetwork</a></li>
               </ul>
             </Box>
           </Box>

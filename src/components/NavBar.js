@@ -109,7 +109,7 @@ export default function NavBar() {
             >
               <Link href='http://test.chatpuppy.com:9200' isExternal
               style={{textDecoration: 'none'}}>
-                Go To App 
+                Demo 
                 <Icon boxSize={4} ml={1} viewBox="0 0 20 20" fill="currentColor">
                   <path
                     fillRule="evenodd"

@@ -31,23 +31,37 @@ export default function FeaturesBox() {
         <Flex
           alignItems="center"
           justifyContent="center"
-          w={20}
+          // w={20}
           h={20}
           color={useColorModeValue("black", "gray.200")}
         >
-          <Icon
-            boxSize={7}
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            aria-hidden="true"
+          <Box
+            backgroundColor={useColorModeValue("gray.200", "gray.900")}
+            borderRadius={60}
+            w={20}
+            h={20}
           >
-            {props.icon}
-          </Icon>
+            <Icon
+              boxSize={10}
+              viewBox="0 0 20 20"
+              marginLeft={6}
+              marginTop={6}
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              {props.icon}
+            </Icon>
+          </Box>
         </Flex>
+        <Flex 
+          justifyContent="center" 
+          alignItems="center"
+        >
         <chakra.h3
           fontWeight="semibold"
           lineHeight="shorter"
           color={useColorModeValue("gray.900")}
+          marginTop={5}
         >
           {props.title}
         </chakra.h3>
@@ -55,8 +69,8 @@ export default function FeaturesBox() {
           fontSize="sm"
           color={useColorModeValue("gray.500", "gray.400")}
         >
-          
         </chakra.p>
+        </Flex>
       </Box>
     );
   };
@@ -118,7 +132,7 @@ export default function FeaturesBox() {
           </Feature>
 
           <Feature
-            title="No emails, phone numbers login"
+            title="No emails, phone numbers"
             icon={
               <MdOutlineAttachEmail />
             }
@@ -146,7 +160,7 @@ export default function FeaturesBox() {
           >
           </Feature>
           <Feature
-            title="Group chat &#38; private messaging"
+            title="Group chat &#38; PM"
             icon={
               <BiGroup />
             }
@@ -160,7 +174,7 @@ export default function FeaturesBox() {
           >
           </Feature>
           <Feature
-            title="Your NFTs is your avatar and username"
+            title="Own NFT avatar"
             icon={
               <BiCrown />
             }
@@ -174,14 +188,14 @@ export default function FeaturesBox() {
           >
           </Feature>
           <Feature
-            title="Embeded with Defi, blockchain games"
+            title="Embeded with Dapps"
             icon={
               <ImEmbed2 />
             }
           >
           </Feature>
           <Feature
-            title="Chat over different blockchains"
+            title="Chat on multi-chains"
             icon={
               <GiCrossedChains />
             }
@@ -189,7 +203,7 @@ export default function FeaturesBox() {
           </Feature>
           <Feature
             color="red"
-            title="Interacting with smart contracts while chatting"
+            title="Smart contracts in chatbox"
             icon={
               <FaRegFileCode />
             }
@@ -204,14 +218,14 @@ export default function FeaturesBox() {
           >
           </Feature>
           <Feature
-            title="Decentralized and serverless"
+            title="Decentralized &#38; serverless"
             icon={
               <CgServerless />
             }
           >
           </Feature>
           <Feature
-            title="Encrypted and mixed messaging"
+            title="Encrypted &#38; mixed"
             icon={
               <MdOutlineNoEncryption />
             }

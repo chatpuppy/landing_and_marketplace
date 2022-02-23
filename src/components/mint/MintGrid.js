@@ -53,7 +53,7 @@ return (
                     !
                 </Text>
                 </Heading>
-                <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+                <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }} textAlign="left">
                 Acquire NFTs for avatar in ChatPuppy, with which you can get premium access to ChatPuppy's exclusive features!
                 </Text>
             </Stack>
@@ -102,13 +102,13 @@ return (
                 </Button>
             </Box>
             <Stack spacing={2}>
-            <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+            <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }} textAlign="left">
             &#9900; You can only mint a mystery avatar or mint &#38; unbox simultaneously. 
             </Text>
-            <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+            <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }} textAlign="left">
             &#9900; If you only mint, you will not know what the exact avatar is until it is unboxed.
             </Text>
-            <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+            <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }} textAlign="left">
             &#9900; The mystery avatars and NFTs are all available for selling.
             </Text>
             </Stack>
