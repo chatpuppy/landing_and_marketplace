@@ -7,11 +7,11 @@ import {
   useColorModeValue,
   Icon,
 } from "@chakra-ui/react";
-import { FaWallet, FaRegFileCode } from "react-icons/fa";
+import { FaRegFileCode } from "react-icons/fa";
 import { FiCoffee } from "react-icons/fi";
 import { SiWeb3Dotjs } from "react-icons/si";
 import { AiOutlineAppstoreAdd } from "react-icons/ai";
-import { BsChatDots, BsShare } from "react-icons/bs";
+import { BsChatDots, BsShare, BsWallet2 } from "react-icons/bs";
 import {
   MdFollowTheSigns,
   MdOutlineAttachEmail,
@@ -110,7 +110,7 @@ export default function FeaturesBox() {
           <Feature
             title="Wallet to Wallet Chat"
             icon={
-              <FaWallet />
+              <BsWallet2 />
             }
           >
           </Feature>
