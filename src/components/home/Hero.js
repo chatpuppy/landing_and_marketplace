@@ -56,10 +56,10 @@ const Hero = () => {
             </Link>
           </Button>
           <Button
-            as="a" href="#mail" variant="solid" display="inline-flex" alignItems="center" justifyContent="center"
+            as="a" href="https://discord.gg/QN658sJWkk" target="_blank" variant="solid" display="inline-flex" alignItems="center" justifyContent="center"
             w={{ base: "full", sm: "auto" }} mb={{ base: 2, sm: 0 }} size="lg" cursor="pointer"
           >
-            Subscribe
+            Discord
           </Button>
         </Stack>
       </Box>
