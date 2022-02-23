@@ -17,6 +17,4 @@ Install required packages
 `npm run start`
 - The React App will run at http://localhost:3000/
 
-### Setup
-
 #### File Structure
