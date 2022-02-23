@@ -1,16 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Home from "views/Home";
 import Mint from "views/Mint";
 import Marketplace from "views/Marketplace"
 import Account from "views/Account";
+import Donate from "views/Donate";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useAuth } from "contexts/AuthContext";
 import './App.css'
 
+
 function App() {
 
   const { setCurrentAccount, setCurrentNetwork } = useAuth()
-
+  
   useEffect(() => {
 
     const initialCheck = async() => {
@@ -30,6 +32,7 @@ function App() {
           setCurrentNetwork(parseInt(chainId, 16))
           window.location.reload()
         })
+
       } catch(err) {
         console.log(err)
       }
@@ -45,6 +48,7 @@ function App() {
           <Route path="/mint" element={<Mint />}/>
           <Route path="/marketplace" element={<Marketplace />}/>
           <Route path="/account" element={<Account />}/>
+          <Route path="/donate" element={<Donate />}/>
         </Routes>
     </Router>
   );

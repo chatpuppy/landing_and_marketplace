@@ -4,7 +4,7 @@ import { Button, Image, useToast, /*Menu, Box,
 } from '@chakra-ui/react';
 import { checkIfWalletIsConnected ,connectWallet } from 'services/walletConnections';
 import { useAuth } from 'contexts/AuthContext';
-//import { ChevronDownIcon } from '@chakra-ui/icons';
+
 import BNBLogo from "assets/bnb-logo.svg"
 import ETHLogo from "assets/eth-logo.svg"
 
@@ -62,7 +62,15 @@ export default function LoginButton() {
                 {currentAccount.substring(0, 5)+"...."+currentAccount.substring(currentAccount.length-6)}
             </MenuButton>
             <MenuList >
-              <MenuItem>Sample</MenuItem>
+            <RouterLink to="/donate">
+              <MenuItem >Donate</MenuItem>
+            </RouterLink>
+            <RouterLink to="/mint">
+              <MenuItem >Mint</MenuItem>
+            </RouterLink>          
+            <RouterLink to="/marketplace">
+              <MenuItem >Marketplace</MenuItem>
+            </RouterLink>          
             </MenuList>
             </Menu>
             </Box> 
