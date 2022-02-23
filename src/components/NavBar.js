@@ -39,7 +39,7 @@ export default function NavBar() {
   return (
     
     <React.Fragment >
-      <Alert status='error'>
+      <Alert status='warning'>
         <AlertIcon />
         <AlertTitle mr={2}>Only Available on Kovan Testnet now!</AlertTitle> 
         <AlertDescription>Please <Link isExternal style={{textDecoration: 'underline'}} href="https://discord.gg/QN658sJWkk">join our discord <ExternalLinkIcon /></Link> for more information.</AlertDescription>

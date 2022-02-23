@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Flex, Image, Badge, useColorModeValue, Button, Center, useToast } from "@chakra-ui/react";
+import { Box, Flex, Image, Badge, useColorModeValue, Button, Center, useToast, Spinner } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
 import BoxImageSrc from "assets/mysteryBox.jpg"
 import { ethers } from "ethers";
@@ -219,7 +219,7 @@ const MintModal = (props) => {
           </Box>
 
           <Box fontWeight="semibold">
-            Price: {property.formattedPrice}
+            Price: {boxPrice ? property.formattedPrice : <Spinner size='xs' mx="2"/>}
             <Box as="span" color={useColorModeValue("gray.600", "gray.200")} fontSize="sm">
               for {count} {count==='1'? "NFT": "NFTs"}
             </Box>
