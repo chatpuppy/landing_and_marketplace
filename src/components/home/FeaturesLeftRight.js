@@ -40,7 +40,7 @@ export default function FeaturesLeftRight() {
             </chakra.h2>
             <Box
               mb={5}
-              textAlign={{ base: "center", sm: "left" }}
+              textAlign="left"
               color={useColorModeValue("gray.600", "gray.200")}
               fontSize={{ md: "lg" }}
             >
@@ -90,7 +90,7 @@ export default function FeaturesLeftRight() {
             </chakra.h2>
             <Box
               mb={5}
-              textAlign={{ base: "center", sm: "left" }}
+              textAlign="left"
               color={useColorModeValue("gray.600", "gray.200")}
               fontSize={{ md: "lg" }}
             >
@@ -126,7 +126,7 @@ export default function FeaturesLeftRight() {
             </chakra.h2>
             <Box
               mb={5}
-              textAlign={{ base: "center", sm: "left" }}
+              textAlign="left"
               color={useColorModeValue("gray.600", "gray.200")}
               fontSize={{ md: "lg" }}
             >

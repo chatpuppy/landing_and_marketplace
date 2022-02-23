@@ -14,14 +14,14 @@ const MintModal = (props) => {
 
     const NFT_manager_contract_address = "0x0528E41841b8BEdD4293463FAa061DdFCC5E41bd"
     const toast = useToast()
-    const { count } = props;
+    const { count, boxPrice } = props;
     const id = 'toast'
 
     const property = {
         imageUrl: BoxImageSrc,
         imageAlt: "Mystery Box",
         title: "Title Info about the product",
-        formattedPrice: (count*0.01).toString()+" ETH ",
+        formattedPrice: (count*boxPrice).toString()+" ETH ",
         rating: 4,
     };
 
@@ -78,7 +78,7 @@ const MintModal = (props) => {
           //gets the account
           const signer = provider.getSigner(); 
           //connects with the contract
-          const options = {value: ethers.utils.parseEther((count*0.01).toString())}
+          const options = {value: ethers.utils.parseEther((count*boxPrice).toString())}
           const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_abi, signer);
           try {
             await NFTManagerConnectedContract.buyAndMint(1, options)
@@ -153,7 +153,7 @@ const MintModal = (props) => {
           //gets the account
           const signer = provider.getSigner();
           //connects with the contract
-          const options = {value: ethers.utils.parseEther((count*0.01).toString())}
+          const options = {value: ethers.utils.parseEther((count*boxPrice).toString())}
           const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_abi, signer);
           try {
             await NFTManagerConnectedContract.buyMintAndUnbox(1, options);
