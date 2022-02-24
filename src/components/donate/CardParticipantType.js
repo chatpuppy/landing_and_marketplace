@@ -1,6 +1,6 @@
-import React, { useState,  useEffect } from "react";
-import { useDonate } from "contexts/DonateContext";
+import React, { useState } from "react";
 import { Box, Heading, HStack, Text, Button } from "@chakra-ui/react";
+import { useDonate } from "contexts/DonateContext";
 
 const Feature = ({ title, desc, onClick, status, ...rest }) => {
     return (
@@ -23,7 +23,8 @@ const Feature = ({ title, desc, onClick, status, ...rest }) => {
   };
 
   export const CardParticipantType = () => {
-    const [participantID, setParticipantID] = useState(0);
+    const {setParticipantID,participantID } = useDonate();
+    // const [participantID, setParticipantID] = useState(0);
 
     console.log("participantID on CardParticipantType:", participantID)
     return (

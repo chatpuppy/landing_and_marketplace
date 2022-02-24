@@ -17,7 +17,10 @@ import {
 
 export const InfoTableComponent = () => { 
     const { donateData, dataCap, priceRange } = useDonate()
+    
     let data = donateData;
+    console.log("InfoTable", data)
+
     const genesisTimestamp = new DateTime(
       ethers.utils.formatEther(data.genesisTimestamp)
     ).toISODate();
@@ -33,7 +36,7 @@ export const InfoTableComponent = () => {
     const endTime = new DateTime(data.endTimestamp).toISODate();
     const higest = ethers.utils.formatEther(data.highest);
     const lowest = ethers.utils.formatEther(data.lowest);
-    const showCap = ethers.utils.formatEther(dataCap);
+    // const showCap = ethers.utils.formatEther(dataCap);
   
     return (
       <Table variant="simple">
@@ -88,7 +91,7 @@ export const InfoTableComponent = () => {
           </Tr>
           <Tr>
             <Td>Cap:</Td>
-            <Td>{showCap}</Td>
+            {/* <Td>{showCap}</Td> */}
           </Tr>
         </Tbody>
       </Table>

@@ -142,7 +142,8 @@ export default function DonateComponent() {
 
   return (
     <>
-      {participantID === 0 ? (<CardParticipantType />) : participantID ? (
+      {participantID === 0 ? (<CardParticipantType />
+      ) : participantID > 0 ? (
         <DonateView />
       ) : userIndex ? <BeneficiaryView /> : (
         <Stack
