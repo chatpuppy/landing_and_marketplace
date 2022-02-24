@@ -7,6 +7,8 @@ import {
     ListItem
   } from '@chakra-ui/react'
 
+import { ethers } from "ethers";
+
 export default function PriceRangeComponent() {
     const { priceRange } = useDonate()
     return (

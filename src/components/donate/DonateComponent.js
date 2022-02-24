@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 
 import DonateModal from "./donateModal";
+import { CardParticipantType } from "./CardParticipantType";
 
 import { DateTime } from "luxon";
 
@@ -43,7 +44,6 @@ import {
 } from "utils/tokenVestingsInteract";
 
 export default function DonateComponent() {
-  const [isLoading, setIsLoading] = useState(false);
   const { setCurrentAccount, currentAccount, currentNetwork } = useAuth();
 
   const {
@@ -64,75 +64,87 @@ export default function DonateComponent() {
     donateData,
     setUserIndexHash,
     setUserIndex,
+    userIndex,
   } = useDonate();
 
   useEffect(() => {
     async function fetchCrowd() {
       const crowdParams = await loadCrowdFundingParams(participantID);
       setDataDonate(crowdParams);
+      console.log("Participant:", participantID);
+      console.log(crowdParams);
     }
-    async function capAndIndex() {
-      const cap = await loadCap(participantID);
-      const reponseIndex = await loadIndex(participantID, currentAccount);
-      setCap(cap);
-      setUserIndexHash(reponseIndex[0]);
-      setUserIndex(reponseIndex[1]);
-    }
-
     fetchCrowd();
-    capAndIndex();
-  }, [
-    currentAccount,
-    participantID,
-    setCap,
-    setDataDonate,
-    setUserIndex,
-    setUserIndexHash,
-  ]);
+  }, [currentAccount,participantID,setDataDonate]);
 
   useEffect(() => {
-    async function fetchTotal() {
-      const totalDonate = await totalDonateAmount();
-      const totalParticipants = await loadTotalParticipant(participantID);
-      setTotalParticipant(totalParticipants);
-      setTotal(totalDonate);
-    }
     async function BeneficiaryData() {
       const participantReleased = await loadParticipantReleasable(
         participantID
       );
       setParticipantReleased(participantReleased);
-
+    }
+    async function beneficiaryCount() {
       const beneficiaryCount = await loadBeneficiaryCount(participantID);
       setBeneficiaryCount(beneficiaryCount);
     }
+    BeneficiaryData();
+    beneficiaryCount();
+  },[participantID, setBeneficiaryCount, setParticipantReleased])
+
+  useEffect(() => {
     async function fetchPriceData() {
       const priceRange = await loadParticipantPriceRange(participantID);
       setParticipantPriceRange(priceRange);
     }
-    fetchTotal();
-    BeneficiaryData();
     fetchPriceData();
-  }, [
-    currentAccount,
-    participantID,
-    setBeneficiaryCount,
-    setCap,
-    setParticipantPriceRange,
-    setParticipantReleased,
-    setTotal,
-    setTotalParticipant,
-    setUserIndex,
-    setUserIndexHash,
-  ]);
+  },[participantID, setParticipantPriceRange])
+
+  useEffect(() => {
+    async function fetchTotalDonate() {
+      const totalDonate = await totalDonateAmount();
+      setTotal(totalDonate);
+    }
+    async function fetchTotalParticipants() {
+      const totalParticipants = await loadTotalParticipant(participantID);
+      setTotalParticipant(totalParticipants);
+      
+    }
+    fetchTotalDonate();
+    fetchTotalParticipants();
+  }, [ participantID, setTotal, setTotalParticipant]);
+
+  
+  useEffect(() => {
+    async function Index() {
+      const reponseIndex = await loadIndex(participantID, currentAccount);
+      setUserIndex(reponseIndex[1]);
+    }
+    
+    async function IndexHash(){
+      const reponseIndex = await loadIndex(participantID, currentAccount);
+      setUserIndexHash(reponseIndex[0]);
+      console.log(participantID)
+      console.log(currentAccount)
+    }
+    Index();
+    IndexHash();
+  },[currentAccount, participantID,  setUserIndex, setUserIndexHash])
+
+  
+  useEffect(() => {
+    async function getCap(){
+      const cap = await loadCap(participantID);
+      setCap(cap);
+    }
+    getCap()},[participantID, setCap])
+
 
   return (
     <>
-      {participantID ? (
-        <CardParticipantType />
-      ) : donateData ? (
+      {participantID === 0 ? (<CardParticipantType />) : participantID ? (
         <DonateView />
-      ) : (
+      ) : userIndex ? <BeneficiaryView /> : (
         <Stack
           spacing={{
             base: "8",
@@ -153,47 +165,3 @@ export default function DonateComponent() {
     </>
   );
 }
-
-const Feature = ({ title, desc, onClick, status, ...rest }) => {
-  return (
-    <Box
-      p={5}
-      shadow="md"
-      borderWidth="1px"
-      flex="1"
-      borderRadius="md"
-      {...rest}
-    >
-      <Heading fontSize="xl">{title}</Heading>
-      <Text mt={4}>{desc}</Text>
-      <Button onClick={onClick} isDisabled={status}>
-        {" "}
-        Donate{" "}
-      </Button>
-    </Box>
-  );
-};
-
-const CardParticipantType = () => {
-  // const [participantID, setParticipantID] = useState(0);
-  const { setParticipantID } = useDonate();
-
-  return (
-    <Box px={8} py={24} mx="auto">
-      <HStack spacing={8}>
-        <Feature
-          title="Public Sale"
-          desc="Public sale Description"
-          onClick={setParticipantID(2)}
-          status={false}
-        />
-        <Feature
-          title="Private Sale"
-          desc="Description"
-          onClick={setParticipantID(1)}
-          status={true} // button for activated sale
-        />
-      </HStack>
-    </Box>
-  );
-};

@@ -6,12 +6,14 @@ import Account from "views/Account";
 import Donate from "views/Donate";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useAuth } from "contexts/AuthContext";
+import { tokenVestingContract } from "./utils/tokenVestingsInteract";
+
 import './App.css'
 
 
 function App() {
 
-  const { setCurrentAccount, setCurrentNetwork } = useAuth()
+  const { setCurrentAccount, setCurrentNetwork, setTokenVestingContract } = useAuth()
   
   useEffect(() => {
 
@@ -40,6 +42,15 @@ function App() {
     initialCheck();
 
   }, [setCurrentAccount, setCurrentNetwork]);
+
+
+  useEffect(() => {
+    async function initTokenVesting() {
+      const response = await tokenVestingContract;
+      setTokenVestingContract(response);
+    }
+    initTokenVesting()
+  })
   
   return (
     <Router>

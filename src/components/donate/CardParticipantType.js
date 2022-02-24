@@ -23,22 +23,22 @@ const Feature = ({ title, desc, onClick, status, ...rest }) => {
   };
 
   export const CardParticipantType = () => {
-    const {setParticipantID} = useDonate();
-    
-    
+    const [participantID, setParticipantID] = useState(0);
+
+    console.log("participantID on CardParticipantType:", participantID)
     return (
       <Box px={8} py={24} mx="auto">
         <HStack spacing={8}>
           <Feature
             title="Public Sale"
             desc="Public sale Description"
-            onClick={()=> setParticipantID(2)}
+            onClick={() => setParticipantID(2)}
             status={false}
           />
           <Feature
             title="Private Sale"
             desc="Description"
-            onClick={setParticipantID(1)}
+            onClick={() => setParticipantID(1)}
             status={true} // button for activated sale
           />
         </HStack>

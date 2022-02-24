@@ -46,7 +46,6 @@ import { Card } from '../common/Card';
 import { Blur } from '../common/Blur';
 
 import { useDonate } from "contexts/DonateContext";
-import { useAuth } from "contexts/AuthContext";
 import { getNameSaleById } from "utils/getNameSaleById";
 
 import { InfoTableComponent } from "./infoTableComponet";
@@ -103,7 +102,7 @@ export const DonateView = () => {
                 <Text alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Beneficiary: {ethers.utils.formatEther(beneficiaryCount)}</Text>
               </Card>
               <Card>
-                { priceRange ? <PriceRangeComponent priceRange={priceRange} /> : '' }
+                { priceRange ? <PriceRangeComponent /> : '' }
               </Card>
             </SimpleGrid>
           </Stack>
@@ -199,7 +198,8 @@ export const DonateView = () => {
   };
 
 
-  const PriceRangeComponent = ({ priceRange }) => {
+  const PriceRangeComponent = () => {
+    const {priceRange } = useDonate()
     if (priceRange) {
       return (
         <Box

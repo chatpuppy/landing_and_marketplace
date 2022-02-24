@@ -1,12 +1,13 @@
 import { Stack, Heading, SimpleGrid, Text, Button, Box , useBreakpointValue} from '@chakra-ui/react'
-import {Card} from '../common/Card';
+import { Card } from '../common/Card';
 import { useDonate } from "contexts/DonateContext";
 import { getNameSaleById } from "utils/getNameSaleById";
+import PriceRangeComponent  from "./PriceRangeComponent";
 
 import { ethers } from "ethers";
 
 export const BeneficiaryView = () => {
-    const {participantID, totalAmount, beneficiaryCount} = useDonate()
+    const {participantID, totalAmount, beneficiaryCount, priceRange} = useDonate()
     return (
         <Stack
           spacing={{
@@ -53,10 +54,10 @@ export const BeneficiaryView = () => {
               </Card>
       
               <Card>
-                {/* <Text alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Beneficiary: {ethers.utils.formatEther(beneficiaryCount)}</Text> */}
+                <Text alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Beneficiary: {ethers.utils.formatEther(beneficiaryCount)}</Text>
               </Card>
               <Card>
-                {/* { priceRange ? <PriceRangeComponent priceRange={priceRange} /> : '' } */}
+                { priceRange ? <PriceRangeComponent /> : '' }
               </Card>
             </SimpleGrid>
           </Stack>
