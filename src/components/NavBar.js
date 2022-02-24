@@ -39,7 +39,8 @@ export default function NavBar() {
   return (
     
     <React.Fragment >
-      <Alert status='warning' justifyContent='center'>
+      {/* ###### */}
+      {/* <Alert status='warning' justifyContent='center'>
         <AlertIcon />
         <AlertTitle mr={2}>Only Available on Kovan Testnet now!</AlertTitle> 
         <AlertDescription>Please <Link isExternal style={{textDecoration: 'underline'}} href="https://discord.gg/QN658sJWkk">join our discord <ExternalLinkIcon /></Link> for more information.</AlertDescription>
@@ -54,7 +55,7 @@ export default function NavBar() {
           <CloseButton position='absolute' right='8px' top='8px' />
         </Alert>
         : <></>
-      }
+      } */}
       <chakra.header 
         style={{position: "sticky",
         top: 0}}
@@ -91,7 +92,8 @@ export default function NavBar() {
               color="brand.500"
               display={{ base: "none", md: "inline-flex" }}
             >
-              <RouterLink to="/" style={{textDecoration: 'none'}}>
+              {/* ###### */}
+              {/* <RouterLink to="/" style={{textDecoration: 'none'}}>
                 <Button variant="ghost">Home</Button>         
               </RouterLink>
               <RouterLink to="/mint" style={{textDecoration: 'none'}}>
@@ -105,7 +107,7 @@ export default function NavBar() {
               </RouterLink>
               <Button as="a" href="https://snapshot.org/#/chatpuppy.eth" target="_blank" variant="ghost"
                 rightIcon={<ExternalLinkIcon />}
-              >Governance</Button>
+              >Governance</Button> */}
               <ToggleTheme />
               {path==="/" ? <></> : <LoginButton />}
             </HStack>
@@ -159,7 +161,8 @@ export default function NavBar() {
                 <RouterLink to="/" style={{textDecoration: 'none'}}>
                   <Button w="full" variant="ghost">
                     Home
-                  </Button>                </RouterLink>
+                  </Button>                
+                </RouterLink>
                 <RouterLink to="/mint" style={{textDecoration: 'none'}}>
                   <Button w="full" variant={path==="/mint" ? "solid" : "ghost"}>
                     Mint

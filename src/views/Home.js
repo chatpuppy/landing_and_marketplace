@@ -18,7 +18,8 @@ export default function Home() {
         <FeaturesLeftRight />
         <SupportedNetworks />
         <FeaturesBox />
-        <Center my="20">
+        {/* ###### */}
+        {/* <Center my="20">
           <chakra.p
                 fontSize={{ base: "3xl", sm: "4xl" }}
                 lineHeight="8"
@@ -37,7 +38,7 @@ export default function Home() {
           w="100vw"
           src={useColorModeValue(RoadmapLight, RoadmapDark)}
         />
-        </Box>
+        </Box> */}
         <Mail />
         <Footer />
     </>
