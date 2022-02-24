@@ -84,12 +84,12 @@ return (
                 lineHeight={1.1}
                 fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}>
                 Mint mystery puppy avatars
-                <Text
+                {/* <Text
                     as={'span'}
                     bgGradient="linear(to-r, red.400,pink.400)"
                     bgClip="text">
                     !
-                </Text>
+                </Text> */}
                 </Heading>
                 <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }} textAlign="left">
                 Acquire NFTs for avatar in ChatPuppy, with which you can get premium access to ChatPuppy's exclusive features!
