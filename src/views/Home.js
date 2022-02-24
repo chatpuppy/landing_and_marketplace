@@ -6,8 +6,8 @@ import Mail from 'components/home/Mail';
 import FeaturesLeftRight from 'components/home/FeaturesLeftRight';
 import FeaturesBox from 'components/home/FeaturesBox';
 import SupportedNetworks from 'components/home/SupportedNetworks';
-import RoadmapDark from "assets/roadmap_dark.jpg"
-import RoadmapLight from "assets/roadmap_light.jpg"
+import RoadmapDark from "assets/roadmap_dark.png"
+import RoadmapLight from "assets/roadmap_light.png"
 import { Box, Center, Image, chakra, useColorModeValue } from '@chakra-ui/react';
 
 export default function Home() {
