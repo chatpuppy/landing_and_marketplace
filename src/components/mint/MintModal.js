@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Flex, Image, Badge, useColorModeValue, Button, Center, useToast } from "@chakra-ui/react";
+import { Box, Flex, Image, Badge, useColorModeValue, Button, Center, useToast, Spinner } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
 import BoxImageSrc from "assets/mysteryBox.jpg"
 import { ethers } from "ethers";
@@ -14,14 +14,14 @@ const MintModal = (props) => {
 
     const NFT_manager_contract_address = "0x0528E41841b8BEdD4293463FAa061DdFCC5E41bd"
     const toast = useToast()
-    const { count } = props;
+    const { count, boxPrice } = props;
     const id = 'toast'
 
     const property = {
         imageUrl: BoxImageSrc,
         imageAlt: "Mystery Box",
         title: "Title Info about the product",
-        formattedPrice: (count*0.01).toString()+" ETH ",
+        formattedPrice: (count*boxPrice).toString()+" ETH ",
         rating: 4,
     };
 
@@ -78,7 +78,7 @@ const MintModal = (props) => {
           //gets the account
           const signer = provider.getSigner(); 
           //connects with the contract
-          const options = {value: ethers.utils.parseEther((count*0.01).toString())}
+          const options = {value: ethers.utils.parseEther((count*boxPrice).toString())}
           const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_abi, signer);
           try {
             await NFTManagerConnectedContract.buyAndMint(1, options)
@@ -153,7 +153,7 @@ const MintModal = (props) => {
           //gets the account
           const signer = provider.getSigner();
           //connects with the contract
-          const options = {value: ethers.utils.parseEther((count*0.01).toString())}
+          const options = {value: ethers.utils.parseEther((count*boxPrice).toString())}
           const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_abi, signer);
           try {
             await NFTManagerConnectedContract.buyMintAndUnbox(1, options);
@@ -219,7 +219,7 @@ const MintModal = (props) => {
           </Box>
 
           <Box fontWeight="semibold">
-            Price: {property.formattedPrice}
+            Price: {boxPrice ? property.formattedPrice : <Spinner size='xs' mx="2"/>}
             <Box as="span" color={useColorModeValue("gray.600", "gray.200")} fontSize="sm">
               for {count} {count==='1'? "NFT": "NFTs"}
             </Box>
@@ -243,14 +243,15 @@ const MintModal = (props) => {
             fontFamily={'heading'}
             mb={2}
             w={'full'}
-            bgGradient="linear(to-r, red.400,pink.400)"
+            h={12}
+            bgGradient="linear(to-r, brand.200,brand.200)"
             color={'white'}
             _hover={{
-                bgGradient: 'linear(to-r, red.400,pink.400)',
+                bgGradient: 'linear(to-r, brand.150,brand.150)',
                 boxShadow: 'xl',
             }}
             _active={{
-                bgGradient: 'linear(to-r, red.200,pink.200)',
+                bgGradient: 'linear(to-r, brand.200,brand.200)',
                 boxShadow: 'xl',
             }}
             onClick={mint}
@@ -264,14 +265,15 @@ const MintModal = (props) => {
             fontFamily={'heading'}
             my={2}
             w={'full'}
-            bgGradient="linear(to-r, red.400,pink.400)"
+            h={12}
+            bgGradient="linear(to-r, brand.150,brand.150)"
             color={'white'}
             _hover={{
-                bgGradient: 'linear(to-r, red.400,pink.400)',
+                bgGradient: 'linear(to-r, brand.150,brand.150)',
                 boxShadow: 'xl',
             }}
             _active={{
-                bgGradient: 'linear(to-r, red.200,pink.200)',
+                bgGradient: 'linear(to-r, brand.150,brand.150)',
                 boxShadow: 'xl',
             }}
             onClick={mintAndUnbox}

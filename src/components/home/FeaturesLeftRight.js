@@ -40,18 +40,20 @@ export default function FeaturesLeftRight() {
             </chakra.h2>
             <Box
               mb={5}
-              textAlign={{ base: "center", sm: "left" }}
+              textAlign="left"
               color={useColorModeValue("gray.600", "gray.200")}
               fontSize={{ md: "lg" }}
             >
               <ul>
                 <li>All of your avatar, username, themes are your own digital NFT onchain assets.</li>
-                <li>All NFTs can be upgraded and are tradable on marketplace or opensea.</li>
+                {/* ###### */}
+                {/* <li>All NFTs can be upgraded and are tradable on marketplace or opensea.</li> */}
                 <li>Integrating 3rd-party NFTs. Ex. use CryptoPunk as avatar or artwork NFTs as themes.</li>
                 <li>Everyone can use, but NFT holders have advanced functionalities. Ex. minting own NFT avatar from your photos.</li>
               </ul>
             </Box>
-            <ButtonGroup>
+            {/* ###### */}
+            {/* <ButtonGroup>
               <RouterLink to="/mint" style={{textDecoration: 'none'}}>
                 <Button bg="brand.100" color="white"
                 _hover={{
@@ -62,7 +64,7 @@ export default function FeaturesLeftRight() {
               <RouterLink to="/marketplace" style={{textDecoration: 'none'}}>
                 <Button>Marketplace</Button>
               </RouterLink>
-            </ButtonGroup>
+            </ButtonGroup> */}
           </Box>
           <Image
           src={Design2} h={{base: "30vh", lg: "50vh"}} w={{base: "100vw", lg: "50vw"}}/>
@@ -90,7 +92,7 @@ export default function FeaturesLeftRight() {
             </chakra.h2>
             <Box
               mb={5}
-              textAlign={{ base: "center", sm: "left" }}
+              textAlign="left"
               color={useColorModeValue("gray.600", "gray.200")}
               fontSize={{ md: "lg" }}
             >
@@ -126,7 +128,7 @@ export default function FeaturesLeftRight() {
             </chakra.h2>
             <Box
               mb={5}
-              textAlign={{ base: "center", sm: "left" }}
+              textAlign="left"
               color={useColorModeValue("gray.600", "gray.200")}
               fontSize={{ md: "lg" }}
             >
