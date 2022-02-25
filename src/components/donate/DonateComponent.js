@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 
 import {
+  useColorModeValue,
   Box,
   Button,
   Heading,
@@ -15,6 +16,8 @@ import {
   Tbody,
   Tr,
   Td,
+  Container,
+  
 } from "@chakra-ui/react";
 
 import DonateModal from "./donateModal";
@@ -44,7 +47,7 @@ import {
 } from "utils/tokenVestingsInteract";
 
 export default function DonateComponent() {
-  const { setCurrentAccount, currentAccount, currentNetwork } = useAuth();
+  const {  currentAccount } = useAuth();
 
   const {
     setBeneficiaryReleasable,
@@ -141,28 +144,41 @@ export default function DonateComponent() {
 
 
   return (
-    <>
-      {participantID === 0 ? (<CardParticipantType />
-      ) : participantID > 0 ? (
-        <DonateView />
-      ) : userIndex ? <BeneficiaryView /> : (
-        <Stack
-          spacing={{
-            base: "8",
-            lg: "6",
-          }}
+    <Box as="section" height="100vh" overflowY="auto">
+      <Container 
+        color={useColorModeValue("gray.800", "inherit")}
+        maxW='container.lg'
+       
+        // columns={{ base: 1, md: 1 }}
+        // spacing={{ base: 10, lg: 32 }}
+        // py={{ base: 10, sm: 20, lg: 32 }}
+        // justify={'center'}
+        // align={'center'}
         >
-          <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="blue.500"
-            alignItems="center"
-            alignContent="center"
-            size="xl"
-          />
-        </Stack>
-      )}
-    </>
+        {participantID === 0 ? (<CardParticipantType />
+        ) : participantID > 0 ? (
+          <DonateView />
+        ) : userIndex ? <BeneficiaryView /> : (
+          <Stack
+            bg={{dark: "gray.900", light: "gray.50"}}
+            color={{dark: "white", light: "dark"}}
+            spacing={{
+              base: "8",
+              lg: "6",
+            }}
+          >
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="blue.500"
+              alignItems="center"
+              alignContent="center"
+              size="xl"
+            />
+          </Stack>
+        )}
+        </Container>
+      </Box>
   );
 }

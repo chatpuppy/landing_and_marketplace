@@ -38,7 +38,11 @@ import {
     Tab, 
     TabPanel,
     TabList,
-    Tabs
+    Tabs,
+    Thead,
+    Tfoot,
+    Th,
+    TableCaption,
   } from '@chakra-ui/react'
 
 import DonateModal from './donateModal';
@@ -94,26 +98,27 @@ export const DonateView = () => {
               }}
               gap="6"
             >
-              <Card>
-                <Text alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Total: {ethers.utils.formatEther(totalAmount)}</Text>
+              <Card textAlign={'center'} justifyContent={'center'}>
+                <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Beneficiary</Heading>
+                <Text size={'2xl'}>{ethers.utils.formatEther(totalAmount)} CPT</Text>
               </Card>
       
-              <Card>
-                <Text alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Beneficiary: {ethers.utils.formatEther(beneficiaryCount)}</Text>
+              <Card textAlign={'center'} justifyContent={'center'}>
+                <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Released </Heading>
+                <Text size={'3xl'}>{ethers.utils.formatEther(beneficiaryCount)} CPT</Text>
               </Card>
-              <Card>
-                { priceRange ? <PriceRangeComponent /> : '' }
+              <Card textAlign={'center'} justifyContent={'center'}>
+                <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Releaseble </Heading>
+                <Text size={'3xl'}>{ethers.utils.formatEther(beneficiaryCount)} CPT</Text>
               </Card>
             </SimpleGrid>
           </Stack>
-          <Stack>
-            <SimpleGrid
-              columns={{
-                base: 1,
-                md: 3,
-              }}
-              gap="6"
-            ></SimpleGrid>
+          <Stack textAlign={'center'} justifyContent={'center'}>
+            <SimpleGrid >
+            <Card textAlign={'center'} justifyContent={'center'}>
+              <PriceRangeComponent/>
+              </Card>
+            </SimpleGrid>
           </Stack>
           <Card minH="xs">
             <SimpleGrid columns={2} spacing={10}>
@@ -215,21 +220,29 @@ export const DonateView = () => {
           <Heading fontSize="xl" align="center">
             Price Range
           </Heading>
-          <List>
+          <Table>
+            <Thead>
+              <Tr>
+                <Th>Amount from</Th>
+                <Th> to</Th>
+                <Th> rate</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {console.log(priceRange)}
             {priceRange
               ? priceRange.map((range, idx) => (
-                  <li id={idx}>
-                    {" "}
-                    <ListItem>
-                      <Text align="left" fontSize="lg">
-                        {ethers.utils.formatEther(range.fromAmount)} for:{" "}
-                        {ethers.utils.formatEther(range.price)}{" "}
-                      </Text>
-                    </ListItem>
-                  </li>
+                
+                <Tr id={idx}>
+                  
+                    <Td>{ethers.utils.formatEther(range.price)} CPT/BNB</Td>
+                    <Td>{ethers.utils.formatEther(range.fromAmount)} CPT</Td>
+                    <Td></Td>
+                  </Tr>
                 ))
-              : "0.0"}
-          </List>
+              : "..."}
+          </Tbody>
+            </Table>
         </Box>
       );
     }
