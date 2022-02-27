@@ -10,7 +10,7 @@ import { ExternalLinkIcon } from '@chakra-ui/icons';
   
 export default function AddressFooter() {
     return (
-        <Box
+        <Box 
         bg={useColorModeValue('gray.50', 'gray.900')}
         color={useColorModeValue('gray.700', 'gray.200')}>
         <Container

@@ -35,7 +35,6 @@ export const InfoTableComponent = () => {
   const endTime = new DateTime(data.endTimestamp).toISODate();
   const higest = ethers.utils.formatEther(data.highest);
   const lowest = ethers.utils.formatEther(data.lowest);
-  // const showCap = ethers.utils.formatEther(dataCap);
 
   return (
     <Table variant="simple" color={useColorModeValue('black.700', 'black.700')}>
@@ -84,10 +83,6 @@ export const InfoTableComponent = () => {
           <Td>Accept donation:</Td>
           <Td>{data.acceptOverCap ? "True" : "False"}</Td>
         </Tr>
-        {/* <Tr>
-          <Td>Cap:</Td>
-          <Td>{showCap}</Td>
-        </Tr> */}
       </Tbody>
     </Table>
   );

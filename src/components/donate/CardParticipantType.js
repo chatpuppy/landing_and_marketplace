@@ -23,10 +23,7 @@ const Feature = ({ title, desc, onClick, status, ...rest }) => {
   };
 
   export const CardParticipantType = () => {
-    const {setParticipantID,participantID } = useDonate();
-    // const [participantID, setParticipantID] = useState(0);
-
-    console.log("participantID on CardParticipantType:", participantID)
+    const { setParticipantID, participantID } = useDonate();
     return (
       <Box px={8} py={24} mx="auto">
         <HStack spacing={8}>

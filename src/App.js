@@ -24,7 +24,6 @@ function App() {
   
         window.ethereum.on('accountsChanged', function (accounts) {
           // Time to reload your interface with accounts[0]!
-          console.log(accounts[0])
           setCurrentAccount(accounts[0]);
           window.location.reload()
         })

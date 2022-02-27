@@ -23,7 +23,7 @@ export default function PriceRangeComponent() {
       }}>
         <Heading  fontSize='xl' align='center'>Price Range</Heading>
        <List>
-        {priceRange? priceRange.map((range, idx) => <li id={idx}> <ListItem><Text align='left' fontSize='lg'>{ethers.utils.formatEther(range.fromAmount)} for: {ethers.utils.formatEther(range.price)} </Text></ListItem></li>) : '0.0'}
+        {priceRange? priceRange.map((range, idx) => <ListItem id={idx}><Text align='left' fontSize='lg'>{ethers.utils.formatEther(range.fromAmount)} for: {ethers.utils.formatEther(range.price)} </Text></ListItem>) : '0.0'}
       </List>
       </Box>
     )

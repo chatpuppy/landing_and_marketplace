@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import React, {useEffect, useState} from "react";
 
 import {
     Stack,
@@ -204,7 +205,8 @@ export const DonateView = () => {
 
 
   const PriceRangeComponent = () => {
-    const {priceRange } = useDonate()
+    const { priceRange, dataCap } = useDonate()
+
     if (priceRange) {
       return (
         <Box
@@ -217,7 +219,7 @@ export const DonateView = () => {
             lg: "row",
           }}
         >
-          <Heading fontSize="xl" align="center">
+          <Heading fontSize="xl" align="center" mb={10} mt={10}>
             Price Range
           </Heading>
           <Table>
@@ -229,15 +231,13 @@ export const DonateView = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {console.log(priceRange)}
             {priceRange
               ? priceRange.map((range, idx) => (
                 
                 <Tr id={idx}>
-                  
-                    <Td>{ethers.utils.formatEther(range.price)} CPT/BNB</Td>
+                    <Td>{ethers.utils.formatEther(range.price)} CPT</Td>
                     <Td>{ethers.utils.formatEther(range.fromAmount)} CPT</Td>
-                    <Td></Td>
+                    <Td>{dataCap ? dataCap  : '...'} CPT/BNB</Td>
                   </Tr>
                 ))
               : "..."}
@@ -249,4 +249,3 @@ export const DonateView = () => {
   };
   
 
-  

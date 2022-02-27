@@ -74,8 +74,6 @@ export default function DonateComponent() {
     async function fetchCrowd() {
       const crowdParams = await loadCrowdFundingParams(participantID);
       setDataDonate(crowdParams);
-      console.log("Participant:", participantID);
-      console.log(crowdParams);
     }
     fetchCrowd();
   }, [currentAccount,participantID,setDataDonate]);
@@ -127,8 +125,6 @@ export default function DonateComponent() {
     async function IndexHash(){
       const reponseIndex = await loadIndex(participantID, currentAccount);
       setUserIndexHash(reponseIndex[0]);
-      console.log(participantID)
-      console.log(currentAccount)
     }
     Index();
     IndexHash();
@@ -138,9 +134,11 @@ export default function DonateComponent() {
   useEffect(() => {
     async function getCap(){
       const cap = await loadCap(participantID);
-      setCap(cap);
+      const ratio = ethers.utils.formatEther(cap);
+      setCap(ratio);
     }
-    getCap()},[participantID, setCap])
+    getCap();
+  },[participantID, setCap])
 
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Flex, Image, Badge, useColorModeValue, Button, Center, useToast, Heading } from "@chakra-ui/react";
+import { Box, Flex, Image, Text, Badge, useColorModeValue, Button, Center, useToast, Heading, Stat, StatLabel, StatHelpText, StatNumber } from "@chakra-ui/react";
 import donateABI from "abi/TokensVesting_abi";
 import { TOKEN_VESTING_ADDRESS } from "constants";
 
@@ -7,6 +7,9 @@ import { TOKEN_VESTING_ADDRESS } from "constants";
 import { ethers } from "ethers";
 import { useAuth } from "contexts/AuthContext";
 import { useDonate } from "contexts/DonateContext";
+
+import { useContractWrite } from 'wagmi'
+import { Card } from "../common/Card"
 
 const DonateModal = (props) => {
     const [ isLoading, setIsLoading ] = useState(false);
@@ -17,46 +20,25 @@ const DonateModal = (props) => {
 
     const { amount } = props;
 
+    
+
 
     const sendDonate = async() => {
-        if((!window.ethereum) || (!currentAccount)){
-            if (!toast.isActive(id)) {
-              toast({
-                id,
-                title: 'No wallet found',
-                description: "Please install Metamask",
-                status: 'error',
-                duration: 4000,
-                isClosable: true,
-              })
-            }
-            return;
-          }
-    
-        if(currentNetwork!==42) {
-        if (!toast.isActive(id)) {
-            toast({
-            id,
-            title: 'Wrong network',
-            description: "Please change network to Kovan Testnet",
-            status: 'error',
-            duration: 4000,
-            isClosable: true,
-            })
-        }
-        return;
-        }
+        if (!currentAccount && !currentNetwork === 42) return 0
         setIsLoading(true);
-
         try {
+          
             const { ethereum } = window; //injected by metamask
             const provider = new ethers.providers.Web3Provider(ethereum); 
             const signer = provider.getSigner(); 
-            const options = {value: ethers.utils.parseEther(amount)}
+            const options = {value: ethers.utils.parseEther((amount).toString())}
             const TokenVestingContract = new ethers.Contract(TOKEN_VESTING_ADDRESS, donateABI, signer);
             
+            let uint8 = new Uint8Array(2);
+            uint8[0] = participantID;
+
             try {
-                await TokenVestingContract.crowdFunding(participantID, options)
+                await TokenVestingContract.crowdFunding(uint8[0], options)
                 toast({
                     title: 'Donate',
                     description: `Donate ${ethers.utils.formatEther(options.value)} ETH/BNB`,
@@ -68,12 +50,12 @@ const DonateModal = (props) => {
                     window.location.reload();
                 }, 5000)
             } catch(err) {
-                console.error('call contract', err)
+                console.log(err)
                 setIsLoading(false);
             }
     
         } catch(err) {
-            console.error('Error Donate Modal', err)
+            console.log('Error Donate Modal', err)
         }
 
     }
@@ -88,12 +70,20 @@ const DonateModal = (props) => {
           w="full"
           alignItems="center"
           justifyContent="center"
+          direction={"column"}
         >
-            <Heading>Donation {amount} ETH/BNB</Heading>
+            
           <Box
             bg={useColorModeValue("white", "gray.700")}
             maxW="sm"
+            justifyContent={'center'}
+            alignItems={'center'}
           >
+            <Stat>
+                <StatLabel>Vesting Donation</StatLabel>
+                <StatNumber>{amount}</StatNumber>
+                <StatHelpText>BNB/ETH</StatHelpText>
+            </Stat>
             
             <Button
                 fontFamily={'heading'}
@@ -114,6 +104,8 @@ const DonateModal = (props) => {
                 >
                 Donate
             </Button>
+            
+            
           </Box>
         </Flex>
     )
