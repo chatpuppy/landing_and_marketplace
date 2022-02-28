@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react'
-import { Button, Image, useToast } from '@chakra-ui/react';
+import { Button, Image, useToast, /*Menu, Box,
+    MenuButton, MenuList, MenuItem*/
+} from '@chakra-ui/react';
 import { checkIfWalletIsConnected ,connectWallet } from 'services/walletConnections';
 import { useAuth } from 'contexts/AuthContext';
-
+//import { ChevronDownIcon } from '@chakra-ui/icons';
 import BNBLogo from "assets/bnb-logo.svg"
 import ETHLogo from "assets/eth-logo.svg"
 
