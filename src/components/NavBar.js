@@ -96,6 +96,9 @@ export default function NavBar() {
               {/* <RouterLink to="/" style={{textDecoration: 'none'}}>
                 <Button variant="ghost">Home</Button>         
               </RouterLink>
+              <RouterLink to="/donate" style={{textDecoration: 'none'}}>
+                <Button variant={path==="/donate" ? "solid" : "ghost"}>Donate</Button>
+              </RouterLink>
               <RouterLink to="/mint" style={{textDecoration: 'none'}}>
                 <Button variant={path==="/mint" ? "solid" : "ghost"}>Mint</Button>
               </RouterLink>
@@ -170,6 +173,11 @@ export default function NavBar() {
                 <RouterLink to="/marketplace" style={{textDecoration: 'none'}}>
                   <Button w="full" variant={path==="/marketplace" ? "solid" : "ghost"}>
                     Marketplace
+                  </Button>
+                </RouterLink>
+                <RouterLink to="/donate" style={{textDecoration: 'none'}}>
+                  <Button w="full" variant={path==="/donate" ? "solid" : "ghost"}>
+                    Donate
                   </Button>
                 </RouterLink>
                 <RouterLink to="/account" style={{textDecoration: 'none'}}>
