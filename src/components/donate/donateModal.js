@@ -8,9 +8,6 @@ import { ethers } from "ethers";
 import { useAuth } from "contexts/AuthContext";
 import { useDonate } from "contexts/DonateContext";
 
-import { useContractWrite } from 'wagmi'
-import { Card } from "../common/Card"
-
 const DonateModal = (props) => {
     const [ isLoading, setIsLoading ] = useState(false);
     const { currentAccount, currentNetwork } = useAuth()

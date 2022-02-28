@@ -6,7 +6,6 @@ import { getNameSaleById } from "utils/getNameSaleById";
 import PriceRangeComponent  from "./PriceRangeComponent";
 
 import { ethers } from "ethers";
-import BeneficiaryModal from './beneficiaryModal';
 
 export const BeneficiaryView = () => {
     const {participantID, totalAmount, beneficiaryCount, priceRange} = useDonate()
