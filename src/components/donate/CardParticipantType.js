@@ -26,7 +26,8 @@ const Feature = ({ title, desc, onClick, status, ...rest }) => {
   export const CardParticipantType = () => {
     const { setParticipantID, participantID } = useDonate();
     return (
-      <Box px={8} py={24} mx="auto">
+      <Box mx="auto">
+        <Text fontSize={'2xl'} mb={2}>Select your participant</Text>
         <Blur
           position={"absolute"}
           top={-10}
