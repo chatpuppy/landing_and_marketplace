@@ -150,7 +150,7 @@ export const BeneficiaryView = () => {
                 <Text alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Beneficiary: {ethers.utils.formatEther(beneficiaryCount)}</Text>
               </Card>
               <Card>
-                { priceRange ? <PriceRangeComponent /> : '' }
+                { priceRange && (participantID === 1 || participantID === 2)? <PriceRangeComponent /> : '' }
               </Card>
             </SimpleGrid>
           </Stack>

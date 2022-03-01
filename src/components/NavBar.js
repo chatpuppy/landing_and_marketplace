@@ -161,15 +161,17 @@ export default function NavBar() {
                   aria-label="Close menu"
                   onClick={mobileNav.onClose}
                 />
-                <RouterLink to="/" style={{textDecoration: 'none'}}>
+                {/* ###### */}
+                {/* <RouterLink to="/" style={{textDecoration: 'none'}}>
                   <Button w="full" variant="ghost">
                     Home
-                  </Button>                
+                  </Button>
                 </RouterLink>
                 <RouterLink to="/mint" style={{textDecoration: 'none'}}>
                   <Button w="full" variant={path==="/mint" ? "solid" : "ghost"}>
                     Mint
-                  </Button>                </RouterLink>
+                  </Button>                
+                </RouterLink>
                 <RouterLink to="/marketplace" style={{textDecoration: 'none'}}>
                   <Button w="full" variant={path==="/marketplace" ? "solid" : "ghost"}>
                     Marketplace
@@ -185,7 +187,7 @@ export default function NavBar() {
                     My NFTs
                   </Button>
                 </RouterLink>
-                {path==="/" ? <></> : <LoginButton />}
+                {path==="/" ? <></> : <LoginButton />} */}
                 <ToggleTheme />
               </VStack>
             </Box>

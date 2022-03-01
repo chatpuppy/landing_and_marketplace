@@ -194,6 +194,14 @@ export const DonateView = () => {
             </Card>
           </SimpleGrid>
         </Stack>
+        <Blur
+          position={"absolute"}
+          top={-10}
+          left={-10}
+          style={{ filter: "blur(70px)" }}
+        />
+        {participantID === 1 || participantID === 2 ? 
+        <Box>
         <Stack textAlign={'center'} justifyContent={'center'}>
           <SimpleGrid >
             <Card textAlign={'center'} justifyContent={'center'}>
@@ -206,12 +214,6 @@ export const DonateView = () => {
             <Card>
               <InfoTableComponent />
             </Card>
-            <Blur
-              position={"absolute"}
-              top={-10}
-              left={-10}
-              style={{ filter: "blur(70px)" }}
-            />
             {beneficiaryData !== undefined || donateData.endTimestamp * 1000 < new Date().getTime() ? "" : 
             <Card>
               <InputDonate />
@@ -219,6 +221,7 @@ export const DonateView = () => {
             }
           </SimpleGrid>
         </Card>
+        </Box> : ""}
         <Box height={5}></Box>
       </Stack>
     )

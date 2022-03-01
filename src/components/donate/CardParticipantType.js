@@ -7,6 +7,7 @@ const Feature = ({ title, desc, onClick, status, ...rest }) => {
     return (
       <Box
         p={5}
+        mb={5}
         shadow="md"
         borderWidth="1px"
         flex="1"
@@ -16,7 +17,7 @@ const Feature = ({ title, desc, onClick, status, ...rest }) => {
         <Heading fontSize="xl">{title}</Heading>
         <Text mt={5} mb={5}>{desc}</Text>
         <Button onClick={onClick} isDisabled={status}>
-          Donate
+          GO
         </Button>
       </Box>
     );
@@ -32,20 +33,36 @@ const Feature = ({ title, desc, onClick, status, ...rest }) => {
           left={-10}
           style={{ filter: "blur(70px)" }}
         />
-        <HStack spacing={8}>
-          <Feature
-            title="Public sale"
-            desc="Public sale Description"
-            onClick={() => setParticipantID(2)}
-            status={false}
-          />
-          <Feature
-            title="Private sale"
-            desc="Description"
-            onClick={() => setParticipantID(1)}
-            status={true} // button for activated sale
-          />
-        </HStack>
+        <Feature
+          title="Private sale"
+          desc="Private sale for ChatPuppy"
+          onClick={() => setParticipantID(1)}
+          status={true} // button for activated sale
+        />
+        <Feature
+          title="Public sale"
+          desc="Public sale for ChatPuppy"
+          onClick={() => setParticipantID(2)}
+          status={false}
+        />
+        <Feature
+          title="Team"
+          desc="Team members release vesting tokens"
+          onClick={() => setParticipantID(3)}
+          status={false}
+        />
+        <Feature
+          title="Advisor"
+          desc="Advisors release vesting tokens"
+          onClick={() => setParticipantID(4)}
+          status={false}
+        />
+        <Feature
+          title="Marketing"
+          desc="Marketing release vesting tokens"
+          onClick={() => setParticipantID(7)}
+          status={false}
+        />
       </Box>
     );
   };
