@@ -56,7 +56,7 @@ import { getNameSaleById } from "utils/getNameSaleById";
 import { InfoTableComponent } from "./infoTableComponet";
 import donateABI from "abi/TokensVesting_abi";
 import { TOKEN_VESTING_ADDRESS } from "constants";
-
+import { AiTwotoneCheckCircle } from "react-icons/ai";
 
 export const DonateView = () => {
     const { participantID, beneficiaryCount, beneficiaryData, releasable, donateData, participantTotal } = useDonate();
@@ -177,19 +177,20 @@ export const DonateView = () => {
             <Card textAlign={'center'} justifyContent={'center'}>
               <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Your benefit</Heading>
               <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.totalAmount))}</Text>
-              <Text fontSize={'2xl'} color={useColorModeValue("gray.400", "#3d444f")} mt={5}>{'sold ' + format(ethers.utils.formatEther(participantTotal))}</Text>
+              <Text fontSize={'2xl'} color={useColorModeValue("gray.400", "#3d444f")} mt={5} mb={5}>{'sold ' + format(ethers.utils.formatEther(participantTotal))}</Text>
             </Card>
     
             <Card textAlign={'center'} justifyContent={'center'}>
               <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Released</Heading>
-              <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 :beneficiaryData.releasedAmount))}</Text>
-              <Button mt={5} mb={5} onClick={redeem}>Redeem unreleased</Button>
+              <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.releasedAmount))}</Text>
+              {beneficiaryData === undefined ? "" : <Button mt={5} mb={5} onClick={redeem}>Redeem unreleased</Button>}
             </Card>
             
             <Card textAlign={'center'} justifyContent={'center'}>
               <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Releaseble</Heading>
-              <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(releasable === undefined ? 0 : releasable))}</Text>
-              {releasable > 0 ? <Button mt={5} mb={5} onClick={release}>Release</Button> : ''}
+              <Text mt={-10} ml={10}>{beneficiaryData === undefined ? <AiTwotoneCheckCircle color={"gray"}/> : beneficiaryData.status === 1 ? <AiTwotoneCheckCircle color={"green"}/> : <AiTwotoneCheckCircle color={"red"}/>}</Text>
+              <Text mt={5} fontSize={'4xl'}>{format(ethers.utils.formatEther(releasable === undefined ? 0 : releasable))}</Text>
+              {releasable > 0 ? <Button mt={5} mb={5} onClick={release}>Release</Button> : ''} 
             </Card>
           </SimpleGrid>
         </Stack>
@@ -205,7 +206,13 @@ export const DonateView = () => {
             <Card>
               <InfoTableComponent />
             </Card>
-            {beneficiaryData !== undefined && donateData.endTimestamp < new Date().getTime() ? "" : 
+            <Blur
+              position={"absolute"}
+              top={-10}
+              left={-10}
+              style={{ filter: "blur(70px)" }}
+            />
+            {beneficiaryData !== undefined || donateData.endTimestamp * 1000 < new Date().getTime() ? "" : 
             <Card>
               <InputDonate />
             </Card>
@@ -267,12 +274,6 @@ export const DonateView = () => {
             Donate
           </Button>
         </Box>
-        <Blur
-          position={"absolute"}
-          top={-10}
-          left={-10}
-          style={{ filter: "blur(70px)" }}
-        />
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
           <ModalOverlay />
           <ModalContent>

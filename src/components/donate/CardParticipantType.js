@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Heading, HStack, Text, Button } from "@chakra-ui/react";
 import { useDonate } from "contexts/DonateContext";
+import { Blur } from '../common/Blur';
 
 const Feature = ({ title, desc, onClick, status, ...rest }) => {
     return (
@@ -25,6 +26,12 @@ const Feature = ({ title, desc, onClick, status, ...rest }) => {
     const { setParticipantID, participantID } = useDonate();
     return (
       <Box px={8} py={24} mx="auto">
+        <Blur
+          position={"absolute"}
+          top={-10}
+          left={-10}
+          style={{ filter: "blur(70px)" }}
+        />
         <HStack spacing={8}>
           <Feature
             title="Public sale"

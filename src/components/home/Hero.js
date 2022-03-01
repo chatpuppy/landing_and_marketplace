@@ -5,10 +5,17 @@ import {
 } from "@chakra-ui/react";
 import Design1 from "assets/design1.png"
 import { ExternalLinkIcon } from '@chakra-ui/icons';
+import { Blur } from '../common/Blur';
 
 const Hero = () => {
   return (
     <Box px={8} pt={24} mx="auto">
+      <Blur
+        position={"absolute"}
+        top={-10}
+        left={-10}
+        style={{ filter: "blur(70px)" }}
+      />
       <Box
         w={{ base: "full", md: 11 / 12, xl: 9 / 12 }} mx="auto"
         textAlign={{ base: "left", md: "center" }}

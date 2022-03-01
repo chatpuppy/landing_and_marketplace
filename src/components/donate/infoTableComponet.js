@@ -2,6 +2,7 @@ import { useDonate } from "contexts/DonateContext";
 import { DateTime } from "luxon";
 import { ethers } from "ethers";
 import { TOKEN_ADDRESS, TOKEN_VESTING_ADDRESS } from "constants";
+import {IoIosTimer} from "react-icons/io";
 
 import { 
     Box,
@@ -44,51 +45,47 @@ export const InfoTableComponent = () => {
     <Table ml={"5%"} mr={"5%"} width={"90%"} mb={8} variant="simple" color={useColorModeValue('black.700', '#dcdcdc')}>
       <Tbody>
         <Tr>
-          <Td>Donate start</Td>
-          <Td>{startTime}</Td>
+          <Td>{"Donate duration".toUpperCase()}</Td>
+          <Td>{startTime} - {endTime}</Td>
         </Tr>
         <Tr>
-          <Td>Donate end</Td>
-          <Td>{endTime}</Td>
-        </Tr>
-        <Tr>
-          <Td>Genesis time</Td>
+          <Td>{"Genesis time".toUpperCase()}</Td>
           <Td>{genesisTimestamp}</Td>
         </Tr>
         <Tr>
-          <Td>Cliff</Td>
+          <Td>{"Cliff".toUpperCase()}</Td>
           <Td>{data.cliff == 0 ? `NO` : `${genesisTimestamp} to ${cliffTimeStamp}`}</Td>
         </Tr>
         <Tr>
-          <Td>Release duration</Td>
-          <Td>{`${cliffTimeStamp} to ${endDuration}`}</Td>
+          <Td>{"Release duration".toUpperCase()}</Td>
+          <Td>{`${cliffTimeStamp} - ${endDuration}`}</Td>
         </Tr>
         <Tr>
-          <Td>TGE radio</Td>
+          <Td>{"TGE radio".toUpperCase()}</Td>
           <Td>{tgeAmount}</Td>
         </Tr>
         <Tr>
-          <Td>Era period</Td>
+          <Td>{"Era period".toUpperCase()}</Td>
           <Td> {eraBasis + " " + (eraBasis > 1 ? 'hours' : 'hour')} </Td>
         </Tr>
         <Tr>
-          <Td>Donation amount</Td>
-          <Td>{lowest} to {higest} BNB</Td>
+          <Td>{"Donation amount".toUpperCase()}</Td>
+          <Td>{lowest} - {higest} BNB</Td>
         </Tr>
         <Tr>
-          <Td>Redeem allowd</Td>
+          <Td>{"Redeem allowd".toUpperCase()}</Td>
           <Td>{data.allowRedeem ? "true" : "false"}</Td>
         </Tr>
         <Tr>
-          <Td>Over cap allowed</Td>
+          <Td>{"Over cap allowed".toUpperCase()}</Td>
           <Td>{data.acceptOverCap ? "true" : "false"}</Td>
         </Tr>
         <Tr>
-          <Td>CPT address</Td>
+          <Td>{"CPT address".toUpperCase()}</Td>
           <Td>{TOKEN_ADDRESS}</Td>
         </Tr>
         <Tr>
-          <Td>Vesting contract</Td>
+          <Td>{"Vesting contract".toUpperCase()}</Td>
           <Td>{TOKEN_VESTING_ADDRESS}</Td>
         </Tr>
       </Tbody>
