@@ -72,6 +72,7 @@ export const loadBeneficiaryCount = async (participant) =>  {
  * @returns 
  */
 export const loadIndex = async (participant, address) => {
+    if(address === undefined) return;
     const response = await tokenVestingContract.getIndex(participant, address);
     return response
 }
@@ -101,6 +102,7 @@ export const loadPriceForAmount = async (participant, amount) => {
  * @returns 
  */
 export const loadReleasable = async (participant, address) => {
+    if(address === undefined) return;
     const res = await loadIndex(participant, address);
     if(res[0]) return await tokenVestingContract.releasable(res[1].toString());
     else return 0;

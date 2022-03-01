@@ -124,22 +124,13 @@ export default function DonateComponent() {
   useEffect(() => {
     async function Index() {
       const reponseIndex = await loadIndex(participantID, currentAccount);
+      if(reponseIndex === undefined) return;
       setUserIndex(reponseIndex[1]);
       if(reponseIndex[0]) setBeneficiaryData(await loadBeneficiary(reponseIndex[1]));
     }
     
     Index();
   },[currentAccount, participantID,  setUserIndex, setBeneficiaryData])
-
-  
-  useEffect(() => {
-    async function getCap(){
-      const cap = await loadCap(participantID);
-      const ratio = ethers.utils.formatEther(cap);
-      setCap(ratio);
-    }
-    getCap();
-  },[participantID, setCap])
 
   useEffect(() => {
     async function getReleasable() {

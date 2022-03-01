@@ -37,7 +37,7 @@ const Feature = ({ title, desc, onClick, status, ...rest }) => {
           title="Private sale"
           desc="Private sale for ChatPuppy"
           onClick={() => setParticipantID(1)}
-          status={true} // button for activated sale
+          status={true}
         />
         <Feature
           title="Public sale"
