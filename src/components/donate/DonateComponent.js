@@ -149,7 +149,7 @@ export default function DonateComponent() {
     getReleasable();
   }, [participantID, setReleasable, currentAccount])
 
-  
+
   return (
     <Box as="section" height="100vh" overflowY="auto">
       <Container 

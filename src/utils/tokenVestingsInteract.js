@@ -101,9 +101,9 @@ export const loadPriceForAmount = async (participant, amount) => {
  * @returns 
  */
 export const loadReleasable = async (participant, address) => {
-    const res = loadIndex(participant, address);
-    if(res.has) return await tokenVestingContract.releasable(res.index);
-    else return 0;    
+    const res = await loadIndex(participant, address);
+    if(res[0]) return await tokenVestingContract.releasable(res[1].toString());
+    else return 0;
 }
 
 /**

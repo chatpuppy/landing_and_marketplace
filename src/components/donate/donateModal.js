@@ -14,17 +14,12 @@ const DonateModal = (props) => {
     const toast = useToast()
     const id = 'toast'
     const {  participantID } = useDonate()
-
     const { amount } = props;
-
-    
-
 
     const sendDonate = async() => {
         if (!currentAccount && !currentNetwork === 42) return 0
         setIsLoading(true);
         try {
-          
             const { ethereum } = window; //injected by metamask
             const provider = new ethers.providers.Web3Provider(ethereum); 
             const signer = provider.getSigner(); 
@@ -56,10 +51,6 @@ const DonateModal = (props) => {
         }
 
     }
-
-    
-
-    
 
     return (
         <Flex

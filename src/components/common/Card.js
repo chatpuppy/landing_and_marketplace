@@ -6,7 +6,7 @@ import {
 export const Card = (props) => (
     <Box
       minH="36"
-      bg="gray.100"
+      bg={useColorModeValue("gray.100","#161b26")}
       boxShadow={useColorModeValue("gray.800", "inherit")}
       borderRadius="lg"
       {...props}

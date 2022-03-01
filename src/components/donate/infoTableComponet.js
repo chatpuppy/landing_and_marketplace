@@ -1,8 +1,11 @@
 import { useDonate } from "contexts/DonateContext";
 import { DateTime } from "luxon";
 import { ethers } from "ethers";
+import { TOKEN_ADDRESS, TOKEN_VESTING_ADDRESS } from "constants";
 
 import { 
+    Box,
+    Heading,
     TabPanels,
     Tab, 
     TabPanel,
@@ -19,7 +22,6 @@ import {
 export const InfoTableComponent = () => { 
   const { donateData } = useDonate()
   let data = donateData;
-  console.log(data.genesisTimestamp.toString())
   
   const genesisTimestamp = DateTime.fromSeconds(parseInt(data.genesisTimestamp)).toFormat("F");
   const cliffTimeStamp = DateTime.fromSeconds(parseInt(data.genesisTimestamp) + parseInt(data.cliff)).toFormat("F");
@@ -34,7 +36,12 @@ export const InfoTableComponent = () => {
   const lowest = ethers.utils.formatEther(data.lowest);
 
   return (
-    <Table variant="simple" color={useColorModeValue('black.700', 'grey')}>
+    <Box>
+    <Heading fontSize="2xl" align="left" ml={12} mb={5} mt={5} color={useColorModeValue('black.700', '#dcdcdc')}>
+      Donation Rules
+    </Heading>
+
+    <Table ml={"5%"} mr={"5%"} width={"90%"} mb={8} variant="simple" color={useColorModeValue('black.700', '#dcdcdc')}>
       <Tbody>
         <Tr>
           <Td>Donate Start</Td>
@@ -76,7 +83,16 @@ export const InfoTableComponent = () => {
           <Td>Over cap allowed</Td>
           <Td>{data.acceptOverCap ? "True" : "False"}</Td>
         </Tr>
+        <Tr>
+          <Td>CPT Address</Td>
+          <Td>{TOKEN_ADDRESS}</Td>
+        </Tr>
+        <Tr>
+          <Td>Vesting Contract</Td>
+          <Td>{TOKEN_VESTING_ADDRESS}</Td>
+        </Tr>
       </Tbody>
     </Table>
+    </Box>
   );
 };

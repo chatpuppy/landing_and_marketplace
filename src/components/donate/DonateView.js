@@ -54,88 +54,166 @@ import { useDonate } from "contexts/DonateContext";
 import { getNameSaleById } from "utils/getNameSaleById";
 
 import { InfoTableComponent } from "./infoTableComponet";
+import donateABI from "abi/TokensVesting_abi";
+import { TOKEN_VESTING_ADDRESS } from "constants";
 
 
 export const DonateView = () => {
-    const { participantID, beneficiaryCount, beneficiaryData, releasable } = useDonate();
-    console.log("beneficiaryData", beneficiaryData);
+    const { participantID, beneficiaryCount, beneficiaryData, releasable, donateData } = useDonate();
+    const [ isLoading, setIsLoading ] = useState(false);
+    const toast = useToast()
+    // console.log("beneficiaryData", beneficiaryData);
+
+    const release = async () => {
+      setIsLoading(true);
+      try {
+        const { ethereum } = window; //injected by metamask
+        const provider = new ethers.providers.Web3Provider(ethereum); 
+        const signer = provider.getSigner(); 
+        // const options = {value: ethers.utils.parseEther((amount).toString())}
+        const TokenVestingContract = new ethers.Contract(TOKEN_VESTING_ADDRESS, donateABI, signer);
+        
+        let uint8 = new Uint8Array(2);
+        uint8[0] = participantID;
+
+        try {
+            await TokenVestingContract.release(uint8[0], {})
+            toast({
+                title: 'Release',
+                description: `Release releasable tokens`,
+                status: 'sucess',
+                duration: 4000,
+                isClosable: true,
+            })
+            setTimeout(()=>{
+                window.location.reload();
+            }, 5000)
+        } catch(err) {
+            console.log(err)
+            setIsLoading(false);
+        }
+      } catch(err) {
+          console.log('Error Release', err)
+      }
+    }
+
+    const redeem = async () => {
+      setIsLoading(true);
+      try {
+        const { ethereum } = window; //injected by metamask
+        const provider = new ethers.providers.Web3Provider(ethereum); 
+        const signer = provider.getSigner(); 
+        const TokenVestingContract = new ethers.Contract(TOKEN_VESTING_ADDRESS, donateABI, signer);
+        
+        let uint8 = new Uint8Array(2);
+        uint8[0] = participantID;
+
+        try {
+            await TokenVestingContract.redeem(uint8[0], {})
+            toast({
+                title: 'Redeem',
+                description: `Redeem unreleasable tokens`,
+                status: 'sucess',
+                duration: 4000,
+                isClosable: true,
+            })
+            setTimeout(()=>{
+                window.location.reload();
+            }, 5000)
+        } catch(err) {
+            console.log(err)
+            setIsLoading(false);
+        }
+      } catch(err) {
+          console.log('Error redeem', err)
+      }
+    }
+
+    const format = (num) => {
+      return parseFloat(num).toFixed(4).toString();
+    }
 
     return (
+      <Stack
+        spacing={{
+          base: "8",
+          lg: "6",
+        }}
+      >
+        <Stack
+          spacing="4"
+          direction={{
+            base: "column",
+            lg: "row",
+          }}
+          justify="space-between"
+        >
+          <Stack spacing="1">
+            <Heading
+              size={useBreakpointValue({
+                base: "xs",
+                lg: "sm",
+              })}
+              fontWeight="medium"
+            ></Heading>
+          </Stack>
+        </Stack>
+        <Stack>
+          <Heading>{participantID ? getNameSaleById(participantID) : ""}</Heading>
+        </Stack>
         <Stack
           spacing={{
-            base: "8",
+            base: "5",
             lg: "6",
           }}
         >
-          <Stack
-            spacing="4"
-            direction={{
-              base: "column",
-              lg: "row",
+          <SimpleGrid
+            columns={{
+              base: 1,
+              md: 3,
             }}
-            justify="space-between"
+            gap="6"
           >
-            <Stack spacing="1">
-              <Heading
-                size={useBreakpointValue({
-                  base: "xs",
-                  lg: "sm",
-                })}
-                fontWeight="medium"
-              ></Heading>
-            </Stack>
-          </Stack>
-          <Stack>
-            <Heading>{participantID ? getNameSaleById(participantID) : ""}</Heading>
-          </Stack>
-          <Stack
-            spacing={{
-              base: "5",
-              lg: "6",
-            }}
-          >
-            <SimpleGrid
-              columns={{
-                base: 1,
-                md: 3,
-              }}
-              gap="6"
-            >
-              <Card textAlign={'center'} justifyContent={'center'}>
-                <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Benefit</Heading>
-                <Text fontSize={'4xl'}>{ethers.utils.formatEther(beneficiaryData === undefined ? "0" : beneficiaryData.totalAmount)}</Text>
-              </Card>
-      
-              <Card textAlign={'center'} justifyContent={'center'}>
-                <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Released</Heading>
-                <Text fontSize={'4xl'}>{ethers.utils.formatEther(beneficiaryData === undefined ? 0 :beneficiaryData.releasedAmount)}</Text>
-              </Card>
-              
-              <Card textAlign={'center'} justifyContent={'center'}>
-                <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Releaseble</Heading>
-                <Text fontSize={'4xl'}>{ethers.utils.formatEther(releasable === undefined ? 0 : releasable)}</Text>
-              </Card>
-            </SimpleGrid>
-          </Stack>
-          <Stack textAlign={'center'} justifyContent={'center'}>
-            <SimpleGrid >
-              <Card textAlign={'center'} justifyContent={'center'}>
-              <PriceRangeComponent/>
-              </Card>
-            </SimpleGrid>
-          </Stack>
-          <Card minH="xs">
-            <SimpleGrid columns={1} spacing={10}>
-              <Card>
-                <InfoTableComponent />
-              </Card>
-              <Card>
-                <InputDonate />
-              </Card>
-            </SimpleGrid>
-         </Card>
+            <Card textAlign={'center'} justifyContent={'center'}>
+              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Your Benefit</Heading>
+              <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.totalAmount))}</Text>
+            </Card>
+    
+            <Card textAlign={'center'} justifyContent={'center'}>
+              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Released</Heading>
+              <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 :beneficiaryData.releasedAmount))}</Text>
+              <Button mb={5} onClick={redeem}>Redeem unreleased</Button>
+            </Card>
+            
+            <Card textAlign={'center'} justifyContent={'center'}>
+              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Releaseble</Heading>
+              <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(releasable === undefined ? 0 : releasable))}</Text>
+              {releasable > 0 ? <Button mb={5} onClick={release}>Release</Button> : ''}
+            </Card>
+          </SimpleGrid>
         </Stack>
-      )
+        <Stack textAlign={'center'} justifyContent={'center'}>
+          <SimpleGrid >
+            <Card textAlign={'center'} justifyContent={'center'}>
+            <PriceRangeComponent/>
+            </Card>
+          </SimpleGrid>
+        </Stack>
+        <Card minH="xs">
+          <SimpleGrid columns={1} spacing={10}>
+            <Card>
+              <InfoTableComponent />
+            </Card>
+            {beneficiaryData !== undefined && donateData.endTimestamp < new Date().getTime() ? "" : 
+            <Card>
+              <InputDonate />
+            </Card>
+            }
+          </SimpleGrid>
+        </Card>
+        <Box height={5}></Box>
+      </Stack>
+    )
 }
     
 
@@ -144,11 +222,11 @@ export const DonateView = () => {
   
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
       useNumberInput({
-        step: 0.01,
-        defaultValue: 1.0,
-        min: 1,
-        max: 6,
-        precision: 2,
+        step: 0.001, 
+        defaultValue: 0.05, // ###### 测试时使用小一点的数
+        min: 0.04,
+        max: 0.06,
+        precision: 3,
       });
   
     const inc = getIncrementButtonProps();
@@ -210,9 +288,9 @@ export const DonateView = () => {
 
 
   const PriceRangeComponent = () => {
-    const { priceRange, dataCap } = useDonate()
+    const { priceRange } = useDonate()
 
-    if (priceRange) {
+    // if (priceRange) {
       return (
         <Box
           margin={{
@@ -224,10 +302,10 @@ export const DonateView = () => {
             lg: "row",
           }}
         >
-          <Heading fontSize="xl" align="center" mb={10} mt={10}>
+          <Heading fontSize="2xl" align="left" ml={12} mb={5} mt={5} color={useColorModeValue('black.700', '#dcdcdc')}>
             Rate List
           </Heading>
-          <Table>
+          <Table ml={"5%"} mr={"5%"} width={"90%"} mb={8} variant="simple" color={useColorModeValue('black.700', '#dcdcdc')}>
             <Thead>
               <Tr>
                 <Th>#</Th>
@@ -248,11 +326,11 @@ export const DonateView = () => {
                   </Tr>
                 ))
               : "..."}
-          </Tbody>
-            </Table>
+            </Tbody>
+          </Table>
         </Box>
       );
-    }
+    // }
   };
   
 
