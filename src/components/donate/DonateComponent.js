@@ -37,6 +37,8 @@ import { BeneficiaryView } from "./BeneficiaryView";
 
 import {
   loadBeneficiaryCount,
+  loadBeneficiary,
+  loadReleasable,
   loadCap,
   loadCrowdFundingParams,
   loadIndex,
@@ -44,6 +46,7 @@ import {
   loadParticipantReleasable,
   loadTotalParticipant,
   totalDonateAmount,
+
 } from "utils/tokenVestingsInteract";
 
 export default function DonateComponent() {
@@ -66,6 +69,8 @@ export default function DonateComponent() {
     participantID,
     donateData,
     setUserIndexHash,
+    setBeneficiaryData,
+    setReleasable,
     setUserIndex,
     userIndex,
   } = useDonate();
@@ -95,7 +100,7 @@ export default function DonateComponent() {
 
   useEffect(() => {
     async function fetchPriceData() {
-      const priceRange = await loadParticipantPriceRange(participantID);
+      let priceRange = await loadParticipantPriceRange(participantID);
       setParticipantPriceRange(priceRange);
     }
     fetchPriceData();
@@ -120,15 +125,11 @@ export default function DonateComponent() {
     async function Index() {
       const reponseIndex = await loadIndex(participantID, currentAccount);
       setUserIndex(reponseIndex[1]);
+      if(reponseIndex[0]) setBeneficiaryData(await loadBeneficiary(reponseIndex[1]));
     }
     
-    async function IndexHash(){
-      const reponseIndex = await loadIndex(participantID, currentAccount);
-      setUserIndexHash(reponseIndex[0]);
-    }
     Index();
-    IndexHash();
-  },[currentAccount, participantID,  setUserIndex, setUserIndexHash])
+  },[currentAccount, participantID,  setUserIndex, setBeneficiaryData])
 
   
   useEffect(() => {
@@ -140,7 +141,15 @@ export default function DonateComponent() {
     getCap();
   },[participantID, setCap])
 
+  useEffect(() => {
+    async function getReleasable() {
+      const releasable = await loadReleasable(participantID, currentAccount);
+      setReleasable(releasable);
+    }
+    getReleasable();
+  }, [participantID, setReleasable, currentAccount])
 
+  
   return (
     <Box as="section" height="100vh" overflowY="auto">
       <Container 

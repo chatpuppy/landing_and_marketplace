@@ -19,68 +19,61 @@ import {
 export const InfoTableComponent = () => { 
   const { donateData } = useDonate()
   let data = donateData;
+  console.log(data.genesisTimestamp.toString())
+  
+  const genesisTimestamp = DateTime.fromSeconds(parseInt(data.genesisTimestamp)).toFormat("F");
+  const cliffTimeStamp = DateTime.fromSeconds(parseInt(data.genesisTimestamp) + parseInt(data.cliff)).toFormat("F");
+  const startTime = DateTime.fromSeconds(parseInt(data.startTimestamp)).toFormat("F");
+  const endTime = DateTime.fromSeconds(parseInt(data.endTimestamp)).toFormat("F");
+  const endDuration = DateTime.fromSeconds(parseInt(data.genesisTimestamp) + parseInt(data.cliff) + parseInt(data.duration)).toFormat("F");
 
-  const genesisTimestamp = new DateTime(
-    ethers.utils.formatEther(data.genesisTimestamp)
-  ).toISODate();
-  const cliffTimeStamp = new DateTime(
-    data.genesisTimestamp + data.cliff
-  ).toISODate();
-  const tgeAmount = ethers.utils.formatEther(data.tgeAmountRatio.div(100));
-  const endDuration = new DateTime(
-    data.genesisTimestamp + data.cliff + data.duration
-  ).toISODate();
-  const eraBasis = ethers.utils.formatEther(data.eraBasis);
-  const startTime = new DateTime(data.startTimestamp).toISODate();
-  const endTime = new DateTime(data.endTimestamp).toISODate();
+  const tgeAmount = data.tgeAmountRatio.div(100) + "%";
+
+  const eraBasis = data.eraBasis.div(3600).toString();
   const higest = ethers.utils.formatEther(data.highest);
   const lowest = ethers.utils.formatEther(data.lowest);
 
   return (
-    <Table variant="simple" color={useColorModeValue('black.700', 'black.700')}>
+    <Table variant="simple" color={useColorModeValue('black.700', 'grey')}>
       <Tbody>
         <Tr>
-          <Td>Genesis:</Td>
-          <Td>{genesisTimestamp}</Td>
-        </Tr>
-        <Tr>
-          <Td>TGE Amount:</Td>
-          <Td>{tgeAmount}</Td>
-        </Tr>
-        <Tr>
-          <Td>Cliff:</Td>
-          <Td>{`from: ${genesisTimestamp} to ${cliffTimeStamp}`}</Td>
-        </Tr>
-        <Tr>
-          <Td>Duration:</Td>
-          <Td>{`from: ${genesisTimestamp} to ${endDuration}`}</Td>
-        </Tr>
-        <Tr>
-          <Td> Era Basis:</Td>
-          <Td> {eraBasis}</Td>
-        </Tr>
-        <Tr>
-          <Td> Start:</Td>
+          <Td>Donate Start</Td>
           <Td>{startTime}</Td>
         </Tr>
         <Tr>
-          <Td> End:</Td>
+          <Td>Donate End</Td>
           <Td>{endTime}</Td>
         </Tr>
         <Tr>
-          <Td> Higest:</Td>
-          <Td>{higest}</Td>
+          <Td>Genesis Time</Td>
+          <Td>{genesisTimestamp}</Td>
         </Tr>
         <Tr>
-          <Td> Lowest:</Td>
-          <Td>{lowest}</Td>
+          <Td>Cliff</Td>
+          <Td>{data.cliff == 0 ? `NO` : `${genesisTimestamp} to ${cliffTimeStamp}`}</Td>
         </Tr>
         <Tr>
-          <Td> Allow redeem:</Td>
+          <Td>Release Duration</Td>
+          <Td>{`${cliffTimeStamp} to ${endDuration}`}</Td>
+        </Tr>
+        <Tr>
+          <Td>TGE Radio</Td>
+          <Td>{tgeAmount}</Td>
+        </Tr>
+        <Tr>
+          <Td>Era period</Td>
+          <Td> {eraBasis + " " + (eraBasis > 1 ? 'hours' : 'hour')} </Td>
+        </Tr>
+        <Tr>
+          <Td>Donation amount</Td>
+          <Td>{lowest} to {higest} BNB</Td>
+        </Tr>
+        <Tr>
+          <Td>Redeem allowd</Td>
           <Td>{data.allowRedeem ? "True" : "False"}</Td>
         </Tr>
         <Tr>
-          <Td>Accept donation:</Td>
+          <Td>Over cap allowed</Td>
           <Td>{data.acceptOverCap ? "True" : "False"}</Td>
         </Tr>
       </Tbody>

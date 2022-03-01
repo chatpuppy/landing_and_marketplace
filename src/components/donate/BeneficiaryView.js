@@ -1,4 +1,5 @@
-import { Stack, Heading, SimpleGrid, Text, Button, Box , useBreakpointValue,  useToast,} from '@chakra-ui/react'
+import { useState }  from "react";
+import { Stack, Heading, SimpleGrid, Text, Button, Box , useBreakpointValue,  useToast} from '@chakra-ui/react'
 import { Card } from '../common/Card';
 import { useAuth } from "contexts/AuthContext";
 import { useDonate } from "contexts/DonateContext";
@@ -17,7 +18,6 @@ export const BeneficiaryView = () => {
     let uint8 = new Uint8Array(2);
     uint8[0] = participantID;
     let participant = uint8[0];
-
 
     const actionRedeem = async() => {
       if (!currentAccount && !currentNetwork === 42) return 0

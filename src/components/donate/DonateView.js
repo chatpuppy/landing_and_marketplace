@@ -57,7 +57,9 @@ import { InfoTableComponent } from "./infoTableComponet";
 
 
 export const DonateView = () => {
-    const { participantID, totalAmount, beneficiaryCount, priceRange } = useDonate()
+    const { participantID, beneficiaryCount, beneficiaryData, releasable } = useDonate();
+    console.log("beneficiaryData", beneficiaryData);
+
     return (
         <Stack
           spacing={{
@@ -100,29 +102,30 @@ export const DonateView = () => {
               gap="6"
             >
               <Card textAlign={'center'} justifyContent={'center'}>
-                <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Beneficiary</Heading>
-                <Text size={'2xl'}>{ethers.utils.formatEther(totalAmount)} CPT</Text>
+                <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Benefit</Heading>
+                <Text fontSize={'4xl'}>{ethers.utils.formatEther(beneficiaryData === undefined ? "0" : beneficiaryData.totalAmount)}</Text>
               </Card>
       
               <Card textAlign={'center'} justifyContent={'center'}>
-                <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Released </Heading>
-                <Text size={'3xl'}>{ethers.utils.formatEther(beneficiaryCount)} CPT</Text>
+                <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Released</Heading>
+                <Text fontSize={'4xl'}>{ethers.utils.formatEther(beneficiaryData === undefined ? 0 :beneficiaryData.releasedAmount)}</Text>
               </Card>
+              
               <Card textAlign={'center'} justifyContent={'center'}>
-                <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Releaseble </Heading>
-                <Text size={'3xl'}>{ethers.utils.formatEther(beneficiaryCount)} CPT</Text>
+                <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Releaseble</Heading>
+                <Text fontSize={'4xl'}>{ethers.utils.formatEther(releasable === undefined ? 0 : releasable)}</Text>
               </Card>
             </SimpleGrid>
           </Stack>
           <Stack textAlign={'center'} justifyContent={'center'}>
             <SimpleGrid >
-            <Card textAlign={'center'} justifyContent={'center'}>
+              <Card textAlign={'center'} justifyContent={'center'}>
               <PriceRangeComponent/>
               </Card>
             </SimpleGrid>
           </Stack>
           <Card minH="xs">
-            <SimpleGrid columns={2} spacing={10}>
+            <SimpleGrid columns={1} spacing={10}>
               <Card>
                 <InfoTableComponent />
               </Card>
@@ -158,15 +161,17 @@ export const DonateView = () => {
           justifyContent={"center"}
           textAlign={"center"}
           as={"form"}
-          mt={10}
-          mr={10}
+          mt={5}
+          ml={20}
+          mr={20}
           borderRight={20}
+          mb={10}
         >
           <Heading mb={10}>Donate</Heading>
-          <HStack maxW="320px">
-            <Button {...inc}>+</Button>
-            <Input {...input} />
+          <HStack maxW="full">
             <Button {...dec}>-</Button>
+            <Input {...input} />
+            <Button {...inc}>+</Button>
           </HStack>
           <Button
             fontFamily={"heading"}
@@ -220,24 +225,26 @@ export const DonateView = () => {
           }}
         >
           <Heading fontSize="xl" align="center" mb={10} mt={10}>
-            Price Range
+            Rate List
           </Heading>
           <Table>
             <Thead>
               <Tr>
-                <Th>Amount from</Th>
-                <Th> to</Th>
+                <Th>#</Th>
+                <Th>From</Th>
+                {/* <Th> to</Th> */}
                 <Th> rate</Th>
               </Tr>
             </Thead>
             <Tbody>
             {priceRange
               ? priceRange.map((range, idx) => (
-                
-                <Tr id={idx}>
-                    <Td>{ethers.utils.formatEther(range.price)} CPT</Td>
+                <Tr key={idx}>
+                    <Td>{idx+1}</Td>
                     <Td>{ethers.utils.formatEther(range.fromAmount)} CPT</Td>
-                    <Td>{dataCap ? dataCap  : '...'} CPT/BNB</Td>
+                    {/* <Td>{ethers.utils.formatEther(range.toAmount)} CPT</Td> */}
+                    <Td>{range.price.toString()} CPT/BNB</Td>
+                    {/* <Td>{dataCap ? dataCap  : '...'} CPT/BNB</Td> */}
                   </Tr>
                 ))
               : "..."}

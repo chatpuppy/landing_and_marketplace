@@ -13,10 +13,9 @@ const Feature = ({ title, desc, onClick, status, ...rest }) => {
         {...rest}
       >
         <Heading fontSize="xl">{title}</Heading>
-        <Text mt={4}>{desc}</Text>
+        <Text mt={5} mb={5}>{desc}</Text>
         <Button onClick={onClick} isDisabled={status}>
-          {" "}
-          Donate{" "}
+          Donate
         </Button>
       </Box>
     );
