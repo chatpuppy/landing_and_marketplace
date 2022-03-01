@@ -4,7 +4,7 @@ export const getNameSaleById = (id) => {
           return 'Private Sale';
         }
         case 2: {
-          return 'Public Sale';
+          return 'Public sale';
         }
         default: { 
           break;

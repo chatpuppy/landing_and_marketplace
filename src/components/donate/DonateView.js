@@ -59,7 +59,7 @@ import { TOKEN_VESTING_ADDRESS } from "constants";
 
 
 export const DonateView = () => {
-    const { participantID, beneficiaryCount, beneficiaryData, releasable, donateData } = useDonate();
+    const { participantID, beneficiaryCount, beneficiaryData, releasable, donateData, participantTotal } = useDonate();
     const [ isLoading, setIsLoading ] = useState(false);
     const toast = useToast()
     // console.log("beneficiaryData", beneficiaryData);
@@ -130,7 +130,7 @@ export const DonateView = () => {
     }
 
     const format = (num) => {
-      return parseFloat(num).toFixed(4).toString();
+      return parseFloat(num).toFixed(3).toString();
     }
 
     return (
@@ -175,20 +175,21 @@ export const DonateView = () => {
             gap="6"
           >
             <Card textAlign={'center'} justifyContent={'center'}>
-              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Your Benefit</Heading>
+              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Your benefit</Heading>
               <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.totalAmount))}</Text>
+              <Text fontSize={'2xl'} color={useColorModeValue("gray.400", "#3d444f")} mt={5}>{'sold ' + format(ethers.utils.formatEther(participantTotal))}</Text>
             </Card>
     
             <Card textAlign={'center'} justifyContent={'center'}>
               <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Released</Heading>
               <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 :beneficiaryData.releasedAmount))}</Text>
-              <Button mb={5} onClick={redeem}>Redeem unreleased</Button>
+              <Button mt={5} mb={5} onClick={redeem}>Redeem unreleased</Button>
             </Card>
             
             <Card textAlign={'center'} justifyContent={'center'}>
               <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Releaseble</Heading>
               <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(releasable === undefined ? 0 : releasable))}</Text>
-              {releasable > 0 ? <Button mb={5} onClick={release}>Release</Button> : ''}
+              {releasable > 0 ? <Button mt={5} mb={5} onClick={release}>Release</Button> : ''}
             </Card>
           </SimpleGrid>
         </Stack>
@@ -303,7 +304,7 @@ export const DonateView = () => {
           }}
         >
           <Heading fontSize="2xl" align="left" ml={12} mb={5} mt={5} color={useColorModeValue('black.700', '#dcdcdc')}>
-            Rate List
+            Rate list
           </Heading>
           <Table ml={"5%"} mr={"5%"} width={"90%"} mb={8} variant="simple" color={useColorModeValue('black.700', '#dcdcdc')}>
             <Thead>

@@ -27,13 +27,13 @@ const Feature = ({ title, desc, onClick, status, ...rest }) => {
       <Box px={8} py={24} mx="auto">
         <HStack spacing={8}>
           <Feature
-            title="Public Sale"
+            title="Public sale"
             desc="Public sale Description"
             onClick={() => setParticipantID(2)}
             status={false}
           />
           <Feature
-            title="Private Sale"
+            title="Private sale"
             desc="Description"
             onClick={() => setParticipantID(1)}
             status={true} // button for activated sale

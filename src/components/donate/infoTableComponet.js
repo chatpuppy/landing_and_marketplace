@@ -38,21 +38,21 @@ export const InfoTableComponent = () => {
   return (
     <Box>
     <Heading fontSize="2xl" align="left" ml={12} mb={5} mt={5} color={useColorModeValue('black.700', '#dcdcdc')}>
-      Donation Rules
+      Donation rules
     </Heading>
 
     <Table ml={"5%"} mr={"5%"} width={"90%"} mb={8} variant="simple" color={useColorModeValue('black.700', '#dcdcdc')}>
       <Tbody>
         <Tr>
-          <Td>Donate Start</Td>
+          <Td>Donate start</Td>
           <Td>{startTime}</Td>
         </Tr>
         <Tr>
-          <Td>Donate End</Td>
+          <Td>Donate end</Td>
           <Td>{endTime}</Td>
         </Tr>
         <Tr>
-          <Td>Genesis Time</Td>
+          <Td>Genesis time</Td>
           <Td>{genesisTimestamp}</Td>
         </Tr>
         <Tr>
@@ -60,11 +60,11 @@ export const InfoTableComponent = () => {
           <Td>{data.cliff == 0 ? `NO` : `${genesisTimestamp} to ${cliffTimeStamp}`}</Td>
         </Tr>
         <Tr>
-          <Td>Release Duration</Td>
+          <Td>Release duration</Td>
           <Td>{`${cliffTimeStamp} to ${endDuration}`}</Td>
         </Tr>
         <Tr>
-          <Td>TGE Radio</Td>
+          <Td>TGE radio</Td>
           <Td>{tgeAmount}</Td>
         </Tr>
         <Tr>
@@ -77,18 +77,18 @@ export const InfoTableComponent = () => {
         </Tr>
         <Tr>
           <Td>Redeem allowd</Td>
-          <Td>{data.allowRedeem ? "True" : "False"}</Td>
+          <Td>{data.allowRedeem ? "true" : "false"}</Td>
         </Tr>
         <Tr>
           <Td>Over cap allowed</Td>
-          <Td>{data.acceptOverCap ? "True" : "False"}</Td>
+          <Td>{data.acceptOverCap ? "true" : "false"}</Td>
         </Tr>
         <Tr>
-          <Td>CPT Address</Td>
+          <Td>CPT address</Td>
           <Td>{TOKEN_ADDRESS}</Td>
         </Tr>
         <Tr>
-          <Td>Vesting Contract</Td>
+          <Td>Vesting contract</Td>
           <Td>{TOKEN_VESTING_ADDRESS}</Td>
         </Tr>
       </Tbody>

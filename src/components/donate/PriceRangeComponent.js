@@ -21,7 +21,7 @@ export default function PriceRangeComponent() {
         base: 'column',
         lg: 'row',
       }}>
-        <Heading  fontSize='xl' align='center'>Rate List</Heading>
+        <Heading  fontSize='xl' align='center'>Rate list</Heading>
        <List>
         {priceRange? priceRange.map((range, idx) => <ListItem id={idx}><Text align='left' fontSize='lg'>{ethers.utils.formatEther(range.fromAmount)} for: {ethers.utils.formatEther(range.price)} </Text></ListItem>) : '0.0'}
       </List>
