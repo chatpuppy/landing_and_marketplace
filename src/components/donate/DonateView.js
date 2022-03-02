@@ -62,17 +62,16 @@ export const DonateView = () => {
     const { participantID, beneficiaryCount, beneficiaryData, releasable, donateData, participantTotal } = useDonate();
     const [ isLoading, setIsLoading ] = useState(false);
     const toast = useToast()
-    // console.log("beneficiaryData", beneficiaryData);
+    console.log("beneficiaryData", beneficiaryData);
+    const { ethereum } = window; //injected by metamask
+    const provider = new ethers.providers.Web3Provider(ethereum); 
+    const signer = provider.getSigner(); 
+    // const options = {value: ethers.utils.parseEther((amount).toString())}
+    const TokenVestingContract = new ethers.Contract(TOKEN_VESTING_ADDRESS, donateABI, signer);
 
     const release = async () => {
       setIsLoading(true);
       try {
-        const { ethereum } = window; //injected by metamask
-        const provider = new ethers.providers.Web3Provider(ethereum); 
-        const signer = provider.getSigner(); 
-        // const options = {value: ethers.utils.parseEther((amount).toString())}
-        const TokenVestingContract = new ethers.Contract(TOKEN_VESTING_ADDRESS, donateABI, signer);
-        
         let uint8 = new Uint8Array(2);
         uint8[0] = participantID;
 
@@ -99,12 +98,7 @@ export const DonateView = () => {
 
     const redeem = async () => {
       setIsLoading(true);
-      try {
-        const { ethereum } = window; //injected by metamask
-        const provider = new ethers.providers.Web3Provider(ethereum); 
-        const signer = provider.getSigner(); 
-        const TokenVestingContract = new ethers.Contract(TOKEN_VESTING_ADDRESS, donateABI, signer);
-        
+      try {        
         let uint8 = new Uint8Array(2);
         uint8[0] = participantID;
 
@@ -183,7 +177,7 @@ export const DonateView = () => {
             <Card textAlign={'center'} justifyContent={'center'}>
               <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Released</Heading>
               <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.releasedAmount))}</Text>
-              {beneficiaryData === undefined ? "" : <Button mt={5} mb={5} onClick={redeem}>Redeem unreleased</Button>}
+              {beneficiaryData === undefined || beneficiaryData.totalAmount.eq(beneficiaryData.releasedAmount) ? "" : <Button mt={5} mb={5} onClick={redeem}>Redeem unreleased</Button>}
             </Card>
             
             <Card textAlign={'center'} justifyContent={'center'}>
