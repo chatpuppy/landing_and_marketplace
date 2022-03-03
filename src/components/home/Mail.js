@@ -101,6 +101,7 @@ export default function Mail() {
               errors={state.errors}
             />
           </GridItem>
+          {state.succeeded || state.submitting ? '' : 
           <GridItem>
             <ReCAPTCHA
               ref={recaptchaRef}
@@ -108,6 +109,7 @@ export default function Mail() {
               onChange={onChange}
             />
           </GridItem>
+          }
           <GridItem as="label" colSpan={{ base: "auto", lg: 6 }}>
             <Button
               w="full"
