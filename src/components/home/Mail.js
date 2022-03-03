@@ -69,7 +69,6 @@ export default function Mail() {
             style={{width: "full", alignItems: "center", justifyContent: "center"}} 
             onSubmit={handleSubmit}
           >
-          <div class="g-recaptcha" data-sitekey="6LdJuLAeAAAAAEWb9E4BoUD2g7Jgzc98dPqCWPpx"></div>
           <SimpleGrid
             w={{ base: "full", md: 7 / 12 }}
             columns={{ base: 1, lg: 6 }}
@@ -107,6 +106,7 @@ export default function Mail() {
           >
             {state.succeeded ? 'Subscribed' : 'Subscribe'}
           </Button>
+          <div class="g-recaptcha" data-sitekey="6LdJuLAeAAAAAEWb9E4BoUD2g7Jgzc98dPqCWPpx"></div>
         </SimpleGrid>
         </form>
         <Stack
