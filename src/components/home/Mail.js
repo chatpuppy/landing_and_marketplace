@@ -11,10 +11,7 @@ export default function Mail() {
   const [captchaText, setCaptchaText] = useState("")
   const recaptchaRef = React.createRef();
 
-  function onChange(value) {
-    console.log("Captcha value:", value);
-    setCaptchaText(value);
-  }
+  const onChange = (value) => setCaptchaText(value);
 
   const Feature = (props) => (
     <Flex alignItems="center" color={useColorModeValue(null, "white")}>
