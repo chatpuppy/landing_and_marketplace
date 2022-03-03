@@ -118,7 +118,7 @@ export default function Mail() {
               cursor="pointer"
               disabled={state.submitting || state.succeeded}
             >
-              {state.succeeded ? 'Subscribed' : 'Subscribe'}
+              {state.succeeded ? 'You have subscribed' : 'Subscribe'}
             </Button>
           </GridItem>
         </SimpleGrid>
