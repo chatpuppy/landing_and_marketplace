@@ -3,8 +3,12 @@ import {
   chakra, Box, Flex, useColorModeValue, SimpleGrid, GridItem, Input, Button,
   VisuallyHidden, Icon, Stack
 } from "@chakra-ui/react";
+import { useForm, ValidationError } from '@formspree/react';
+import { AiOutlineCheckCircle } from "react-icons/ai";
 
 export default function Mail() {
+  const [state, handleSubmit] = useForm("xzboggld");
+
   const Feature = (props) => (
     <Flex alignItems="center" color={useColorModeValue(null, "white")}>
       <Icon
@@ -61,18 +65,23 @@ export default function Mail() {
               Join the mail list today.
             </chakra.span>
           </chakra.span>
+          <form 
+            style={{width: "full", alignItems: "center", justifyContent: "center"}} 
+            onSubmit={handleSubmit}
+          >
           <SimpleGrid
-          as="form"
-          w={{ base: "full", md: 7 / 12 }}
-          columns={{ base: 1, lg: 6 }}
-          spacing={3}
-          pt={1}
-          mx="auto"
-          mt={4}
-        >
+            w={{ base: "full", md: 7 / 12 }}
+            columns={{ base: 1, lg: 6 }}
+            spacing={3}
+            pt={1}
+            mx="auto"
+            mt={4}
+          >
           <GridItem as="label" colSpan={{ base: "auto", lg: 4 }}>
             <VisuallyHidden>Your Email</VisuallyHidden>
             <Input
+              id="email"
+              name="email"
               mt={0}
               size="lg"
               type="email"
@@ -80,19 +89,26 @@ export default function Mail() {
               required={true}
               color="white"
             />
+            <ValidationError 
+              prefix="Email" 
+              field="email"
+              errors={state.errors}
+            />
           </GridItem>
+          <div class="g-recaptcha" data-sitekey="6LdJuLAeAAAAAEWb9E4BoUD2g7Jgzc98dPqCWPpx"></div>
           <Button
-            as={GridItem}
-            w="full"
+            w="150px"
             variant="solid"
             colSpan={{ base: "auto", lg: 2 }}
             size="lg"
             type="submit"
             cursor="pointer"
+            disabled={state.submitting || state.succeeded}
           >
-            Subscribe
+            {state.succeeded ? 'Subscribed' : 'Subscribe'}
           </Button>
         </SimpleGrid>
+        </form>
         <Stack
           display="flex"
           direction={{ base: "column", md: "row" }}
@@ -107,7 +123,7 @@ export default function Mail() {
           <Feature>Cancel anytime</Feature>
         </Stack>
         </Box>
-        
+
       </Flex>
     </Flex>
   );

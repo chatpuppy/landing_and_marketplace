@@ -3,9 +3,9 @@ import {
 } from '@chakra-ui/react';
 import BNBLogo from "assets/bnb-logo.svg"
 import ETHLogo from "assets/eth-logo.svg"
-import AVAXLogo from "assets/avax-logo.svg"
+// import AVAXLogo from "assets/avax-logo.svg"
 import MATICLogo from "assets/matic-logo.svg"
-import FTMLogo from "assets/ftm-logo.svg"
+// import FTMLogo from "assets/ftm-logo.svg"
 
 export default function SupportedNetworks() {
     return (
@@ -31,20 +31,20 @@ export default function SupportedNetworks() {
             </chakra.p>
             <Stack direction={'row'} spacing={6}>
             <Link href={'#'}>
-                <Image mt="4" h="40px" src={BNBLogo}/>
-            </Link>
-            <Link href={'#'}>
                 <Image mt="4" h="40px" src={ETHLogo}/>
             </Link>
             <Link href={'#'}>
                 <Image mt="4" h="40px" src={MATICLogo}/>
             </Link>
             <Link href={'#'}>
+                <Image mt="4" h="40px" src={BNBLogo}/>
+            </Link>
+            {/* <Link href={'#'}>
                 <Image mt="4" h="40px" src={AVAXLogo}/>
-            </Link>
-            <Link href={'#'}>
+            </Link> */}
+            {/* <Link href={'#'}>
                 <Image mt="4" h="40px" src={FTMLogo}/>
-            </Link>
+            </Link> */}
             </Stack>
         </Container>
         </Box>

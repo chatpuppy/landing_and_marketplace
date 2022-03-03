@@ -4,7 +4,13 @@ import {
     Box, chakra, Container, HStack, Image, Stack, Text, useColorModeValue,
     VisuallyHidden,
   } from '@chakra-ui/react';
-import { FaDiscord, FaTwitter, FaTelegramPlane, FaGithub, FaMedium } from 'react-icons/fa';
+import { 
+  FaDiscord, 
+  FaTwitter, 
+  // FaTelegramPlane, 
+  FaGithub, 
+  FaMedium 
+} from 'react-icons/fa';
 import Logo from "assets/logo.png"
   
   const SocialButton = ({
