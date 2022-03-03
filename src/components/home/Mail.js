@@ -5,9 +5,15 @@ import {
 } from "@chakra-ui/react";
 import { useForm, ValidationError } from '@formspree/react';
 import { AiOutlineCheckCircle } from "react-icons/ai";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function Mail() {
   const [state, handleSubmit] = useForm("xzboggld");
+  const recaptchaRef = React.createRef();
+
+  function onChange(value) {
+    console.log("Captcha value:", value);
+  }
 
   const Feature = (props) => (
     <Flex alignItems="center" color={useColorModeValue(null, "white")}>
@@ -106,7 +112,13 @@ export default function Mail() {
           >
             {state.succeeded ? 'Subscribed' : 'Subscribe'}
           </Button>
-          <div class="g-recaptcha" data-sitekey="6LdJuLAeAAAAAEWb9E4BoUD2g7Jgzc98dPqCWPpx"></div>
+          <GridItem colSpan={{base: "auto", lg: 4}}>
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey="6LdJuLAeAAAAAEWb9E4BoUD2g7Jgzc98dPqCWPpx"
+              onChange={onChange}
+            />
+          </GridItem>
         </SimpleGrid>
         </form>
         <Stack
