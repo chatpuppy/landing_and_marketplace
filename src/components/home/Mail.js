@@ -11,9 +11,9 @@ export default function Mail() {
   const [state, handleSubmit] = useForm("xzboggld");
   const recaptchaRef = React.createRef();
 
-  function onChange(value) {
-    console.log("Captcha value:", value);
-  }
+  // function onChange(value) {
+  //   console.log("Captcha value:", value);
+  // }
 
   const Feature = (props) => (
     <Flex alignItems="center" color={useColorModeValue(null, "white")}>
@@ -106,7 +106,7 @@ export default function Mail() {
             <ReCAPTCHA
               ref={recaptchaRef}
               sitekey="6LdJuLAeAAAAAEWb9E4BoUD2g7Jgzc98dPqCWPpx"
-              onChange={onChange}
+              // onChange={onChange}
             />
           </GridItem>
           }
@@ -120,7 +120,7 @@ export default function Mail() {
               cursor="pointer"
               disabled={state.submitting || state.succeeded}
             >
-              {state.succeeded ? 'You have subscribed' : 'Subscribe'}
+              {state.succeeded ? 'Thanks for your subscription!' : 'Subscribe'}
             </Button>
           </GridItem>
         </SimpleGrid>
