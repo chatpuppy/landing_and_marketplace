@@ -1,15 +1,14 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   chakra, Box, Flex, useColorModeValue, SimpleGrid, GridItem, Input, Button,
   VisuallyHidden, Icon, Stack
 } from "@chakra-ui/react";
 import { useForm, ValidationError } from '@formspree/react';
-import { AiOutlineCheckCircle } from "react-icons/ai";
 import ReCAPTCHA from "react-google-recaptcha";
 
 export default function Mail() {
   const [state, handleSubmit] = useForm("xzboggld");
-  const [captchaText, setCaptchaText] = useForm("");
+  const [captchaText, setCaptchaText] = useState("")
   const recaptchaRef = React.createRef();
 
   function onChange(value) {
