@@ -83,7 +83,7 @@ export default function Mail() {
             mx="auto"
             mt={4}
           >
-          <GridItem as="label" colSpan={{ base: "auto", lg: 4 }}>
+          <GridItem as="label" colSpan={{ base: "auto", lg: 6 }}>
             <VisuallyHidden>Your Email</VisuallyHidden>
             <Input
               id="email"
@@ -101,23 +101,25 @@ export default function Mail() {
               errors={state.errors}
             />
           </GridItem>
-          <Button
-            w="150px"
-            variant="solid"
-            colSpan={{ base: "auto", lg: 2 }}
-            size="lg"
-            type="submit"
-            cursor="pointer"
-            disabled={state.submitting || state.succeeded}
-          >
-            {state.succeeded ? 'Subscribed' : 'Subscribe'}
-          </Button>
-          <GridItem colSpan={{base: "auto", lg: 4}}>
+          <GridItem>
             <ReCAPTCHA
               ref={recaptchaRef}
               sitekey="6LdJuLAeAAAAAEWb9E4BoUD2g7Jgzc98dPqCWPpx"
               onChange={onChange}
             />
+          </GridItem>
+          <GridItem as="label" colSpan={{ base: "auto", lg: 6 }}>
+            <Button
+              w="full"
+              variant="solid"
+              colSpan={{ base: "auto", lg: 2 }}
+              size="lg"
+              type="submit"
+              cursor="pointer"
+              disabled={state.submitting || state.succeeded}
+            >
+              {state.succeeded ? 'Subscribed' : 'Subscribe'}
+            </Button>
           </GridItem>
         </SimpleGrid>
         </form>
