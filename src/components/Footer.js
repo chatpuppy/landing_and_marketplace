@@ -4,7 +4,7 @@ import {
     Box, chakra, Container, HStack, Image, Stack, Text, useColorModeValue,
     VisuallyHidden,
   } from '@chakra-ui/react';
-import { FaDiscord, FaTwitter, FaTelegramPlane, FaGithub } from 'react-icons/fa';
+import { FaDiscord, FaTwitter, FaTelegramPlane, FaGithub, FaMedium } from 'react-icons/fa';
 import Logo from "assets/logo.png"
   
   const SocialButton = ({
@@ -69,11 +69,14 @@ import Logo from "assets/logo.png"
               <SocialButton label={'YouTube'} href={'https://discord.gg/QN658sJWkk'}>
                 <FaDiscord />
               </SocialButton>
-              <SocialButton label={'Telegram'} href={'https://t.me/chatpuppy'}>
+              {/* <SocialButton label={'Telegram'} href={'https://t.me/chatpuppy'}>
                 <FaTelegramPlane />
-              </SocialButton>
+              </SocialButton> */}
               <SocialButton label={'Github'} href={'https://github.com/chatpuppy'}>
                 <FaGithub />
+              </SocialButton>
+              <SocialButton label={'Medium'} href={'https://chatpuppy.medium.com/'}>
+                <FaMedium />
               </SocialButton>
             </Stack>
           </Container>
