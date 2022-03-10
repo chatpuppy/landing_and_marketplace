@@ -8,11 +8,12 @@ import {
 import MintModal from './MintModal';
 import { ethers } from 'ethers';
 import nft_manager_abi from "abi/nft_manager_abi"
+import { NFT_MANAGER_ADDRESS } from 'constants';
 
 export default function MintGrid() {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const NFT_manager_contract_address = "0x0528E41841b8BEdD4293463FAa061DdFCC5E41bd"
+    const NFT_manager_contract_address = NFT_MANAGER_ADDRESS;
 
     const [ boxPrice, setBoxPrice ] = useState()
 

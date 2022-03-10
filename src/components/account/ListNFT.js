@@ -10,6 +10,7 @@ import nft_core_abi from "abi/nft_core_abi.json"
 import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
 import { useAuth } from 'contexts/AuthContext';
 import { useNavigate } from "react-router-dom";
+import { TOKEN_ADDRESS, NFT_TOKEN_ADDRESS, MARKETPLACE_ADDRESS } from 'constants';
 
 export default function ListNFT(props) {
 
@@ -19,7 +20,7 @@ export default function ListNFT(props) {
     const toast = useToast();
 
     const [ isLoading, setIsLoading ] = useState(false);
-    const [ token, setToken ] = useState("0x7C4b6E294Fd0ae77B6E1730CBEb1B8491859Ee24");
+    const [ token, setToken ] = useState(TOKEN_ADDRESS);
 
     const { currentAccount, approved } = useAuth()
     const priceRef = useRef();
@@ -28,8 +29,8 @@ export default function ListNFT(props) {
     const bg = useColorModeValue("gray.700", "gray.200")
     const buttonbg = useColorModeValue("white", "gray.900")
 
-    const NFT_core_contract_address = "0xAb50F84DC1c8Ef1464b6F29153E06280b38fA754"
-    const NFT_marketplace_contract_address = "0xc60a6AE3a85838D3bAAf359219131B1e33103560"
+    const NFT_core_contract_address = NFT_TOKEN_ADDRESS;
+    const NFT_marketplace_contract_address = MARKETPLACE_ADDRESS;
     
     const listNFT = async(e) => {
       e.preventDefault();
@@ -45,7 +46,7 @@ export default function ListNFT(props) {
         const NFTMarketplaceConnectedContract = new ethers.Contract(NFT_marketplace_contract_address, nft_marketplace_abi, signer);
         const NFTCoreConnectedContract = new ethers.Contract(NFT_core_contract_address, nft_core_abi, signer)
         if(!approved) {
-          await NFTCoreConnectedContract.setApprovalForAll("0xc60a6AE3a85838D3bAAf359219131B1e33103560", true)
+          await NFTCoreConnectedContract.setApprovalForAll(NFT_marketplace_contract_address, true)
         }
         await NFTMarketplaceConnectedContract.addOrder(number, token, ethers.utils.parseEther(''+priceRef.current.value))
         toast({
@@ -96,7 +97,7 @@ export default function ListNFT(props) {
                 <form onSubmit={listNFT}>
                     <FormControl id="token" isRequired>
                         <FormLabel>Token Name</FormLabel>
-                        <Select isReadOnly onChange={handleTokenChange} placeholder='CPT' value="0x7C4b6E294Fd0ae77B6E1730CBEb1B8491859Ee24">
+                        <Select isReadOnly onChange={handleTokenChange} placeholder='CPT' value={TOKEN_ADDRESS}>
 
                         </Select>
                     </FormControl>

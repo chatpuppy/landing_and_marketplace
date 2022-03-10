@@ -14,10 +14,11 @@ import BoxImageSrc from "assets/mysteryBox.jpg"
 import { AiOutlineStar } from "react-icons/ai"
 import { BsBoxSeam } from "react-icons/bs"
 import EmptyList from 'components/EmptyList';
+import {NFT_TOKEN_ADDRESS, NFT_MANAGER_ADDRESS, MARKETPLACE_ADDRESS} from 'constants';
 
 export default function Account() {
-    const NFT_core_contract_address = "0xAb50F84DC1c8Ef1464b6F29153E06280b38fA754"
-    const NFT_manager_contract_address = "0x0528E41841b8BEdD4293463FAa061DdFCC5E41bd"
+    const NFT_core_contract_address = NFT_TOKEN_ADDRESS
+    const NFT_manager_contract_address = NFT_MANAGER_ADDRESS
 
     const [ isLoading, setIsLoading ] = useState(false);
     const { currentAccount, setOwnedNFTs, setApproved } = useAuth();
@@ -39,7 +40,7 @@ export default function Account() {
             const NFTCoreConnectedContract = new ethers.Contract(NFT_core_contract_address, nft_core_abi, signer);
             const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_abi, signer);
             let count = await NFTCoreConnectedContract.balanceOf(currentAccount);
-            let _approved = await NFTCoreConnectedContract.isApprovedForAll(currentAccount, "0xc60a6AE3a85838D3bAAf359219131B1e33103560");
+            let _approved = await NFTCoreConnectedContract.isApprovedForAll(currentAccount, MARKETPLACE_ADDRESS);
             setApproved(_approved);
             count = parseInt(count["_hex"], 16);
             let _ownedNFTs = []
@@ -75,7 +76,7 @@ export default function Account() {
                 setIsLoading(false)
             }, 400);
         }
-    }, [currentAccount, setOwnedNFTs, boxedItems, unboxedItems, setApproved])
+    }, [currentAccount, setOwnedNFTs, boxedItems, unboxedItems, setApproved, NFT_core_contract_address, NFT_manager_contract_address])
     
     useEffect(() => {
         let isConnected = false;

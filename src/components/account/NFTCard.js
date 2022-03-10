@@ -7,10 +7,11 @@ import nft_manager_abi from "abi/nft_manager_abi.json";
 import { useAuth } from "contexts/AuthContext";
 import { ethers } from "ethers";
 import ListNFT from "./ListNFT";
+import {NFT_MANAGER_ADDRESS} from 'constants';
 
 const NFTCard = (props) => {
 
-  const NFT_manager_contract_address = "0x0528E41841b8BEdD4293463FAa061DdFCC5E41bd";
+  const NFT_manager_contract_address = NFT_MANAGER_ADDRESS;
   const [ isLoading, setIsLoading ] = useState(false);
 
   const toast = useToast()

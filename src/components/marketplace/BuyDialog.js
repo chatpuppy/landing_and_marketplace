@@ -8,11 +8,12 @@ import cpt_abi from "abi/cpt_abi.json"
 import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
 import { ethers } from "ethers";
 import { useAuth } from 'contexts/AuthContext';
+import {TOKEN_ADDRESS, MARKETPLACE_ADDRESS} from 'constants';
 
 export default function BuyDialog(props) {
 
-    const cpt_contract_address = '0x7C4b6E294Fd0ae77B6E1730CBEb1B8491859Ee24'
-    const NFT_marketplace_contract_address = "0xc60a6AE3a85838D3bAAf359219131B1e33103560"
+    const cpt_contract_address = TOKEN_ADDRESS;
+    const NFT_marketplace_contract_address = MARKETPLACE_ADDRESS;
 
     const { currentAccount } = useAuth()
     const toast = useToast();
@@ -48,7 +49,7 @@ export default function BuyDialog(props) {
                 return;
             }
             if(!approved) {
-                await CPTConnectedContract.approve("0xc60a6AE3a85838D3bAAf359219131B1e33103560", price);
+                await CPTConnectedContract.approve(NFT_marketplace_contract_address, price);
                 setApproved(true);
                 setTimeout(() => {
                     setIsLoading(false)
@@ -84,14 +85,14 @@ export default function BuyDialog(props) {
             const signer = provider.getSigner();
             //connects with the contract
             const CPTConnectedContract = new ethers.Contract(cpt_contract_address, cpt_abi, signer);
-            let _bal = await CPTConnectedContract.allowance(currentAccount, "0xc60a6AE3a85838D3bAAf359219131B1e33103560");
+            let _bal = await CPTConnectedContract.allowance(currentAccount, NFT_marketplace_contract_address);
             if(parseInt(_bal["_hex"],16) >= parseInt(price["_hex"], 16)) {
                 setApproved(true)
             }
         } catch(err) {
             console.log(err)
         }
-    }, [currentAccount, price])
+    }, [currentAccount, price, NFT_marketplace_contract_address, cpt_contract_address])
 
     useEffect(() => {
         let isConnected = false;

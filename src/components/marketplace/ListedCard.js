@@ -9,6 +9,7 @@ import { ethers } from "ethers";
 import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
 import { useNavigate } from "react-router-dom";
 import BuyDialog from "./BuyDialog";
+import { MARKETPLACE_ADDRESS } from "constants";
 
 const ListedCard = (props) => {
 
@@ -18,7 +19,7 @@ const ListedCard = (props) => {
   const { currentAccount } = useAuth();
   const bg = useColorModeValue("gray.700", "gray.200")
   const buttonbg = useColorModeValue("white", "gray.900")
-  const NFT_marketplace_contract_address = "0xc60a6AE3a85838D3bAAf359219131B1e33103560"
+  const NFT_marketplace_contract_address = MARKETPLACE_ADDRESS;
   const [ isLoading, setIsLoading ] = useState(false);
   const toast = useToast()
   const priceRef = useRef();

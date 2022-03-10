@@ -14,11 +14,12 @@ import { useAuth } from 'contexts/AuthContext';
 import FAQ from 'components/FAQ';
 import PageName from 'components/PageName';
 import EmptyList from 'components/EmptyList';
+import { MARKETPLACE_ADDRESS } from 'constants';
 
 export default function Marketplace() {
 
   const color = useColorModeValue("black", "white")
-  const NFT_marketplace_contract_address = "0xc60a6AE3a85838D3bAAf359219131B1e33103560"
+  const NFT_marketplace_contract_address = MARKETPLACE_ADDRESS;
   const [ isLoading, setIsLoading ] = useState(false);
   const { currentAccount, setListedNFTs } = useAuth()
   const toast = useToast()
@@ -49,7 +50,7 @@ export default function Marketplace() {
     } finally {
         setIsLoading(false)
     }
-  }, [currentAccount, setListedNFTs])
+  }, [currentAccount, setListedNFTs, NFT_marketplace_contract_address])
 
 
   useEffect(() => {

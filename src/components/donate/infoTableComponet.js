@@ -23,7 +23,7 @@ import {
 export const InfoTableComponent = () => { 
   const { donateData } = useDonate()
   let data = donateData;
-  
+
   const genesisTimestamp = DateTime.fromSeconds(parseInt(data.genesisTimestamp)).toFormat("F");
   const cliffTimeStamp = DateTime.fromSeconds(parseInt(data.genesisTimestamp) + parseInt(data.cliff)).toFormat("F");
   const startTime = DateTime.fromSeconds(parseInt(data.startTimestamp)).toFormat("F");

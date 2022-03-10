@@ -5,6 +5,7 @@ import BoxImageSrc from "assets/mysteryBox.jpg"
 import { ethers } from "ethers";
 import nft_manager_abi from "abi/nft_manager_abi"
 import { useAuth } from "contexts/AuthContext";
+import { NFT_MANAGER_ADDRESS } from 'constants';
 
 const MintModal = (props) => {
 
@@ -12,7 +13,7 @@ const MintModal = (props) => {
     const [ isLoadingMintAndUnbox, setIsLoadingMintAndUnbox ] = useState(false);
     const { currentAccount, currentNetwork } = useAuth()
 
-    const NFT_manager_contract_address = "0x0528E41841b8BEdD4293463FAa061DdFCC5E41bd"
+    const NFT_manager_contract_address = NFT_MANAGER_ADDRESS;
     const toast = useToast()
     const { count, boxPrice } = props;
     const id = 'toast'
