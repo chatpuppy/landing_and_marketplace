@@ -70,6 +70,13 @@ export default function BuyDialog(props) {
             }, 5000)
         } catch(err) {
             console.log(err);
+            toast({
+                title: 'Match NFT order error',
+                description: `${err.data.message}`,
+                status: 'error',
+                duration: 4000,
+                isClosable: true,
+            });
         } finally {
             setIsLoading(false)
         }

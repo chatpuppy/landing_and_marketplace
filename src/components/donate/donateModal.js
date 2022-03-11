@@ -1,5 +1,15 @@
 import React, { useState } from "react";
-import { Box, Flex, Image, Text, Badge, useColorModeValue, Button, Center, useToast, Heading, Stat, StatLabel, StatHelpText, StatNumber } from "@chakra-ui/react";
+import { 
+    Box, 
+    Flex, 
+    useColorModeValue, 
+    Button, 
+    useToast, 
+    Stat, 
+    StatLabel, 
+    StatHelpText, 
+    StatNumber 
+} from "@chakra-ui/react";
 import donateABI from "abi/TokensVesting_abi";
 import { TOKEN_VESTING_ADDRESS } from "constants";
 
@@ -12,7 +22,6 @@ const DonateModal = (props) => {
     const [ isLoading, setIsLoading ] = useState(false);
     const { currentAccount, currentNetwork } = useAuth()
     const toast = useToast()
-    const id = 'toast'
     const {  participantID } = useDonate()
     const { amount } = props;
 
@@ -42,7 +51,13 @@ const DonateModal = (props) => {
                     window.location.reload();
                 }, 5000)
             } catch(err) {
-                console.log(err)
+                toast({
+                    title: 'Donate error',
+                    description: `${err.data.message}`,
+                    status: 'error',
+                    duration: 4000,
+                    isClosable: true,
+                })
                 setIsLoading(false);
             }
     

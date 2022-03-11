@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Home from "views/Home";
 import Mint from "views/Mint";
 import Marketplace from "views/Marketplace"
@@ -53,7 +53,6 @@ function App() {
   //   }
   //   initTokenVesting()
   // })
-  
   
   return (
     <Router>

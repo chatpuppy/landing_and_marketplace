@@ -40,10 +40,10 @@ const NFTCard = (props) => {
       const _type = await NFTManagerConnectedContract.boxStatus(number);
       if(_type===2) {
         toast({
-          title: 'In Progress',
-          description: "Refresh page after a few minutes",
+          title: 'Unbox NFT',
+          description: "Unboxing in progress, refresh page after a few minutes",
           status: 'warning',
-          duration: 2000,
+          duration: 4000,
           isClosable: true,
         })
         setIsLoading(false);
@@ -54,21 +54,28 @@ const NFTCard = (props) => {
             title: 'Transaction Succesful',
             description: "Unboxed your NFT",
             status: 'success',
-            duration: 2000,
+            duration: 4000,
             isClosable: true,
           })
           setTimeout(()=>{
             window.location.reload();
           }, 3000)
         } catch(err) {
+          toast({
+            title: 'Unbox NFT error',
+            description: `${err.data.message}`,
+            status: 'error',
+            duration: 4000,
+            isClosable: true,
+          })
           setIsLoading(false)
         }
       } else if(_type===1) {
         toast({
-          title: 'Error',
-          description: "NFT already unboxed",
-          status: 'error',
-          duration: 2000,
+          title: 'Unbox NFT',
+          description: "NFT mystery box has been unboxed",
+          status: 'warning',
+          duration: 4000,
           isClosable: true,
         })
         setIsLoading(false);

@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import React, {useEffect, useState} from "react";
+import React, { useState} from "react";
 
 import {
     Stack,
@@ -12,22 +12,12 @@ import {
     useColorModeValue,
     useToast,
     HStack,
-    Spinner,
     Input,
-    InputGroup,
-    InputRightElement,
-    List,
-    ListIcon,
-    ListItem,
     Table,
     Tbody,
     Tr,
     Td,
-    NumberInput,
     useNumberInput,
-    Container,
-    Icon,
-    Image,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -35,15 +25,8 @@ import {
     ModalBody,
     ModalCloseButton,
     useDisclosure,
-    TabPanels,
-    Tab, 
-    TabPanel,
-    TabList,
-    Tabs,
     Thead,
-    Tfoot,
     Th,
-    TableCaption,
   } from '@chakra-ui/react'
 
 import DonateModal from './donateModal';
@@ -59,10 +42,9 @@ import { TOKEN_VESTING_ADDRESS } from "constants";
 import { AiTwotoneCheckCircle } from "react-icons/ai";
 
 export const DonateView = () => {
-    const { participantID, beneficiaryCount, beneficiaryData, releasable, donateData, participantTotal } = useDonate();
+    const { participantID, beneficiaryData, releasable, donateData, participantTotal } = useDonate();
     const [ isLoading, setIsLoading ] = useState(false);
     const toast = useToast()
-    console.log("beneficiaryData", beneficiaryData);
     const { ethereum } = window; //injected by metamask
     const provider = new ethers.providers.Web3Provider(ethereum); 
     const signer = provider.getSigner(); 
@@ -89,6 +71,13 @@ export const DonateView = () => {
             }, 5000)
         } catch(err) {
             console.log(err)
+            toast({
+              title: 'Release tokens error',
+              description: `${err.data.message}`,
+              status: 'error',
+              duration: 4000,
+              isClosable: true,
+            })
             setIsLoading(false);
         }
       } catch(err) {

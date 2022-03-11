@@ -47,8 +47,15 @@ const ListedCard = (props) => {
             navigate("/account", { replace: true });
         }, 5000)
     } catch(err) {
-        console.log(err)
-    } finally {
+        console.log(err);
+        toast({
+          title: 'Cancel NFT order error',
+          description: `${err.data.message}`,
+          status: 'error',
+          duration: 4000,
+          isClosable: true,
+        });
+} finally {
       setTimeout(()=>{
         setIsLoading(false)
       }, 5000)
@@ -80,7 +87,14 @@ const ListedCard = (props) => {
         }, 5000)
     } catch(err) {
         console.log(err)
-    } finally {
+        toast({
+          title: 'Update NFT price error',
+          description: `${err.data.message}`,
+          status: 'error',
+          duration: 4000,
+          isClosable: true,
+        });
+} finally {
       setTimeout(()=>{
         setIsLoading(false)
       }, 5000)

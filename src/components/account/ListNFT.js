@@ -61,6 +61,13 @@ export default function ListNFT(props) {
         }, 5000)
       } catch(err) {
           console.log(err)
+          toast({
+            title: 'List NFT error',
+            description: `${err.data.message}`,
+            status: 'error',
+            duration: 4000,
+            isClosable: true,
+        })
       } finally {
         setTimeout(()=>{
           setIsLoading(false)

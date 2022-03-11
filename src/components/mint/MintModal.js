@@ -56,19 +56,19 @@ const MintModal = (props) => {
         return;
       }
 
-      if(currentNetwork!==42) {
-        if (!toast.isActive(id)) {
-          toast({
-            id,
-            title: 'Wrong network',
-            description: "Please change network to Kovan Testnet",
-            status: 'error',
-            duration: 4000,
-            isClosable: true,
-          })
-        }
-        return;
-      }
+      // if(currentNetwork!==42) {
+      //   if (!toast.isActive(id)) {
+      //     toast({
+      //       id,
+      //       title: 'Wrong network',
+      //       description: "Please change network to Kovan Testnet",
+      //       status: 'error',
+      //       duration: 4000,
+      //       isClosable: true,
+      //     })
+      //   }
+      //   return;
+      // }
 
       setIsLoadingMint(true);
 
@@ -94,6 +94,13 @@ const MintModal = (props) => {
                 window.location.reload();
             }, 5000)
           } catch(err) {
+            toast({
+              title: 'Buy and mint NFT error',
+              description: `${err.data.message}`,
+              status: 'error',
+              duration: 4000,
+              isClosable: true,
+            });
             setIsLoadingMint(false);
           }
       } catch(err) {
@@ -131,19 +138,19 @@ const MintModal = (props) => {
         return;
       }
 
-      if(currentNetwork!==42) {
-        if (!toast.isActive(id)) {
-          toast({
-            id,
-            title: 'Wrong network',
-            description: "Please change network to Kovan Testnet",
-            status: 'error',
-            duration: 4000,
-            isClosable: true,
-          })
-        }
-        return;
-      }
+      // if(currentNetwork!==42) {
+      //   if (!toast.isActive(id)) {
+      //     toast({
+      //       id,
+      //       title: 'Wrong network',
+      //       description: "Please change network to Kovan Testnet",
+      //       status: 'error',
+      //       duration: 4000,
+      //       isClosable: true,
+      //     })
+      //   }
+      //   return;
+      // }
 
       setIsLoadingMintAndUnbox(true)
       
@@ -169,6 +176,13 @@ const MintModal = (props) => {
                 window.location.reload();
             }, 5000)
           } catch(err) {
+            toast({
+              title: 'Buy, mint and unbox NFT error',
+              description: `${err.data.message}`,
+              status: 'error',
+              duration: 4000,
+              isClosable: true,
+            });
             setIsLoadingMintAndUnbox(false);
           }
       } catch(err) {

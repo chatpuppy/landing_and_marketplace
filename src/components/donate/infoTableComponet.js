@@ -2,21 +2,14 @@ import { useDonate } from "contexts/DonateContext";
 import { DateTime } from "luxon";
 import { ethers } from "ethers";
 import { TOKEN_ADDRESS, TOKEN_VESTING_ADDRESS } from "constants";
-import {IoIosTimer} from "react-icons/io";
 
 import { 
     Box,
     Heading,
-    TabPanels,
-    Tab, 
-    TabPanel,
-    TabList,
-    Tabs,
     Table,
     Tbody,
     Tr,
     Td,
-    NumberInput,
     useColorModeValue
   } from '@chakra-ui/react'
 
@@ -54,7 +47,7 @@ export const InfoTableComponent = () => {
         </Tr>
         <Tr>
           <Td>{"Cliff".toUpperCase()}</Td>
-          <Td>{data.cliff == 0 ? `NO` : `${genesisTimestamp} to ${cliffTimeStamp}`}</Td>
+          <Td>{data.cliff === 0 ? `NO` : `${genesisTimestamp} to ${cliffTimeStamp}`}</Td>
         </Tr>
         <Tr>
           <Td>{"Release duration".toUpperCase()}</Td>
