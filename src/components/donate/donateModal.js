@@ -20,6 +20,7 @@ import { useDonate } from "contexts/DonateContext";
 
 const DonateModal = (props) => {
     const [ isLoading, setIsLoading ] = useState(false);
+    const [ isDonated, setIsDonated ] = useState(false);
     const { currentAccount, currentNetwork } = useAuth()
     const toast = useToast()
     const {  participantID } = useDonate()
@@ -39,17 +40,18 @@ const DonateModal = (props) => {
             uint8[0] = participantID;
 
             try {
-                await TokenVestingContract.crowdFunding(uint8[0], options)
+                const tx = await TokenVestingContract.crowdFunding(uint8[0], options);
                 toast({
                     title: 'Donate',
-                    description: `Donate ${ethers.utils.formatEther(options.value)} ETH/BNB`,
-                    status: 'sucess',
+                    description: `Waiting for confirmation, hash: ${tx.hash}`,
+                    status: 'warning',
                     duration: 4000,
                     isClosable: true,
-                })
-                setTimeout(()=>{
-                    window.location.reload();
-                }, 5000)
+                });
+
+                await tx.wait(2);
+                setIsLoading(false);
+                setIsDonated(true);
             } catch(err) {
                 toast({
                     title: 'Donate error',
@@ -63,6 +65,7 @@ const DonateModal = (props) => {
     
         } catch(err) {
             console.log('Error Donate Modal', err)
+            setIsLoading(false);
         }
 
     }
@@ -104,6 +107,7 @@ const DonateModal = (props) => {
                 }}
                 onClick={sendDonate}
                 isLoading={isLoading}
+                isDisabled={isDonated}
                 >
                 Donate
             </Button>

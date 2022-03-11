@@ -43,7 +43,9 @@ import { AiTwotoneCheckCircle } from "react-icons/ai";
 
 export const DonateView = () => {
     const { participantID, beneficiaryData, releasable, donateData, participantTotal } = useDonate();
-    const [ isLoading, setIsLoading ] = useState(false);
+    const [ isReleasing, setIsReleasing ] = useState(false);
+    const [ isRedeeming, setIsRedeeming ] = useState(false);
+    const [ showRedeemButton, setShowRedeemButton ] = useState(true);
     const toast = useToast()
     const { ethereum } = window; //injected by metamask
     const provider = new ethers.providers.Web3Provider(ethereum); 
@@ -52,23 +54,24 @@ export const DonateView = () => {
     const TokenVestingContract = new ethers.Contract(TOKEN_VESTING_ADDRESS, donateABI, signer);
 
     const release = async () => {
-      setIsLoading(true);
+      setIsReleasing(true);
       try {
         let uint8 = new Uint8Array(2);
         uint8[0] = participantID;
 
         try {
-            await TokenVestingContract.release(uint8[0], {})
-            toast({
-                title: 'Release',
-                description: `Release releasable tokens`,
-                status: 'sucess',
-                duration: 4000,
-                isClosable: true,
-            })
-            setTimeout(()=>{
-                window.location.reload();
-            }, 5000)
+          const tx = await TokenVestingContract.release(uint8[0], {})
+          toast({
+              title: 'Release',
+              description: `Waiting for confirmation, hash: ${tx.hash}`,
+              status: 'warning',
+              duration: 4000,
+              isClosable: true,
+          })
+
+          await tx.wait(2);
+          setIsReleasing(false);
+          window.location.reload();
         } catch(err) {
             console.log(err)
             toast({
@@ -78,7 +81,7 @@ export const DonateView = () => {
               duration: 4000,
               isClosable: true,
             })
-            setIsLoading(false);
+            setIsReleasing(false);
         }
       } catch(err) {
           console.log('Error Release', err)
@@ -86,29 +89,37 @@ export const DonateView = () => {
     }
 
     const redeem = async () => {
-      setIsLoading(true);
+      setIsRedeeming(true);
       try {        
         let uint8 = new Uint8Array(2);
         uint8[0] = participantID;
 
         try {
-            await TokenVestingContract.redeem(uint8[0], {})
+            const tx = await TokenVestingContract.redeem(uint8[0], {})
             toast({
-                title: 'Redeem',
-                description: `Redeem unreleasable tokens`,
-                status: 'sucess',
-                duration: 4000,
-                isClosable: true,
-            })
-            setTimeout(()=>{
-                window.location.reload();
-            }, 5000)
+              title: 'Redeem',
+              description: `Waiting for confirmation, hash: ${tx.hash}`,
+              status: 'warning',
+              duration: 4000,
+              isClosable: true,
+            });
+            await tx.wait(2);
+            setIsRedeeming(false);
+            setShowRedeemButton(false);
         } catch(err) {
             console.log(err)
-            setIsLoading(false);
+            toast({
+              title: 'Redeem error',
+              description: `${err.data.message}`,
+              status: 'error',
+              duration: 4000,
+              isClosable: true,
+            })
+            setIsRedeeming(false);
         }
       } catch(err) {
           console.log('Error redeem', err)
+          setIsRedeeming(false);
       }
     }
 
@@ -166,14 +177,14 @@ export const DonateView = () => {
             <Card textAlign={'center'} justifyContent={'center'}>
               <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Released</Heading>
               <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.releasedAmount))}</Text>
-              {beneficiaryData === undefined || beneficiaryData.totalAmount.eq(beneficiaryData.releasedAmount) ? "" : <Button mt={5} mb={5} onClick={redeem}>Redeem unreleased</Button>}
+              {beneficiaryData === undefined || beneficiaryData.totalAmount.eq(beneficiaryData.releasedAmount) || !showRedeemButton ? "" : <Button mt={5} mb={5} onClick={redeem} isLoading={isRedeeming}>Redeem unreleased</Button>}
             </Card>
             
             <Card textAlign={'center'} justifyContent={'center'}>
               <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Releaseble</Heading>
               <Text mt={-10} ml={10}>{beneficiaryData === undefined ? <AiTwotoneCheckCircle color={"gray"}/> : beneficiaryData.status === 1 ? <AiTwotoneCheckCircle color={"green"}/> : <AiTwotoneCheckCircle color={"red"}/>}</Text>
               <Text mt={5} fontSize={'4xl'}>{format(ethers.utils.formatEther(releasable === undefined ? 0 : releasable))}</Text>
-              {releasable > 0 ? <Button mt={5} mb={5} onClick={release}>Release</Button> : ''} 
+              {releasable > 0 ? <Button mt={5} mb={5} onClick={release} isLoading={isReleasing}>Release</Button> : ''} 
             </Card>
           </SimpleGrid>
         </Stack>
