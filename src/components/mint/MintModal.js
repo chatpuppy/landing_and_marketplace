@@ -3,9 +3,10 @@ import { Box, Flex, Image, Badge, useColorModeValue, Button, Center, useToast, S
 import { StarIcon } from "@chakra-ui/icons";
 import BoxImageSrc from "assets/mysteryBox.jpg"
 import { ethers } from "ethers";
-import nft_manager_abi from "abi/nft_manager_abi"
+import nft_manager_abi from "abi/nft_manager_abi";
+import nft_manager_v2_abi from "abi/nft_manager_v2_abi.json"
 import { useAuth } from "contexts/AuthContext";
-import { NFT_MANAGER_ADDRESS } from 'constants';
+import { NFT_MANAGER_ADDRESS, NFT_MANAGER_V2_ADDRESS, TOKEN_NAME} from 'constants';
 
 const MintModal = (props) => {
 
@@ -13,7 +14,7 @@ const MintModal = (props) => {
     const [ isLoadingMintAndUnbox, setIsLoadingMintAndUnbox ] = useState(false);
     const { currentAccount, currentNetwork } = useAuth()
 
-    const NFT_manager_contract_address = NFT_MANAGER_ADDRESS;
+    const NFT_manager_contract_address = NFT_MANAGER_V2_ADDRESS;
     const toast = useToast()
     const { count, boxPrice } = props;
     const id = 'toast'
@@ -22,7 +23,7 @@ const MintModal = (props) => {
         imageUrl: BoxImageSrc,
         imageAlt: "Mystery Box",
         title: "Title Info about the product",
-        formattedPrice: (count*boxPrice).toString()+" ETH ",
+        formattedPrice: (count*boxPrice).toString() + ` ${TOKEN_NAME} `,
         rating: 4,
     };
 
@@ -80,9 +81,9 @@ const MintModal = (props) => {
           const signer = provider.getSigner(); 
           //connects with the contract
           const options = {value: ethers.utils.parseEther((count*boxPrice).toString())}
-          const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_abi, signer);
+          const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_v2_abi, signer);
           try {
-            await NFTManagerConnectedContract.buyAndMint(1, options)
+            await NFTManagerConnectedContract.buyAndMint(options)
             toast({
               title: 'Minted!',
               description: "Got a Mystery Box!",
@@ -162,9 +163,9 @@ const MintModal = (props) => {
           const signer = provider.getSigner();
           //connects with the contract
           const options = {value: ethers.utils.parseEther((count*boxPrice).toString())}
-          const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_abi, signer);
+          const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_v2_abi, signer);
           try {
-            await NFTManagerConnectedContract.buyMintAndUnbox(1, options);
+            await NFTManagerConnectedContract.buyMintAndUnbox(options);
             toast({
               title: 'Minted & Unboxed!',
               description: "Unboxed a Mystery Box!",
@@ -208,7 +209,7 @@ const MintModal = (props) => {
         />
 
         <Box p="6">
-          <Box d="flex" alignItems="baseline">
+          {/* <Box d="flex" alignItems="baseline">
             <Badge rounded="full" px="2" colorScheme="teal">
               New
             </Badge>
@@ -231,7 +232,7 @@ const MintModal = (props) => {
             isTruncated
           >
             {property.title}
-          </Box>
+          </Box> */}
 
           <Box fontWeight="semibold">
             Price: {boxPrice ? property.formattedPrice : <Spinner size='xs' mx="2"/>}
@@ -240,7 +241,7 @@ const MintModal = (props) => {
             </Box>
           </Box>
 
-          <Box d="flex" mt="2" alignItems="center">
+          {/* <Box d="flex" mt="2" alignItems="center">
             {Array(5)
               .fill("")
               .map((_, i) => (
@@ -252,7 +253,7 @@ const MintModal = (props) => {
             <Box as="span" ml="2" color={useColorModeValue("gray.600", "gray.200")} fontSize="sm">
               Rarity?
             </Box>
-          </Box>
+          </Box> */}
         </Box>
         <Button
             fontFamily={'heading'}

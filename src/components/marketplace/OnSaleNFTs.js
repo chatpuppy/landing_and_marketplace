@@ -16,17 +16,22 @@ export default function OnSaleNFTs() {
         let _ownedListedNFTs = [];
         try {
             for(let i=0; i<listedNFTs.length; i++) {
-                if(listedNFTs[i][0].toLowerCase()!==currentAccount.toLowerCase()) {
+                if(listedNFTs[i]['seller'].toLowerCase() !== currentAccount.toLowerCase()) {
                     _ownedListedNFTs.push(listedNFTs[i])
                 }
             }
             if(onSaleItems.length<_ownedListedNFTs.length) {
-                setOnSaleItems(onSaleItems.concat(Array.from({length: _ownedListedNFTs.length}, (_, i) => i).map((number, index)=>
-                    <ListedCard key={parseInt(_ownedListedNFTs[index][2]["_hex"], 16)} 
-                    tokenId={parseInt(_ownedListedNFTs[index][2]["_hex"], 16)} 
-                    owner={_ownedListedNFTs[index][0]}
-                    orderId={_ownedListedNFTs[index][5]}
-                    price={_ownedListedNFTs[index][4]}
+                setOnSaleItems(onSaleItems.concat(Array.from({length: _ownedListedNFTs.length}, (_, i) => i).map((number, index) => 
+                    <ListedCard 
+                        key={parseInt(_ownedListedNFTs[index]['tokenId']["_hex"], 16)} 
+                        tokenId={parseInt(_ownedListedNFTs[index]['tokenId']["_hex"], 16)} 
+                        owner={_ownedListedNFTs[index]['seller']}
+                        orderId={_ownedListedNFTs[index][5]}
+                        price={_ownedListedNFTs[index][4]}
+                        unboxed={_ownedListedNFTs[index]['unboxed']}
+                        metadata={_ownedListedNFTs[index]['_artifacts']}
+                        dna={_ownedListedNFTs[index]['_dna']}
+                        paymentToken={_ownedListedNFTs[index]['paymentToken']}
                     />
                 )))
             }

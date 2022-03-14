@@ -4,7 +4,8 @@ import NavBar from 'components/NavBar';
 import { useAuth } from 'contexts/AuthContext';
 import { ethers } from "ethers";
 import nft_core_abi from "abi/nft_core_abi.json"
-import nft_manager_abi from "abi/nft_manager_abi.json"
+// import nft_manager_abi from "abi/nft_manager_abi.json";
+// import nft_manager_v2_abi from "abi/nft_manager_v2_abi.json";
 import { SimpleGrid, useColorModeValue, Skeleton, useToast,
     Tabs, TabList, TabPanels, Tab, TabPanel, Stack
 } from '@chakra-ui/react';
@@ -14,11 +15,11 @@ import BoxImageSrc from "assets/mysteryBox.jpg"
 import { AiOutlineStar } from "react-icons/ai"
 import { BsBoxSeam } from "react-icons/bs"
 import EmptyList from 'components/EmptyList';
-import {NFT_TOKEN_ADDRESS, NFT_MANAGER_ADDRESS, MARKETPLACE_ADDRESS} from 'constants';
+import {NFT_TOKEN_ADDRESS, NFT_MANAGER_ADDRESS, NFT_MANAGER_V2_ADDRESS, MARKETPLACE_ADDRESS} from 'constants';
 
 export default function Account() {
     const NFT_core_contract_address = NFT_TOKEN_ADDRESS
-    const NFT_manager_contract_address = NFT_MANAGER_ADDRESS
+    // const NFT_manager_contract_address = NFT_MANAGER_V2_ADDRESS
 
     const [ isLoading, setIsLoading ] = useState(false);
     const { currentAccount, setOwnedNFTs, setApproved } = useAuth();
@@ -38,7 +39,7 @@ export default function Account() {
             const signer = provider.getSigner(); 
             //connects with the contract
             const NFTCoreConnectedContract = new ethers.Contract(NFT_core_contract_address, nft_core_abi, signer);
-            const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_abi, signer);
+            // const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_v2_abi, signer);
             let count = await NFTCoreConnectedContract.balanceOf(currentAccount);
             let _approved = await NFTCoreConnectedContract.isApprovedForAll(currentAccount, MARKETPLACE_ADDRESS);
             setApproved(_approved);
@@ -48,24 +49,42 @@ export default function Account() {
             let _unboxedItems = []
             for(let i=0; i<count; i++) {
                 let _id = await NFTCoreConnectedContract.tokenOfOwnerByIndex(currentAccount, i);
-                _id = parseInt(_id["_hex"], 16)
-                const _type = await NFTManagerConnectedContract.boxStatus(_id);
-                _ownedNFTs.push([_id, _type]);
-                if(_type===0) _boxedItems.push(_id);
-                else _unboxedItems.push(_id);
+                _id = parseInt(_id["_hex"], 16);
+                // const _type = await NFTManagerConnectedContract.boxStatus(_id); // 需要用另外方法判断是否unboxed，否则在NFTManager升级后，数据会丢失
+                const _metadata = await NFTCoreConnectedContract.tokenMetaData(_id);
+                _ownedNFTs.push([_id, _metadata._artifacts > 0 ? 1 : 0]);
+                const data = {
+                    id: _id, 
+                    metadata: _metadata._artifacts, 
+                    dna: _metadata._dna
+                };
+                if(_metadata._artifacts > 0) _unboxedItems.push(data);
+                else _boxedItems.push(data);
             }
+
             setOwnedNFTs(_ownedNFTs)
             if(_boxedItems.length!==0 && boxedItems.length===0) {
                 setBoxedItems(boxedItems.concat(Array.from({length: _boxedItems.length}, (_, i) => i).map((number, index)=>
-                <NFTCard key={_boxedItems[index]} number={_boxedItems[index]} unboxed={false}
+                <NFTCard 
+                    key={_boxedItems[index].id} 
+                    number={_boxedItems[index].id} 
+                    unboxed={false}
+                    metadata={_boxedItems[index].metadata}
+                    dna={_boxedItems[index].dna}
                     src={BoxImageSrc}
                 />
                 )))
             }
             if(_unboxedItems.length!==0 && unboxedItems.length===0) {
+                // $$$$$$ 加载头像链接
                 setUnboxedItems(unboxedItems.concat(Array.from({length: _unboxedItems.length}, (_, i) => i).map((number, index)=>
-                <NFTCard key={_unboxedItems[index]} number={_unboxedItems[index]} unboxed={true}
-                    src={"https://www.larvalabs.com/cryptopunks/cryptopunk"+_unboxedItems[index]+".png"}
+                <NFTCard 
+                    key={_unboxedItems[index].id} 
+                    number={_unboxedItems[index].id} 
+                    unboxed={true}
+                    metadata={_unboxedItems[index].metadata}
+                    dna={_unboxedItems[index].dna}
+                    src={null}
                 />
                 )))
             }
@@ -76,7 +95,7 @@ export default function Account() {
                 setIsLoading(false)
             }, 400);
         }
-    }, [currentAccount, setOwnedNFTs, boxedItems, unboxedItems, setApproved, NFT_core_contract_address, NFT_manager_contract_address])
+    }, [currentAccount, setOwnedNFTs, boxedItems, unboxedItems, setApproved, NFT_core_contract_address])
     
     useEffect(() => {
         let isConnected = false;
@@ -131,13 +150,13 @@ export default function Account() {
                 </Tab>
             </TabList>
             <TabPanels>
-                <TabPanel>
-                    <SimpleGrid columns={[1, null, 3]} >
+                <TabPanel m='auto' w='80%'>
+                    <SimpleGrid columns={[1, null, 4]} >
                         {boxedItems.length===0 ? <EmptyList /> : boxedItems}
                     </SimpleGrid>
                 </TabPanel>
-                <TabPanel>
-                    <SimpleGrid columns={[1, null, 3]} >
+                <TabPanel m='auto' w='80%'>
+                    <SimpleGrid columns={[1, null, 4]} >
                         {unboxedItems.length===0 ? <EmptyList /> : unboxedItems}
                     </SimpleGrid>
                 </TabPanel>
@@ -157,13 +176,13 @@ export default function Account() {
                 </Tab>
             </TabList>
             <TabPanels>
-                <TabPanel>
-                    <SimpleGrid columns={[1, null, 3]} >
+                <TabPanel m='auto' w='80%'>
+                    <SimpleGrid columns={[1, null, 4]} >
                         <EmptyList />
                     </SimpleGrid>
                 </TabPanel>
-                <TabPanel>
-                    <SimpleGrid columns={[1, null, 3]} >
+                <TabPanel m='auto' w='80%'>
+                    <SimpleGrid columns={[1, null, 4]} >
                         <EmptyList />
                     </SimpleGrid>
                 </TabPanel>

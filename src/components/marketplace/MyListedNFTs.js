@@ -4,30 +4,35 @@ import ListedCard from './ListedCard';
 import { Stack, Skeleton } from '@chakra-ui/react';
 import EmptyList from 'components/EmptyList';
 
-export default function OnSaleNFTs() {
+export default function MyListedNFTs() {
 
     const { currentAccount, listedNFTs } = useAuth()
-    const [ onSaleItems, setOnSaleItems ] = useState([]);
+    // const [ onSaleItems, setOnSaleItems ] = useState([]);
+    const [ myListedItems, setMyListedItems ] = useState([]);
     const [ isLoading, setIsLoading ] = useState()
 
-    const setOnSaleNFTs = useCallback(async() => {
+    const setMyLitedNFTs = useCallback(async() => {
         setIsLoading(true);
         if(!currentAccount) return;
         let _ownedListedNFTs = [];
-        
         try {
             for(let i=0; i<listedNFTs.length; i++) {
-                if(listedNFTs[i][0].toLowerCase()===currentAccount.toLowerCase()) {
+                if(listedNFTs[i]['seller'].toLowerCase()===currentAccount.toLowerCase()) {
                     _ownedListedNFTs.push(listedNFTs[i])
                 }
             }
-            if(onSaleItems.length<_ownedListedNFTs.length) {
-                setOnSaleItems(onSaleItems.concat(Array.from({length: _ownedListedNFTs.length}, (_, i) => i).map((number, index)=>
-                    <ListedCard key={parseInt(_ownedListedNFTs[index][2]["_hex"], 16)} 
-                    tokenId={parseInt(_ownedListedNFTs[index][2]["_hex"], 16)} 
-                    owner={_ownedListedNFTs[index][0]}
-                    orderId={_ownedListedNFTs[index][5]}
-                    price={_ownedListedNFTs[index][4]}
+            if(myListedItems.length<_ownedListedNFTs.length) {
+                setMyListedItems(myListedItems.concat(Array.from({length: _ownedListedNFTs.length}, (_, i) => i).map((number, index)=>
+                    <ListedCard 
+                        key={parseInt(_ownedListedNFTs[index]['tokenId']["_hex"], 16)} 
+                        tokenId={parseInt(_ownedListedNFTs[index]['tokenId']["_hex"], 16)} 
+                        owner={_ownedListedNFTs[index]['seller']}
+                        orderId={_ownedListedNFTs[index][5]}
+                        price={_ownedListedNFTs[index][4]}
+                        unboxed={_ownedListedNFTs[index]['unboxed']}
+                        metadata={_ownedListedNFTs[index]['_artifacts']}
+                        dna={_ownedListedNFTs[index]['_dna']}
+                        paymentToken={_ownedListedNFTs[index]['paymentToken']}
                     />
                 )))
             }
@@ -36,25 +41,25 @@ export default function OnSaleNFTs() {
         } finally {
             setIsLoading(false)
         }
-    }, [currentAccount, listedNFTs, setOnSaleItems, onSaleItems])
+    }, [currentAccount, myListedItems, listedNFTs])
 
     useEffect(() => {
 
         let isConnected = false;
         if(!isConnected) {
             if(listedNFTs) {
-                setOnSaleNFTs();
+                setMyLitedNFTs();
             }
         }
         
         return () => {
             isConnected = true;
         }
-    }, [setOnSaleNFTs, listedNFTs])
+    }, [listedNFTs, setMyLitedNFTs])
     
     return (
         <>
-            {onSaleItems.length===0 ?
+            {myListedItems.length===0 ?
             isLoading ?
             <Stack p={50}>
                 <Skeleton bg="gray.400" height='20px' />
@@ -64,7 +69,7 @@ export default function OnSaleNFTs() {
             :
             <EmptyList />
             :
-            onSaleItems
+            myListedItems
             }
         </>
     )

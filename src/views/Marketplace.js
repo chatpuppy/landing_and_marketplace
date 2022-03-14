@@ -9,24 +9,27 @@ import { BsBoxSeam } from "react-icons/bs"
 import OnSaleNFTs from 'components/marketplace/OnSaleNFTs';
 import MyListedNFT from 'components/marketplace/MyListedNFTs'
 import { ethers } from "ethers";
-import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
+import nft_marketplace_abi from "abi/nft_marketplace_abi.json";
+import nft_core_abi from "abi/nft_core_abi.json";
 import { useAuth } from 'contexts/AuthContext';
-import FAQ from 'components/FAQ';
+// import FAQ from 'components/FAQ';
 import PageName from 'components/PageName';
 import EmptyList from 'components/EmptyList';
-import { MARKETPLACE_ADDRESS } from 'constants';
+import { MARKETPLACE_ADDRESS, NFT_TOKEN_ADDRESS } from 'constants';
 
 export default function Marketplace() {
 
   const color = useColorModeValue("black", "white")
   const NFT_marketplace_contract_address = MARKETPLACE_ADDRESS;
+  const NFT_core_contract_address = NFT_TOKEN_ADDRESS
+
   const [ isLoading, setIsLoading ] = useState(false);
   const { currentAccount, setListedNFTs } = useAuth()
   const toast = useToast()
   const id = 'toast'
   
   const getListedNFTs = useCallback(async() => {
-    setIsLoading(true)
+    setIsLoading(true);
     if(!currentAccount) return;
     try {
         const { ethereum } = window; //injected by metamask
@@ -35,22 +38,30 @@ export default function Marketplace() {
         //gets the account
         const signer = provider.getSigner(); 
         //connects with the contract
+        const NFTCoreConnectedContract = new ethers.Contract(NFT_core_contract_address, nft_core_abi, signer);
         const NFTMarketplaceConnectedContract = new ethers.Contract(NFT_marketplace_contract_address, nft_marketplace_abi, signer);
         let ordersArr = await NFTMarketplaceConnectedContract.onSaleOrders()
         ordersArr = ordersArr.map(x=>parseInt(x["_hex"], 16))
         let listedOrdersArr = [];
+
         for(let i=0; i<ordersArr.length; i++) {
-            let _order = Object.assign([], await NFTMarketplaceConnectedContract.orders(ordersArr[i]))
-            _order.push(ordersArr[i])
-            listedOrdersArr.push(_order);
+            let _order = Object.assign([], await NFTMarketplaceConnectedContract.orders(ordersArr[i]));
+            const _metadata = await NFTCoreConnectedContract.tokenMetaData(_order.tokenId);
+            _order.push(ordersArr[i]);
+            listedOrdersArr.push({
+                ..._order,
+                ..._metadata,
+                ...{unboxed: _metadata._artifacts > 0},
+            });
         }
-        setListedNFTs(listedOrdersArr)
+        console.log(listedOrdersArr);
+        setListedNFTs(listedOrdersArr);
     } catch(err) {
         console.log(err)
     } finally {
         setIsLoading(false)
     }
-  }, [currentAccount, setListedNFTs, NFT_marketplace_contract_address])
+  }, [currentAccount, NFT_core_contract_address, NFT_marketplace_contract_address, setListedNFTs])
 
 
   useEffect(() => {
@@ -104,13 +115,13 @@ export default function Marketplace() {
                 </Tab>
             </TabList>
             <TabPanels>
-                <TabPanel>
-                    <SimpleGrid columns={[1, null, 3]} >
+                <TabPanel m='auto' w='80%'>
+                    <SimpleGrid columns={[1, null, 4]} >
                         <OnSaleNFTs />
                     </SimpleGrid>
                 </TabPanel>
-                <TabPanel>
-                    <SimpleGrid columns={[1, null, 3]}>
+                <TabPanel m='auto' w='80%'>
+                    <SimpleGrid columns={[1, null, 4]}>
                         <MyListedNFT />
                     </SimpleGrid>
                 </TabPanel>
@@ -130,20 +141,20 @@ export default function Marketplace() {
                 </Tab>
             </TabList>
             <TabPanels>
-                <TabPanel>
-                    <SimpleGrid columns={[1, null, 3]} >
+                <TabPanel m='auto' w='80%'>
+                    <SimpleGrid columns={[1, null, 4]} >
                         <EmptyList />
                     </SimpleGrid>
                 </TabPanel>
-                <TabPanel>
-                    <SimpleGrid columns={[1, null, 3]} >
+                <TabPanel m='auto' w='80%'>
+                    <SimpleGrid columns={[1, null, 4]} >
                         <EmptyList />
                     </SimpleGrid>
                 </TabPanel>
             </TabPanels>
         </Tabs>
       }
-      <FAQ />
+      {/* <FAQ /> */}
       <Footer />
       </>
   );

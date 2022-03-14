@@ -81,7 +81,7 @@ export default function ListNFT(props) {
 
     return (
       <>
-        <Button size="md" bg={buttonbg} color={bg}
+        <Button size="md" bg={buttonbg} color={bg} mb={3}
           fontWeight="bold" rounded="lg" textTransform="uppercase"
           _hover={{
             bg: "gray.500",
@@ -92,7 +92,7 @@ export default function ListNFT(props) {
           onClick={onOpen}
           isLoading={isLoading}
         >
-            List
+            Sell
         </Button>
   
         <Modal isOpen={isOpen} onClose={onClose}>

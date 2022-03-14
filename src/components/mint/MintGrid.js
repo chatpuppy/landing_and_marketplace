@@ -7,13 +7,14 @@ import {
 } from '@chakra-ui/react';
 import MintModal from './MintModal';
 import { ethers } from 'ethers';
-import nft_manager_abi from "abi/nft_manager_abi"
-import { NFT_MANAGER_ADDRESS } from 'constants';
+// import nft_manager_abi from "abi/nft_manager_abi";
+import nft_manager_v2_abi from "abi/nft_manager_v2_abi";
+import { NFT_MANAGER_ADDRESS, NFT_MANAGER_V2_ADDRESS} from 'constants';
 
 export default function MintGrid() {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const NFT_manager_contract_address = NFT_MANAGER_ADDRESS;
+    const NFT_manager_contract_address = NFT_MANAGER_V2_ADDRESS;
 
     const [ boxPrice, setBoxPrice ] = useState()
 
@@ -42,7 +43,7 @@ export default function MintGrid() {
             //gets the account
             const signer = provider.getSigner(); 
             //connects with the contract
-            const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_abi, signer);
+            const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_v2_abi, signer);
             const _boxPrice = await NFTManagerConnectedContract.boxPrice();
             setBoxPrice(parseInt(_boxPrice["_hex"], 16)/ Math.pow(10, 18))
         } catch(err) {

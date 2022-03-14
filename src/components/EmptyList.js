@@ -29,7 +29,6 @@ const EmptyList = () => {
         w="full"
         roundedTop="lg"
         fit="cover"
-        h="40vh"
         src={BoxImageSrc}
         alt="NIKE AIR"
       />
@@ -37,7 +36,7 @@ const EmptyList = () => {
         <chakra.h1
           color={useColorModeValue("white","gray.800")}
           fontWeight="bold"
-          fontSize="3xl"
+          fontSize="2xl"
           textTransform="uppercase"
         >
           No NFTs Found
@@ -57,7 +56,7 @@ const EmptyList = () => {
         bg={bg}
         roundedBottom="lg"
       >
-          <Button bg={buttonbg} _hover={{
+          <Button mb={3} bg={buttonbg} _hover={{
               bg: "gray.500",
           }}
           _focus={{

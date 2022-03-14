@@ -113,7 +113,7 @@ export default function BuyDialog(props) {
 
     return (
         <>
-        <Button colorScheme='blue' onClick={() => setIsOpen(true)}>
+        <Button mb={3} colorScheme='blue' onClick={() => setIsOpen(true)}>
             Buy
         </Button>
 

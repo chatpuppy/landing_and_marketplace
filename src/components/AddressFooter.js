@@ -7,7 +7,7 @@ import {
     useColorModeValue,
 } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
-import {NFT_TOKEN_ADDRESS, ETHERSCAN_BASE_URL, NFT_MANAGER_ADDRESS} from 'constants';
+import {NFT_TOKEN_ADDRESS, ETHERSCAN_BASE_URL, NFT_MANAGER_ADDRESS, NFT_MANAGER_V2_ADDRESS} from 'constants';
   
 function shortenAddress(address) {
     return address.substr(0, 6) + "..." + address.substr(address.length - 6, 6)
@@ -32,8 +32,8 @@ export default function AddressFooter() {
                 isExternal mr="1">{shortenAddress(NFT_TOKEN_ADDRESS)}  {""}<ExternalLinkIcon /></Link>
             </Text>
             <Text>NFT Manager Address: {""}
-                <Link href={ETHERSCAN_BASE_URL + NFT_MANAGER_ADDRESS}
-                isExternal mr="1">{shortenAddress(NFT_MANAGER_ADDRESS)}  {""}<ExternalLinkIcon /></Link>
+                <Link href={ETHERSCAN_BASE_URL + NFT_MANAGER_V2_ADDRESS}
+                isExternal mr="1">{shortenAddress(NFT_MANAGER_V2_ADDRESS)}  {""}<ExternalLinkIcon /></Link>
             </Text>
         </Container>
         </Box>

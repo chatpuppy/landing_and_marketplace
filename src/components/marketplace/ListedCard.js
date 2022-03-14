@@ -2,27 +2,33 @@ import React, { useState, useRef } from "react";
 import { chakra, Box, Image, Flex, useColorModeValue, Button, useToast,
   Modal, ModalOverlay, ModalContent, ModalHeader, 
   ModalBody, ModalCloseButton, useDisclosure,
-  FormControl, FormLabel, Input
+  FormControl, FormLabel, Input, Divider
 } from "@chakra-ui/react";
 import { useAuth } from "contexts/AuthContext";
 import { ethers } from "ethers";
 import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
 import { useNavigate } from "react-router-dom";
 import BuyDialog from "./BuyDialog";
-import { MARKETPLACE_ADDRESS } from "constants";
+import { MARKETPLACE_ADDRESS, ETHERSCAN_BASE_URL } from "constants";
+import { sortLayer, mergeLayers } from "avatar";
+import mergeImages from 'merge-images';
+import BoxImageSrc from "assets/mysteryBox.jpg"
 
 const ListedCard = (props) => {
 
   let navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { tokenId, owner, orderId, price } = props;
+  const { tokenId, owner, orderId, price, unboxed, metadata } = props;
   const { currentAccount } = useAuth();
   const bg = useColorModeValue("gray.700", "gray.200")
   const buttonbg = useColorModeValue("white", "gray.900")
   const NFT_marketplace_contract_address = MARKETPLACE_ADDRESS;
   const [ isLoading, setIsLoading ] = useState(false);
+  const [ imageBase64, setImageBase64 ] = useState('');
   const toast = useToast()
   const priceRef = useRef();
+
+  console.log(props);
 
   const unlistNFT = async() => {
     setIsLoading(true)
@@ -94,12 +100,51 @@ const ListedCard = (props) => {
           duration: 4000,
           isClosable: true,
         });
-} finally {
+    } finally {
       setTimeout(()=>{
         setIsLoading(false)
       }, 5000)
     }
   }
+
+  const parseMetadata = (md) => {
+    // Ex. 0x0622000602030a020501
+    const sortedLayers = sortLayer(md.toHexString().substr(10, 12));
+    const mergedLayers = mergeLayers(sortedLayers);
+    if(mergedLayers.images.length === 0) return null;
+
+    // console.log('images', mergedLayers.images);
+    let level = 0;
+    let experience = 0;
+    let rarity = 1;
+    for(let i = 0; i < mergedLayers.layers.length; i++) {
+      level = level + mergedLayers.layers[i].level;
+      experience = experience + mergedLayers.layers[i].experience;
+      rarity = rarity * mergedLayers.layers[i].rarity / 1000000;
+    }
+    console.log(level, experience);
+    return {
+      metadata: md.toHexString(),
+      level,
+      experience,
+      rarity: (rarity * 1000000).toFixed(4),
+      images: mergedLayers.images,
+      layers: mergedLayers.layers
+    }
+  }
+
+  let parsedMetadata;
+  if(unboxed) {
+    parsedMetadata = parseMetadata(metadata);
+    if(parsedMetadata !== null) {
+      // console.log("===", tokenId, parsedMetadata.level, parsedMetadata.layers, parsedMetadata.images);
+      mergeImages(parsedMetadata.images).then((b64) => {
+        setImageBase64(b64);
+      });
+    }
+  }
+
+  const showUrl = (addr) => <a href={ETHERSCAN_BASE_URL + addr} target='_blank' rel="noreferrer">Owner: {addr.substr(0, 8) + "..." + addr.substr(addr.length - 6, 6)}</a>
 
   return (
   <Flex
@@ -120,25 +165,59 @@ const ListedCard = (props) => {
         w="full"
         roundedTop="lg"
         fit="cover"
-        h="40vh"
-        src={"https://www.larvalabs.com/cryptopunks/cryptopunk"+tokenId+".png"}
+        src={unboxed && parsedMetadata !== null ? imageBase64 : BoxImageSrc}
         alt="NIKE AIR"
       />
       <Box px={4} py={2} bg={bg}>
         <chakra.h1
           color={useColorModeValue("white","gray.800")}
           fontWeight="bold"
-          fontSize="3xl"
+          fontSize="xl"
           textTransform="uppercase"
+          textAlign="right"
         >
           ID #{tokenId}
         </chakra.h1>
-        <chakra.span
+
+        <chakra.h1
+            color={useColorModeValue("white", "gray.800")}
+            fontSize="md"
+            textTransform="uppercase"
+          >
+          {unboxed && parsedMetadata !== null ? 
+          "Lvl: " + parsedMetadata.level : 'Mystery Box'}
+          </chakra.h1>
+          <chakra.h1
+            color={useColorModeValue("white", "gray.800")}
+            fontSize="md"
+            textTransform="uppercase"
+          >
+          {unboxed && parsedMetadata !== null? 
+          "Exp: " + parsedMetadata.experience : 'Unbox it then'}
+          </chakra.h1>
+          <chakra.h1
+            color={useColorModeValue("white", "gray.800")}
+            fontSize="md"
+            textTransform="uppercase"
+          >
+          {unboxed && parsedMetadata !== null? 
+          "RAT: " + parsedMetadata.rarity + ' per million' : 'get NFT'}
+          </chakra.h1>
+          <chakra.h1
+            color={useColorModeValue("white", "gray.800")}
+            fontSize="md"
+            textTransform="uppercase"
+          >
+           {currentAccount.toLowerCase() !== owner.toLowerCase() ? showUrl(owner) : ''}
+          </chakra.h1>
+        <Divider h={3}/>
+        <chakra.h1
           color={useColorModeValue("white","gray.800")}
-          fontSize="xl"
+          fontSize="md"
+          fontWeight="bold"
         >
           Price: {parseInt(price["_hex"], 16)/Math.pow(10, 18)} CPT
-        </chakra.span>
+        </chakra.h1>
       </Box>
       <Flex
         alignItems="center"
@@ -150,7 +229,7 @@ const ListedCard = (props) => {
       >
           {currentAccount.toLowerCase()===owner.toLowerCase() ? 
           <>
-          <Button size="md" bg={buttonbg} color={bg}
+          <Button mb={3} size="md" bg={buttonbg} color={bg}
           fontWeight="bold" rounded="lg" textTransform="uppercase"
           _hover={{
               bg: "gray.500",
@@ -162,7 +241,7 @@ const ListedCard = (props) => {
           >
               EDIT
           </Button>
-          <Button size="md" bg={buttonbg} color={bg}
+          <Button mb={3} size="md" bg={buttonbg} color={bg}
           fontWeight="bold" rounded="lg" textTransform="uppercase"
           _hover={{
               bg: "gray.500",
