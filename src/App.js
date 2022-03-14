@@ -3,7 +3,7 @@ import Home from "views/Home";
 import Mint from "views/Mint";
 import Marketplace from "views/Marketplace"
 import Account from "views/Account";
-import Donate from "views/Donate";
+// import Donate from "views/Donate";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useAuth } from "contexts/AuthContext";
 // import { tokenVestingContract } from "./utils/tokenVestingsInteract";
@@ -61,7 +61,7 @@ function App() {
           <Route path="/mint" element={<Mint />}/>
           <Route path="/marketplace" element={<Marketplace />}/>
           <Route path="/account" element={<Account />}/>
-          <Route path="/donate" element={<Donate />}/>
+          {/* <Route path="/donate" element={<Donate />}/> */}
         </Routes>
     </Router>
   );
