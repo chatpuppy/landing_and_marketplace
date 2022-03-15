@@ -36,14 +36,14 @@ const EmptyList = () => {
         <chakra.h1
           color={useColorModeValue("white","gray.800")}
           fontWeight="bold"
-          fontSize="2xl"
+          fontSize="xl"
           textTransform="uppercase"
         >
           No NFTs Found
         </chakra.h1>
         <chakra.span
           color={useColorModeValue("white","gray.800")}
-          fontSize="xl"
+          fontSize="md"
         >
           Go To Mint Page
         </chakra.span>

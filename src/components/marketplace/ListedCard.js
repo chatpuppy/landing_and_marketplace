@@ -13,6 +13,9 @@ import { MARKETPLACE_ADDRESS, ETHERSCAN_BASE_URL } from "constants";
 import { sortLayer, mergeLayers } from "avatar";
 import mergeImages from 'merge-images';
 import BoxImageSrc from "assets/mysteryBox.jpg"
+import {BiHelpCircle} from 'react-icons/bi';
+import ReactTooltip from 'react-tooltip';
+
 
 const ListedCard = (props) => {
 
@@ -27,6 +30,11 @@ const ListedCard = (props) => {
   const [ imageBase64, setImageBase64 ] = useState('');
   const toast = useToast()
   const priceRef = useRef();
+
+  const strLevel = "LEVEL: <br/>Sum of levels of each traits, <br/>higher means more value.";
+  const strExperience = "EXPERIENCE: <br/>Sum of each trait's experience, <br/>higher means more value.";
+  const strRarity = "RARITY: <br/>Probability of same NFT<br/> in 1,000,000 NFTs, <br/>lower means more value.";
+  const strOwner = "OWNER: <br/>Seller of NFT";
 
   console.log(props);
 
@@ -144,7 +152,7 @@ const ListedCard = (props) => {
     }
   }
 
-  const showUrl = (addr) => <a href={ETHERSCAN_BASE_URL + addr} target='_blank' rel="noreferrer">Owner: {addr.substr(0, 8) + "..." + addr.substr(addr.length - 6, 6)}</a>
+  const showUrl = (addr) => <a href={ETHERSCAN_BASE_URL + addr} target='_blank' rel="noreferrer">Owner: {addr.substr(0, 5) + "..." + addr.substr(addr.length - 6, 6)}</a>
 
   return (
   <Flex
@@ -182,33 +190,46 @@ const ListedCard = (props) => {
         <chakra.h1
             color={useColorModeValue("white", "gray.800")}
             fontSize="md"
-            textTransform="uppercase"
+            // textTransform="uppercase"
           >
           {unboxed && parsedMetadata !== null ? 
-          "Lvl: " + parsedMetadata.level : 'Mystery Box'}
-          </chakra.h1>
+          <Flex>
+            <BiHelpCircle fontSize="xs" data-tip={strLevel} data-for="level"/>
+            &nbsp;Lvl: {parsedMetadata.level} 
+          </Flex> : 'This is mystery box'}
+        </chakra.h1>
           <chakra.h1
             color={useColorModeValue("white", "gray.800")}
             fontSize="md"
-            textTransform="uppercase"
+            // textTransform="uppercase"
           >
           {unboxed && parsedMetadata !== null? 
-          "Exp: " + parsedMetadata.experience : 'Unbox it then'}
-          </chakra.h1>
+          <Flex>
+            <BiHelpCircle fontSize="xs" data-tip={strExperience} data-for="exp"/>
+            &nbsp;Exp: {parsedMetadata.experience}
+          </Flex> : 'Please unbox it'}
+        </chakra.h1>
           <chakra.h1
             color={useColorModeValue("white", "gray.800")}
             fontSize="md"
-            textTransform="uppercase"
+            // textTransform="uppercase"
           >
           {unboxed && parsedMetadata !== null? 
-          "RAT: " + parsedMetadata.rarity + ' per million' : 'get NFT'}
-          </chakra.h1>
+          <Flex>
+            <BiHelpCircle fontSize="xs" data-tip={strRarity} data-for="rat"/>
+            &nbsp;Rat: {parsedMetadata.rarity}
+          </Flex>  : 'and get NFT'}
+        </chakra.h1>
           <chakra.h1
             color={useColorModeValue("white", "gray.800")}
             fontSize="md"
-            textTransform="uppercase"
+            // textTransform="uppercase"
           >
-           {currentAccount.toLowerCase() !== owner.toLowerCase() ? showUrl(owner) : ''}
+           {currentAccount.toLowerCase() !== owner.toLowerCase() ? 
+           <Flex>
+             <BiHelpCircle fontSize="xs" data-tip={strOwner} data-for="owner"/>
+             &nbsp; {showUrl(owner)}
+           </Flex>: ''}
           </chakra.h1>
         <Divider h={3}/>
         <chakra.h1
@@ -260,6 +281,10 @@ const ListedCard = (props) => {
           }
         </Flex>
       </Box>
+      <ReactTooltip id="level" effect="solid" multiline={true} />
+      <ReactTooltip id="exp" effect="solid" multiline={true} />
+      <ReactTooltip id="rat" effect="solid" multiline={true} />
+      <ReactTooltip id="owner" effect="solid" multiline={true} />
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>

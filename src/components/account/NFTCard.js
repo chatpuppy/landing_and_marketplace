@@ -11,6 +11,8 @@ import ListNFT from "./ListNFT";
 import {NFT_MANAGER_ADDRESS, NFT_MANAGER_V2_ADDRESS} from 'constants';
 import { sortLayer, mergeLayers } from "avatar";
 import mergeImages from 'merge-images';
+import {BiHelpCircle} from 'react-icons/bi';
+import ReactTooltip from 'react-tooltip';
 
 const NFTCard = (props) => {
 
@@ -18,10 +20,8 @@ const NFTCard = (props) => {
   const [ isLoading, setIsLoading ] = useState(false);
   const [ imageBase64, setImageBase64 ] = useState('');
 
-  const toast = useToast()
-
-  const { currentAccount } = useAuth()
-
+  const toast = useToast();
+  const { currentAccount } = useAuth();
   const { src, number, unboxed, metadata, dna } = props;
   const bg = useColorModeValue("gray.700", "gray.200")
   const buttonbg = useColorModeValue("white", "gray.900")
@@ -29,6 +29,11 @@ const NFTCard = (props) => {
   const [isOpen, setIsOpen] = useState(false)
   const onClose = () => setIsOpen(false)
   const cancelRef = useRef()
+
+  const strLevel = "LEVEL: <br/>Sum of levels of each traits, <br/>higher means more value.";
+  const strExperience = "EXPERIENCE: <br/>Sum of each trait's experience, <br/>higher means more value.";
+  const strRarity = "RARITY: <br/>Probability of same NFT<br/> in 1,000,000 NFTs, <br/>lower means more value.";
+  const strArtifacts = "ARTIFACTS: <br/>metadata of NFT on chain";
 
   const unboxNFT = async() => {
     setIsLoading(true);
@@ -161,36 +166,47 @@ const NFTCard = (props) => {
           <chakra.h1
             color={useColorModeValue("white", "gray.800")}
             fontSize="md"
-            textTransform="uppercase"
+            // textTransform="uppercase"
           >
           {unboxed && parsedMetadata !== null ? 
-          "Lvl: " + parsedMetadata.level : ''}
+          <Flex>
+            <BiHelpCircle fontSize="xs" data-tip={strLevel} data-for="level"/>
+            &nbsp;Lvl: {parsedMetadata.level} 
+          </Flex> : ''}
           </chakra.h1>
           <chakra.h1
             color={useColorModeValue("white", "gray.800")}
             fontSize="md"
-            textTransform="uppercase"
+            // textTransform="uppercase"
           >
           {unboxed && parsedMetadata !== null? 
-          "Exp: " + parsedMetadata.experience : ''}
+          <Flex>
+            <BiHelpCircle fontSize="xs" data-tip={strExperience} data-for="exp"/>
+            &nbsp;Exp: {parsedMetadata.experience}
+          </Flex> : ''}
           </chakra.h1>
           <chakra.h1
             color={useColorModeValue("white", "gray.800")}
             fontSize="md"
-            textTransform="uppercase"
+            // textTransform="uppercase"
           >
           {unboxed && parsedMetadata !== null? 
-          "RAT: " + parsedMetadata.rarity + ' per million' : ''}
+          <Flex>
+            <BiHelpCircle fontSize="xs" data-tip={strRarity} data-for="rat"/>
+            &nbsp;Rat: {parsedMetadata.rarity}
+          </Flex>  : ''}
           </chakra.h1>
           <chakra.h1
             color={useColorModeValue("white", "gray.500")}
             fontSize="sm"
-            textTransform="uppercase"
+            // textTransform="uppercase"
           >
           {unboxed && parsedMetadata !== null ? 
-           'Art: ' + parsedMetadata.metadata.substr(2) : ''}
+          <Flex>
+            <BiHelpCircle fontSize="xs" data-tip={strArtifacts} data-for="meta"/>
+            &nbsp;Meta: {parsedMetadata.metadata.substr(2)}
+          </Flex> : ''}
           </chakra.h1>
-
         </Box>
         {unboxed ? 
         <Center my="2"
@@ -223,6 +239,10 @@ const NFTCard = (props) => {
         }
         
       </Box>
+      <ReactTooltip id="level" effect="solid" multiline={true} />
+      <ReactTooltip id="exp" effect="solid" multiline={true} />
+      <ReactTooltip id="rat" effect="solid" multiline={true} />
+      <ReactTooltip id="meta" effect="solid" multiline={true} />
       <AlertDialog
         isCentered={true}
         isOpen={isOpen}
