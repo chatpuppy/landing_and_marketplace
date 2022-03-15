@@ -165,7 +165,7 @@ const ListedCard = (props) => {
       <Box
       maxW="xs"
       mx="auto"
-      bg={useColorModeValue("gray.700","white")}
+      bg={useColorModeValue("white", "gray.200")}
       shadow="lg"
       rounded="lg"
     >
@@ -174,11 +174,11 @@ const ListedCard = (props) => {
         roundedTop="lg"
         fit="cover"
         src={unboxed && parsedMetadata !== null ? imageBase64 : BoxImageSrc}
-        alt="NIKE AIR"
+        alt="NFT Avatar"
       />
-      <Box px={4} py={2} bg={bg}>
+      <Box px={4} py={2}>
         <chakra.h1
-          color={useColorModeValue("white","gray.800")}
+          color={useColorModeValue("gray.800","gray.800")}
           fontWeight="bold"
           fontSize="xl"
           textTransform="uppercase"
@@ -188,7 +188,7 @@ const ListedCard = (props) => {
         </chakra.h1>
 
         <chakra.h1
-            color={useColorModeValue("white", "gray.800")}
+            color={useColorModeValue("gray.800", "gray.800")}
             fontSize="md"
             // textTransform="uppercase"
           >
@@ -199,7 +199,7 @@ const ListedCard = (props) => {
           </Flex> : 'This is mystery box'}
         </chakra.h1>
           <chakra.h1
-            color={useColorModeValue("white", "gray.800")}
+            color={useColorModeValue("gray.800", "gray.800")}
             fontSize="md"
             // textTransform="uppercase"
           >
@@ -210,7 +210,7 @@ const ListedCard = (props) => {
           </Flex> : 'Please unbox it'}
         </chakra.h1>
           <chakra.h1
-            color={useColorModeValue("white", "gray.800")}
+            color={useColorModeValue("gray.800", "gray.800")}
             fontSize="md"
             // textTransform="uppercase"
           >
@@ -221,7 +221,7 @@ const ListedCard = (props) => {
           </Flex>  : 'and get NFT'}
         </chakra.h1>
           <chakra.h1
-            color={useColorModeValue("white", "gray.800")}
+            color={useColorModeValue("gray.800", "gray.800")}
             fontSize="md"
             // textTransform="uppercase"
           >
@@ -231,9 +231,9 @@ const ListedCard = (props) => {
              &nbsp; {showUrl(owner)}
            </Flex>: ''}
           </chakra.h1>
-        <Divider h={3}/>
+        <Divider h={2} mb={1}/>
         <chakra.h1
-          color={useColorModeValue("white","gray.800")}
+          color={useColorModeValue("gray.800","gray.800")}
           fontSize="md"
           fontWeight="bold"
         >
@@ -245,7 +245,6 @@ const ListedCard = (props) => {
         justifyContent="space-between"
         px={4}
         py={2}
-        bg={bg}
         roundedBottom="lg"
       >
           {currentAccount.toLowerCase()===owner.toLowerCase() ? 

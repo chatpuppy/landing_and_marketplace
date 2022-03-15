@@ -142,7 +142,7 @@ const NFTCard = (props) => {
       <Box
         maxW="xs"
         mx="auto"
-        bg={useColorModeValue("gray.700", "gray.200")}
+        bg={useColorModeValue("white", "gray.200")}
         shadow="lg"
         rounded="lg"
       >
@@ -151,11 +151,11 @@ const NFTCard = (props) => {
           fit="cover"
           roundedTop="lg"
           src={unboxed && parsedMetadata !== null ? imageBase64 : src}
-          alt="TITLE"
+          alt="NFT Avatar"
         />
         <Box px={4} py={2}>
           <chakra.h1
-            color={useColorModeValue("white", "gray.800")}
+            color={useColorModeValue("gray.800", "gray.800")}
             fontWeight="bold"
             fontSize="xl"
             textTransform="uppercase"
@@ -164,7 +164,7 @@ const NFTCard = (props) => {
             Id #{number}
           </chakra.h1>
           <chakra.h1
-            color={useColorModeValue("white", "gray.800")}
+            color={useColorModeValue("gray.800", "gray.800")}
             fontSize="md"
             // textTransform="uppercase"
           >
@@ -175,7 +175,7 @@ const NFTCard = (props) => {
           </Flex> : ''}
           </chakra.h1>
           <chakra.h1
-            color={useColorModeValue("white", "gray.800")}
+            color={useColorModeValue("gray.800", "gray.800")}
             fontSize="md"
             // textTransform="uppercase"
           >
@@ -186,7 +186,7 @@ const NFTCard = (props) => {
           </Flex> : ''}
           </chakra.h1>
           <chakra.h1
-            color={useColorModeValue("white", "gray.800")}
+            color={useColorModeValue("gray.800", "gray.800")}
             fontSize="md"
             // textTransform="uppercase"
           >
@@ -197,7 +197,7 @@ const NFTCard = (props) => {
           </Flex>  : ''}
           </chakra.h1>
           <chakra.h1
-            color={useColorModeValue("white", "gray.500")}
+            color={useColorModeValue("gray.500", "gray.500")}
             fontSize="sm"
             // textTransform="uppercase"
           >
