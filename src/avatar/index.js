@@ -48,3 +48,60 @@ export const sortLayer = (itemIds) => {
 	sortedArray[5] = orignalArray[3];
 	return sortedArray;
 }
+
+const probability = () => {
+	let itemsArray = {};
+	let traits = [];
+	for(let i = 0; i < boxTypes.length; i++) {
+		itemsArray[boxTypes[i]] = [];
+		for(let j = 0; j < itemParams.length; j++) {
+			if(boxTypes[i] === itemParams[j].boxType) itemsArray[boxTypes[i]].push(itemParams[j]);
+		}
+	}
+
+	for(let i = 0; i < boxTypes.length; i++) {
+		let sum = 0;
+		const random = Math.floor(Math.random() * 1000000);
+		for(let j = 0; j < itemsArray[boxTypes[i]].length; j++) {
+			sum = sum + itemsArray[boxTypes[i]][j].rarity;
+			if(sum > random) {
+				traits.push(itemsArray[boxTypes[i]][j]);
+				break;
+			}
+		}
+	}
+
+	return traits;
+}
+
+const simMultiProbability = (times) => {
+	// let itemCount = [
+	// 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	// 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	// 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	// 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	// 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	// 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	// ];
+	let rarities = [];
+	let experiences = [];
+	for(let i = 0; i < times; i++) {
+		const traits = probability();
+		let rarity = 1;
+		let experience = 0;
+		for(let j = 0; j < boxTypes.length; j++) {
+			// itemCount[j][traits[j].itemId] = itemCount[j][traits[j].itemId] + 1;
+			rarity = rarity * traits[j].rarity / 1000000;
+			experience = experience + traits[j].experience;
+		}
+		rarities.push((rarity * 1000000).toFixed(2));
+		experiences.push(experience);
+	}
+	// console.log(itemCount);
+	console.log('======= Rarities ========');
+	console.log(rarities.toString());
+	console.log('====== Experiences ======');
+	console.log(experiences.toString());
+}
+
+simMultiProbability(20000);

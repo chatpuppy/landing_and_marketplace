@@ -7,7 +7,6 @@ const EmptyList = () => {
 
     const navigate = useNavigate()
 
-    const bg = useColorModeValue("gray.700", "gray.200")
     const buttonbg = useColorModeValue("white", "gray.900")
 
     return (
@@ -21,7 +20,7 @@ const EmptyList = () => {
       <Box
       maxW="xs"
       mx="auto"
-      bg={useColorModeValue("gray.700","white")}
+      bg={useColorModeValue("white","gray.200")}
       shadow="lg"
       rounded="lg"
     >
@@ -32,9 +31,9 @@ const EmptyList = () => {
         src={BoxImageSrc}
         alt="NIKE AIR"
       />
-      <Box px={4} py={2} bg={bg}>
+      <Box px={4} py={2}>
         <chakra.h1
-          color={useColorModeValue("white","gray.800")}
+          color={useColorModeValue("gray.800", "gray.800")}
           fontWeight="bold"
           fontSize="xl"
           textTransform="uppercase"
@@ -42,7 +41,7 @@ const EmptyList = () => {
           No NFTs Found
         </chakra.h1>
         <chakra.span
-          color={useColorModeValue("white","gray.800")}
+          color={useColorModeValue("gray.800", "gray.800")}
           fontSize="md"
         >
           Go To Mint Page
@@ -53,7 +52,6 @@ const EmptyList = () => {
         justifyContent="space-between"
         px={4}
         py={2}
-        bg={bg}
         roundedBottom="lg"
       >
           <Button mb={3} bg={buttonbg} _hover={{
