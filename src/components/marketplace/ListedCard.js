@@ -173,7 +173,7 @@ const ListedCard = (props) => {
         w="full"
         roundedTop="lg"
         fit="cover"
-        src={unboxed && parsedMetadata !== null ? imageBase64 : BoxImageSrc}
+        src={unboxed && parsedMetadata !== null ? (imageBase64 === '' ? './avatar/loading.jpg' : imageBase64) : BoxImageSrc}
         alt="NFT Avatar"
       />
       <Box px={4} py={2}>

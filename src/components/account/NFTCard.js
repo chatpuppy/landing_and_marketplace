@@ -150,7 +150,7 @@ const NFTCard = (props) => {
           w="full"
           fit="cover"
           roundedTop="lg"
-          src={unboxed && parsedMetadata !== null ? imageBase64 : src}
+          src={unboxed && parsedMetadata !== null ? (imageBase64 === '' ? './avatar/loading.jpg' : imageBase64) : src}
           alt="NFT Avatar"
         />
         <Box px={4} py={2}>
