@@ -13,18 +13,21 @@ import { sortLayer, mergeLayers } from "avatar";
 import mergeImages from 'merge-images';
 import {BiHelpCircle} from 'react-icons/bi';
 import ReactTooltip from 'react-tooltip';
+import CoonfirmationProgress from '../ConfirmationProgress';
 
 const NFTCard = (props) => {
 
   const NFT_manager_contract_address = NFT_MANAGER_V2_ADDRESS;
   const [ isLoading, setIsLoading ] = useState(false);
   const [ imageBase64, setImageBase64 ] = useState('');
+  const [ hiddenConfirmationProgress, setHiddenConfirmationProgress] = useState(true);
+  const [ confirmationProgressData, setConfirmationProgressData ] = useState({value: 5, message: 'Start', step: 1});
 
   const toast = useToast();
   const { currentAccount } = useAuth();
   const { src, number, unboxed, metadata, dna } = props;
-  const bg = useColorModeValue("gray.700", "gray.200")
-  const buttonbg = useColorModeValue("white", "gray.900")
+  const bg = useColorModeValue("white", "gray.200")
+  const buttonbg = useColorModeValue("gray.900", "gray.900")
 
   const [isOpen, setIsOpen] = useState(false)
   const onClose = () => setIsOpen(false)
@@ -58,26 +61,55 @@ const NFTCard = (props) => {
         setIsLoading(false);
       } else if(_type===0) {
         try {
-          await NFTManagerConnectedContract.unbox(number);
-          toast({
-            title: 'Transaction Succesful',
-            description: "Unboxed your NFT",
-            status: 'success',
-            duration: 4000,
-            isClosable: true,
-          })
-          setTimeout(()=>{
-            window.location.reload();
-          }, 3000)
+          setHiddenConfirmationProgress(false);
+          setConfirmationProgressData({step: '1/4', value: 25, message: 'Start...'});
+          try {
+            const tx = await NFTManagerConnectedContract.unbox(number);
+            setConfirmationProgressData({step: '2/4', value: 50, message: 'Unboxing...'});
+            await tx.wait(2);
+            setConfirmationProgressData({step: '3/4', value: 75, message: 'Generating random NFT metadata for about 10 seconds...'});
+
+            // $$$$$$ 通过每2秒获取NFT的metadata来判断是否unbox成功
+            // 如果成功，则弹出窗口显示unbox的头像，并将图片保存到NFTStorage
+            let count = 0;
+            const t = setInterval(async()=>{
+              const _type = await NFTManagerConnectedContract.boxStatus(number);
+              console.log("type", _type);
+              if(_type === 1 || count > 20) {
+                console.log(count)
+                setConfirmationProgressData({step: '4/4', value: 100, message: 'Congrat! you have got an exclusive NFT'});
+                clearInterval(t);
+                setHiddenConfirmationProgress(true);
+                setIsLoading(false);
+                onClose();
+              } else {
+                count++;
+              }
+            }, 2000)
+          } catch(err) {
+            if(err.code === 4001) {
+              toast({
+                title: 'Unbox NFT',
+                description: 'User cancel the transaction',
+                status: 'warning',
+                duration: 4000,
+                isClosable: true,
+              });
+              setHiddenConfirmationProgress(true);
+              setIsLoading(false);
+            } else {
+              toast({
+                title: 'Unbox NFT',
+                description: `Error ${err.data.message}`,
+                status: 'error',
+                duration: 4000,
+                isClosable: true,
+              })
+              setIsLoading(false)    
+            }
+          }
         } catch(err) {
-          toast({
-            title: 'Unbox NFT error',
-            description: `${err.data.message}`,
-            status: 'error',
-            duration: 4000,
-            isClosable: true,
-          })
-          setIsLoading(false)
+          console.log(err);
         }
       } else if(_type===1) {
         toast({
@@ -257,6 +289,13 @@ const NFTCard = (props) => {
 
             <AlertDialogBody>
               Are you sure? You can't undo this action afterwards.
+              <Box h={5}></Box>
+              <CoonfirmationProgress 
+                hidden={hiddenConfirmationProgress}
+                step={confirmationProgressData.step}
+                value={confirmationProgressData.value}
+                message={confirmationProgressData.message}
+              />
             </AlertDialogBody>
 
             <AlertDialogFooter>

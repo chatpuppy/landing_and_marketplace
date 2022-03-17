@@ -7,12 +7,15 @@ import nft_manager_abi from "abi/nft_manager_abi";
 import nft_manager_v2_abi from "abi/nft_manager_v2_abi.json"
 import { useAuth } from "contexts/AuthContext";
 import { NFT_MANAGER_ADDRESS, NFT_MANAGER_V2_ADDRESS, TOKEN_NAME} from 'constants';
+import ConfirmationProgress from '../ConfirmationProgress';
 
 const MintModal = (props) => {
 
     const [ isLoadingMint, setIsLoadingMint ] = useState(false);
     const [ isLoadingMintAndUnbox, setIsLoadingMintAndUnbox ] = useState(false);
     const { currentAccount, currentNetwork } = useAuth()
+    const [ hiddenConfirmationProgress, setHiddenConfirmationProgress] = useState(true);
+    const [ confirmationProgressData, setConfirmationProgressData ] = useState({value: 5, message: 'Start', step: 1});
 
     const NFT_manager_contract_address = NFT_MANAGER_V2_ADDRESS;
     const toast = useToast()
@@ -28,7 +31,6 @@ const MintModal = (props) => {
     };
 
     const mint = async() => {
-
       if(!window.ethereum) {
         if (!toast.isActive(id)) {
           toast({
@@ -78,31 +80,41 @@ const MintModal = (props) => {
           //connect to an ethereum node
           const provider = new ethers.providers.Web3Provider(ethereum); 
           //gets the account
-          const signer = provider.getSigner(); 
+          const signer = provider.getSigner();
           //connects with the contract
           const options = {value: ethers.utils.parseEther((count*boxPrice).toString())}
           const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_v2_abi, signer);
+          setHiddenConfirmationProgress(false);
+          setConfirmationProgressData({step: '1/3', value: 33, message: 'Start...'})
           try {
-            await NFTManagerConnectedContract.buyAndMint(options)
-            toast({
-              title: 'Minted!',
-              description: "Got a Mystery Box!",
-              status: 'success',
-              duration: 4000,
-              isClosable: true,
-            })
-            setTimeout(()=>{
-                window.location.reload();
-            }, 5000)
-          } catch(err) {
-            toast({
-              title: 'Buy and mint NFT error',
-              description: `${err.data.message}`,
-              status: 'error',
-              duration: 4000,
-              isClosable: true,
-            });
+            const tx = await NFTManagerConnectedContract.buyAndMint(options);
+            console.log(tx);
+            setConfirmationProgressData({step: '2/3', value: 66, message: 'Mint and wait confirmation...'});
+            await tx.wait(2);
+            setConfirmationProgressData({step: '3/3', value: 100, message: 'You have got 2 confirmations, done!'})
             setIsLoadingMint(false);
+          } catch(err) {
+            if(err.code === 4001) {
+              // Cancel transaction
+              toast({
+                title: 'Buy and mint NFT',
+                description: `User cancel the transaction`,
+                status: 'warning',
+                duration: 4000,
+                isClosable: true,
+              });
+              setHiddenConfirmationProgress(true);
+              setIsLoadingMint(false);
+            } else {
+              toast({
+                title: 'Buy and mint NFT error',
+                description: `${err.data.message}`,
+                status: 'error',
+                duration: 4000,
+                isClosable: true,
+              });
+              setIsLoadingMint(false);  
+            }
           }
       } catch(err) {
           console.log(err)
@@ -255,9 +267,14 @@ const MintModal = (props) => {
             </Box>
           </Box> */}
         </Box>
+        <ConfirmationProgress 
+          step={confirmationProgressData.step}
+          message={confirmationProgressData.message}
+          value={confirmationProgressData.value}
+          hidden={hiddenConfirmationProgress}/>
         <Button
             fontFamily={'heading'}
-            mb={2}
+            mb={3}
             w={'full'}
             h={12}
             bgGradient="linear(to-r, brand.200,brand.200)"
@@ -276,7 +293,7 @@ const MintModal = (props) => {
             >
             Mint
         </Button>
-        <Center>Or</Center>
+        {/* <Center>Or</Center>
         <Button
             fontFamily={'heading'}
             my={2}
@@ -297,7 +314,7 @@ const MintModal = (props) => {
             isDisabled={isLoadingMint}
             >
             Mint &#38; Unbox
-        </Button>
+        </Button> */}
       </Box>
     </Flex>
   );

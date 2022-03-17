@@ -2,13 +2,14 @@ import React, { useState, useRef, useEffect, useCallback } from 'react'
 import {
     AlertDialog, AlertDialogBody, AlertDialogFooter,
     AlertDialogHeader, AlertDialogContent, AlertDialogOverlay,
-    Button, useToast, Progress,
+    Button, useToast, Box
 } from '@chakra-ui/react'
 import cpt_abi from "abi/cpt_abi.json"
 import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
 import { ethers } from "ethers";
 import { useAuth } from 'contexts/AuthContext';
 import {TOKEN_ADDRESS, MARKETPLACE_ADDRESS} from 'constants';
+import ConfirmationProgress from '../ConfirmationProgress';
 
 export default function BuyDialog(props) {
 
@@ -20,6 +21,9 @@ export default function BuyDialog(props) {
     const { tokenId, price, orderId } = props;
     const [ isLoading, setIsLoading ] = useState(false);
     const [isOpen, setIsOpen] = useState(false)
+    const [ hiddenConfirmationProgress, setHiddenConfirmationProgress] = useState(true);
+    const [ confirmationProgressData, setConfirmationProgressData ] = useState({value: 5, message: 'Start', step: 1});
+
     const onClose = () => setIsOpen(false)
     const cancelRef = useRef()
 
@@ -38,7 +42,7 @@ export default function BuyDialog(props) {
             const NFTMarketplaceConnectedContract = new ethers.Contract(NFT_marketplace_contract_address, nft_marketplace_abi, signer);
             let _bal = await CPTConnectedContract.balanceOf(currentAccount)
             _bal = parseInt(_bal["_hex"], 16)
-            if(_bal<parseInt(price["_hex"], 16)) {
+            if(_bal < parseInt(price["_hex"], 16)) {
                 toast({
                     title: 'Error!',
                     description: "Token balance is low!",
@@ -48,37 +52,49 @@ export default function BuyDialog(props) {
                 })
                 return;
             }
-            if(!approved) {
-                await CPTConnectedContract.approve(NFT_marketplace_contract_address, price);
-                setApproved(true);
+            setHiddenConfirmationProgress(false);
+            setConfirmationProgressData({step: '1/5', value: 20, message: 'Start...'});
+            try {
+                if(!approved) {
+                    const tx = await CPTConnectedContract.approve(NFT_marketplace_contract_address, price);
+                    setConfirmationProgressData({step: '2/5', value: 40, message: 'Approving...'});
+                    await tx.wait(2);
+                    setConfirmationProgressData({step: '3/5', value: 60, message: 'Approved, start purchase...'});
+                    setApproved(true);
+                }
+                const tx = await NFTMarketplaceConnectedContract.matchOrder(orderId, price);
+                setConfirmationProgressData({step: '4/5', value: 80, message: 'Purchase NFT and wait confirmation...'});
+                await tx.wait(2);
+                setConfirmationProgressData({step: '5/5', value: 100, message: 'You have got 2 confirmations, done!'});
+
                 setTimeout(() => {
-                    setIsLoading(false)
-                }, 7500);
-                return;
+                    setIsLoading(false);
+                    setIsOpen(false)
+                }, 2000);
+            } catch (err) {
+                if(err.code === 4001) {
+                    toast({
+                        title: 'Buy NFT order',
+                        description: 'User cancel the transaction',
+                        status: 'warning',
+                        duration: 4000,
+                        isClosable: true,
+                    });
+                    setHiddenConfirmationProgress(true);
+                    setIsLoading(false);
+                } else {
+                    toast({
+                        title: 'Buy NFT order',
+                        description: `Error ${err.data.message}`,
+                        status: 'error',
+                        duration: 4000,
+                        isClosable: true,
+                    });
+                    setIsLoading(false);
+                }
             }
-            await NFTMarketplaceConnectedContract.matchOrder(orderId, price)
-            toast({
-                title: 'Success!',
-                description: "You got NFT #"+tokenId+"!",
-                status: 'success',
-                duration: 4000,
-                isClosable: true,
-            })
-            setTimeout(()=>{
-                setIsLoading(false)
-                window.location.reload();
-            }, 5000)
         } catch(err) {
             console.log(err);
-            toast({
-                title: 'Match NFT order error',
-                description: `${err.data.message}`,
-                status: 'error',
-                duration: 4000,
-                isClosable: true,
-            });
-        } finally {
-            setIsLoading(false)
         }
     }
 
@@ -126,20 +142,27 @@ export default function BuyDialog(props) {
             <AlertDialogOverlay>
             <AlertDialogContent>
                 <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                    <Progress hasStripe isAnimated value={approved ? 50 : 0} colorScheme='blue' my="4"
+                    {/* <Progress hasStripe isAnimated value={approved ? 50 : 0} colorScheme='blue' my="4"
                     size="md" rounded="sm"
-                    />
+                    /> */}
                     {approved ? 'Confirm Purchase' : 'Approve Purchase'}
                 </AlertDialogHeader>
 
                 <AlertDialogBody>
-                {approved ? 'Buy' : 'Approve'} ID #{tokenId} for {parseInt(price["_hex"], 16)/ Math.pow(10, 18)} CPT
+                    {approved ? 'Buy' : 'Approve'} ID #{tokenId} for {parseInt(price["_hex"], 16)/ Math.pow(10, 18)} CPT
+                    <Box h={5}></Box>
+                    <ConfirmationProgress 
+                        hidden={hiddenConfirmationProgress}
+                        step={confirmationProgressData.step}
+                        value={confirmationProgressData.value}
+                        message={confirmationProgressData.message}
+                    />
                 </AlertDialogBody>
 
                 <AlertDialogFooter>
-                <Button isLoading={isLoading} colorScheme='blue' onClick={buyNFT} ml={3}>
-                    {approved ? "Confirm" : "Approve"}
-                </Button>
+                    <Button isLoading={isLoading} colorScheme='blue' onClick={buyNFT} ml={3}>
+                        {approved ? "Confirm" : "Approve"}
+                    </Button>
                 </AlertDialogFooter>
             </AlertDialogContent>
             </AlertDialogOverlay>

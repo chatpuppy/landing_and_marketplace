@@ -15,7 +15,7 @@ import mergeImages from 'merge-images';
 import BoxImageSrc from "assets/mysteryBox.jpg"
 import {BiHelpCircle} from 'react-icons/bi';
 import ReactTooltip from 'react-tooltip';
-
+import ConfirmationProgress from "../ConfirmationProgress";
 
 const ListedCard = (props) => {
 
@@ -27,7 +27,12 @@ const ListedCard = (props) => {
   const buttonbg = useColorModeValue("white", "gray.900")
   const NFT_marketplace_contract_address = MARKETPLACE_ADDRESS;
   const [ isLoading, setIsLoading ] = useState(false);
+  const [ isUpdatingPrice, setIsUpdatingPrice ] = useState(false);
   const [ imageBase64, setImageBase64 ] = useState('');
+  const [ hiddenConfirmationProgress, setHiddenConfirmationProgress] = useState(true);
+  const [ confirmationProgressData, setConfirmationProgressData ] = useState({value: 5, message: 'Start', step: 1});
+
+
   const toast = useToast()
   const priceRef = useRef();
 
@@ -42,76 +47,98 @@ const ListedCard = (props) => {
     setIsLoading(true)
     if(!currentAccount) return;
     try {
-        const { ethereum } = window; //injected by metamask
-        //connect to an ethereum node
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        //gets the account
-        const signer = provider.getSigner();
-        //connects with the contract
-        const NFTMarketplaceConnectedContract = new ethers.Contract(NFT_marketplace_contract_address, nft_marketplace_abi, signer);
-        await NFTMarketplaceConnectedContract.cancelOrder(orderId);
+      const { ethereum } = window; //injected by metamask
+      //connect to an ethereum node
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      //gets the account
+      const signer = provider.getSigner();
+      //connects with the contract
+      const NFTMarketplaceConnectedContract = new ethers.Contract(NFT_marketplace_contract_address, nft_marketplace_abi, signer);
+      try {
+        const tx = await NFTMarketplaceConnectedContract.cancelOrder(orderId);
+        await tx.wait(2);
+        setIsLoading(false);
         toast({
           title: 'Unlisted!',
-          description: "Check your account!",
+          description: "This NFT is not onsale!",
           status: 'success',
           duration: 4000,
           isClosable: true,
         })
-        setTimeout(()=>{
-            navigate("/account", { replace: true });
-        }, 5000)
+      } catch(err) {
+        if(err.code === 4001) {
+          toast({
+            title: 'Unlist order',
+            description: 'User cancel the transaction',
+            status: 'warning',
+            duration: 4000,
+            isClosable: true,
+          });
+          setIsLoading(false);
+        } else {
+          toast({
+            title: 'Cancel NFT order error',
+            description: `${err.data.message}`,
+            status: 'error',
+            duration: 4000,
+            isClosable: true,
+          });
+          setIsLoading(false);
+        }
+      }
     } catch(err) {
-        console.log(err);
-        toast({
-          title: 'Cancel NFT order error',
-          description: `${err.data.message}`,
-          status: 'error',
-          duration: 4000,
-          isClosable: true,
-        });
-} finally {
-      setTimeout(()=>{
-        setIsLoading(false)
-      }, 5000)
+      console.log(err);
     }
   }
 
   const updatePrice = async(e) => {
     e.preventDefault()
-    setIsLoading(true)
+    setIsUpdatingPrice(true)
     if(!currentAccount) return;
     try {
-        const { ethereum } = window; //injected by metamask
-        //connect to an ethereum node
-        const provider = new ethers.providers.Web3Provider(ethereum); 
-        //gets the account
-        const signer = provider.getSigner(); 
-        //connects with the contract
-        const NFTMarketplaceConnectedContract = new ethers.Contract(NFT_marketplace_contract_address, nft_marketplace_abi, signer);
-        await NFTMarketplaceConnectedContract.updatePrice(orderId, ethers.utils.parseEther(''+priceRef.current.value))
-        toast({
-          title: 'Updated!',
-          description: "Price has been updated!",
-          status: 'success',
-          duration: 4000,
-          isClosable: true,
-        })
-        setTimeout(()=>{
-            window.location.reload();
-        }, 5000)
+      const { ethereum } = window; //injected by metamask
+      //connect to an ethereum node
+      const provider = new ethers.providers.Web3Provider(ethereum); 
+      //gets the account
+      const signer = provider.getSigner(); 
+      //connects with the contract
+      const NFTMarketplaceConnectedContract = new ethers.Contract(NFT_marketplace_contract_address, nft_marketplace_abi, signer);
+      setHiddenConfirmationProgress(false);
+      setConfirmationProgressData({step: '1/3', value: 33, message: 'Start...'});
+      try {
+        const tx = await NFTMarketplaceConnectedContract.updatePrice(orderId, ethers.utils.parseEther(''+priceRef.current.value))
+        setConfirmationProgressData({step: '2/3', value: 66, message: 'Update price and wait confirmations...'});
+        await tx.wait(2);
+        setConfirmationProgressData({step: '3/3', value: 100, message: 'You have got 2 confirmations, done!'});
+
+        setTimeout(() => {
+          setIsUpdatingPrice(false);
+          onClose();
+        }, 2000);
+      } catch(err) {
+        if(err.code === 4001) {
+          toast({
+            title: 'Update NFT price',
+            description: 'User cancel the transaction',
+            status: 'warning',
+            duration: 4000,
+            isClosable: true,
+          });
+          setHiddenConfirmationProgress(true);
+        } else {
+          toast({
+            title: 'Update NFT price',
+            description: `Error ${err.data.message}`,
+            status: 'error',
+            duration: 4000,
+            isClosable: true,
+          });
+          setHiddenConfirmationProgress(true);
+          setIsUpdatingPrice(false);
+        }
+      }
     } catch(err) {
-        console.log(err)
-        toast({
-          title: 'Update NFT price error',
-          description: `${err.data.message}`,
-          status: 'error',
-          duration: 4000,
-          isClosable: true,
-        });
-    } finally {
-      setTimeout(()=>{
-        setIsLoading(false)
-      }, 5000)
+      console.log(err)
     }
   }
 
@@ -295,7 +322,14 @@ const ListedCard = (props) => {
                     <FormLabel>Price</FormLabel>
                     <Input type="number" ref={priceRef} min="0" step="1"/>
                 </FormControl>
-                <Button colorScheme="blue" isLoading={isLoading} my="2" type="submit" size="md">Update</Button>
+                <Box h={5}></Box>
+                <ConfirmationProgress 
+                  hidden={hiddenConfirmationProgress}
+                  step={confirmationProgressData.step}
+                  value={confirmationProgressData.value}
+                  message={confirmationProgressData.message}
+                />
+                <Button colorScheme="blue" isLoading={isUpdatingPrice} my="2" type="submit" size="md">Update</Button>
             </form>
           </ModalBody>
         </ModalContent>

@@ -92,7 +92,7 @@ export default function Marketplace() {
   return (
       <>
       <NavBar />
-      <PageName name="Marketplace" />
+      {/* <PageName name="Marketplace" pic="./images/banner_marketplace.jpg"/> */}
       {
         currentAccount ?
         isLoading 

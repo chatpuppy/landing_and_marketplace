@@ -104,4 +104,4 @@ const simMultiProbability = (times) => {
 	console.log(experiences.toString());
 }
 
-simMultiProbability(20000);
+// simMultiProbability(20000);

@@ -1,22 +1,27 @@
 import React from 'react'
-import { Center, Heading } from '@chakra-ui/react';
+import { Center, Heading, Image } from '@chakra-ui/react';
 
 export default function PageName(props) {
 
-    const { name } = props;
+    const { name, pic } = props;
 
     return (
-        <Center h="10vh" w={{base: "90vw", sm: "50vw"}} my="6" mx="auto" bg="brand.100"
+        <Center h="20vh" w="80vw" my="6" mx="auto" bg="brand.100"
             rounded="lg"
         >
-            <Heading fontSize={{ base: "3xl", sm: "4xl" }}
+            <Image
+                src={pic}
+                alt={name}
+            >
+            </Image>
+            {/* <Heading fontSize={{ base: "3xl", sm: "4xl" }}
             fontWeight="extrabold"
             letterSpacing="tight"
             lineHeight="shorter"
             color="gray.100"
             >
                 {name}
-            </Heading>
+            </Heading> */}
         </Center>
     )
 }

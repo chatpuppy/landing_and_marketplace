@@ -76,7 +76,6 @@ export default function Account() {
                 )))
             }
             if(_unboxedItems.length!==0 && unboxedItems.length===0) {
-                // $$$$$$ 加载头像链接
                 setUnboxedItems(unboxedItems.concat(Array.from({length: _unboxedItems.length}, (_, i) => i).map((number, index)=>
                 <NFTCard 
                     key={_unboxedItems[index].id} 
@@ -126,7 +125,7 @@ export default function Account() {
     return (
         <>
         <NavBar />
-        <PageName name="My NFTs" />
+        {/* <PageName name="My NFTs" pic="./images/banner_list.jpg" /> */}
         {
         currentAccount ?
         isLoading 
