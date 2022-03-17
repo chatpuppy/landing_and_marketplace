@@ -116,11 +116,14 @@ export default function ListNFT(props) {
             Sell
         </Button>
   
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal 
+          isOpen={isOpen} 
+          // onClose={onClose}
+        >
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>List NFT</ModalHeader>
-            <ModalCloseButton />
+            <ModalCloseButton onClick={onClose}/>
             <ModalBody>
                 <form onSubmit={listNFT}>
                     <FormControl id="token" isRequired>

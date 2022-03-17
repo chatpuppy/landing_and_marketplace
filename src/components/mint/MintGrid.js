@@ -162,11 +162,15 @@ return (
         left={-10}
         style={{ filter: 'blur(70px)' }}
     />
-    <Modal isOpen={isOpen} onClose={onClose} isCentered>
+    <Modal 
+        isOpen={isOpen} 
+        // onClose={onClose} 
+        isCentered
+    >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Confirmation</ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton onClick={onClose}/>
           <ModalBody>
             <MintModal count={input.value} boxPrice={boxPrice}/>
           </ModalBody>

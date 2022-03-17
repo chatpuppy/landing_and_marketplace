@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import {
-    AlertDialog, AlertDialogBody, AlertDialogFooter,
+    AlertDialog, AlertDialogBody, AlertDialogFooter, ModalCloseButton,
     AlertDialogHeader, AlertDialogContent, AlertDialogOverlay,
     Button, useToast, Box
 } from '@chakra-ui/react'
@@ -136,7 +136,7 @@ export default function BuyDialog(props) {
         <AlertDialog
             isOpen={isOpen}
             leastDestructiveRef={cancelRef}
-            onClose={onClose}
+            // onClose={onClose}
             isCentered
         >
             <AlertDialogOverlay>
@@ -147,7 +147,7 @@ export default function BuyDialog(props) {
                     /> */}
                     {approved ? 'Confirm Purchase' : 'Approve Purchase'}
                 </AlertDialogHeader>
-
+                <ModalCloseButton onClick={onClose}/>
                 <AlertDialogBody>
                     {approved ? 'Buy' : 'Approve'} ID #{tokenId} for {parseInt(price["_hex"], 16)/ Math.pow(10, 18)} CPT
                     <Box h={5}></Box>

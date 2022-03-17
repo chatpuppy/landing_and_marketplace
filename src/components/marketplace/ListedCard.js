@@ -311,11 +311,15 @@ const ListedCard = (props) => {
       <ReactTooltip id="exp" effect="solid" multiline={true} />
       <ReactTooltip id="rat" effect="solid" multiline={true} />
       <ReactTooltip id="owner" effect="solid" multiline={true} />
-      <Modal isOpen={isOpen} onClose={onClose}>
+
+      <Modal 
+        isOpen={isOpen} 
+        // onClose={onClose}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Update Price</ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton onClick={onClose}/>
           <ModalBody>
             <form onSubmit={updatePrice}>
                 <FormControl id="price" isRequired mb="2">

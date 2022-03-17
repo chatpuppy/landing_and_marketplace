@@ -49,6 +49,7 @@ export const sortLayer = (itemIds) => {
 	return sortedArray;
 }
 
+// Following function is for testing only
 const probability = () => {
 	let itemsArray = {};
 	let traits = [];

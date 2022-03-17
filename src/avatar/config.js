@@ -7,7 +7,7 @@ export const itemParams = [{
 		itemName: 'Blue',
 		rarity: 280000,
 		level: 1,
-		experience: 0,
+		experience: 1,
 	}, {
 		boxType: 2,
 		boxName: 'Background',
@@ -55,7 +55,7 @@ export const itemParams = [{
 		itemName: 'Gakuran',
 		rarity:  330000,
 		level:   1,
-		experience: 0,
+		experience: 1,
 	}, {
 		boxType: 3,
 		boxName: 'Body',
@@ -103,7 +103,7 @@ export const itemParams = [{
 		itemName: 'Normal',
 		rarity:  300000,
 		level:   1,
-		experience: 0,
+		experience: 1,
 	}, {
 		boxType: 4,
 		boxName: 'Eyes',
@@ -239,7 +239,7 @@ export const itemParams = [{
 		itemName: 'None',
 		rarity:  380000,
 		level:   1,
-		experience: 0,
+		experience: 1,
 	}, {
 		boxType: 6,
 		boxName: 'Fur',
@@ -247,7 +247,7 @@ export const itemParams = [{
 		itemName: 'Grey',
 		rarity:  370000,
 		level:   1,
-		experience: 0,
+		experience: 1,
 	}, {
 		boxType: 6,
 		boxName: 'Fur',
@@ -303,7 +303,7 @@ export const itemParams = [{
 		itemName: 'Grrrrr',
 		rarity:  310000,
 		level:   1,
-		experience: 0,
+		experience: 1,
 	}, {
 		boxType: 7,
 		boxName: 'Mouth',

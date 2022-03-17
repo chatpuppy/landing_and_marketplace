@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { chakra, Box, Image, Flex, useColorModeValue, Button,
-  AlertDialog, AlertDialogBody, AlertDialogFooter,
+  AlertDialog, AlertDialogBody, AlertDialogFooter, ModalCloseButton,
   AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, useToast, Center
 } from "@chakra-ui/react";
 // import nft_manager_abi from "abi/nft_manager_abi.json";
@@ -24,7 +24,7 @@ const NFTCard = (props) => {
 
   const [ isLoading, setIsLoading ] = useState(false);
   const [ imageBase64, setImageBase64 ] = useState('');
-  const [ unboxModalParams, setUnboxModalParams] = useState({tokenId: 0, metadata: 0})
+  const [ unboxModalParams, setUnboxModalParams] = useState({tokenId: 0, artifacts: 0, dna: ''})
   const [ hiddenConfirmationProgress, setHiddenConfirmationProgress] = useState(true);
   const [ confirmationProgressData, setConfirmationProgressData ] = useState({value: 5, message: 'Start', step: 1});
 
@@ -73,11 +73,11 @@ const NFTCard = (props) => {
           setHiddenConfirmationProgress(false);
           setConfirmationProgressData({step: '1/4', value: 25, message: 'Start...'});
 
-          // $$$$$$ Testing
+          // Testing
           // setIsOpen1(true);
           // const _metadata = await NFTCoreConnectedContract.tokenMetaData(50);
           // console.log(_metadata);
-          // setUnboxModalParams({metadata: _metadata._artifacts, tokenId: 50}); 
+          // setUnboxModalParams({artifacts: _metadata._artifacts, tokenId: 50, dna: '0xaaa0000'}); 
 
           try {
             const tx = await NFTManagerConnectedContract.unbox(number);
@@ -85,16 +85,20 @@ const NFTCard = (props) => {
             await tx.wait(2);
             setConfirmationProgressData({step: '3/4', value: 75, message: 'Generating random NFT metadata for about 10 seconds...'});
 
-            // 通过每1.5秒获取NFT的metadata来判断是否unbox成功
-            // 如果成功，则弹出窗口显示unbox的头像，并将图片保存到NFTStorage
+            // Get NFT metadata every 1.5 second, to make sure the unboxed is fullfil
             let count = 0;
             const t = setInterval(async()=>{
               // const _type = await NFTManagerConnectedContract.boxStatus(number);
               const _metadata = await NFTCoreConnectedContract.tokenMetaData(number);
               console.log("_artifacts", _metadata._artifacts);
               if(_metadata._artifacts > 0 || count > 20) {
-                console.log(_metadata, number);
-                setUnboxModalParams({metadata: _metadata._artifacts, tokenId: number}); 
+                // console.log(_metadata, number);
+                // Popup unbox modal dialog box to upload to ipfs network, and show the picture and artifacts, level, experience, ipfs
+                setUnboxModalParams({
+                  artifacts: _metadata._artifacts, 
+                  tokenId: number, 
+                  dna: _metadata._dna
+                }); 
                 setIsOpen1(true);
                 setConfirmationProgressData({step: '4/4', value: 100, message: 'Congrat! you have got an exclusive NFT'});
                 clearInterval(t);
@@ -160,7 +164,7 @@ const NFTCard = (props) => {
     }
 
     return {
-      metadata: md.toHexString(),
+      artifacts: md.toHexString(),
       level,
       experience,
       rarity: (rarity * 1000000).toFixed(4),
@@ -198,7 +202,7 @@ const NFTCard = (props) => {
           w="full"
           fit="cover"
           roundedTop="lg"
-          src={unboxed && parsedMetadata !== null ? (imageBase64 === '' ? './avatar/loading.jpg' : imageBase64) : src}
+          src={unboxed && parsedMetadata !== null ? (imageBase64 === '' ? './images/loading.jpg' : imageBase64) : src}
           alt="NFT Avatar"
         />
         <Box px={4} py={2}>
@@ -252,7 +256,7 @@ const NFTCard = (props) => {
           {unboxed && parsedMetadata !== null ? 
           <Flex>
             <BiHelpCircle fontSize="xs" data-tip={strArtifacts} data-for="meta"/>
-            &nbsp;Meta: {parsedMetadata.metadata.substr(2)}
+            &nbsp;Meta: {parsedMetadata.artifacts.substr(2)}
           </Flex> : ''}
           </chakra.h1>
         </Box>
@@ -295,7 +299,7 @@ const NFTCard = (props) => {
         isCentered={true}
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}
-        onClose={onClose}
+        // onClose={onClose}
       >
         <AlertDialogOverlay>
           <AlertDialogContent>
@@ -315,7 +319,7 @@ const NFTCard = (props) => {
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button isLoading={isLoading} ref={cancelRef1} onClick={onClose1}>
+              <Button isLoading={isLoading} ref={cancelRef} onClick={onClose}>
                 Cancel
               </Button>
               <Button isLoading={isLoading} onClick={unboxNFT} colorScheme='blue' ml={3}>
@@ -329,22 +333,24 @@ const NFTCard = (props) => {
         isCentered={true}
         isOpen={isOpen1}
         leastDestructiveRef={cancelRef1}
-        onClose={onClose1}
+        // onClose={onClose1}
       >
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
               Unbox Result
             </AlertDialogHeader>
+            <ModalCloseButton onClick={onClose1}/>
             <AlertDialogBody>
               <UnboxModal 
-                metadata={unboxModalParams.metadata}
                 tokenId={unboxModalParams.tokenId}
+                artifacts={unboxModalParams.artifacts}
+                dna={unboxModalParams.dna}
               />
             </AlertDialogBody>
             <AlertDialogFooter>
               <Button ref={cancelRef1} onClick={onClose1}>
-                Cancel
+                Close
               </Button>
               {/* <Button isLoading={isUploading} onClick={upload} colorScheme='blue' ml={3}>
                 Upload

@@ -221,51 +221,12 @@ const MintModal = (props) => {
         />
 
         <Box p="6">
-          {/* <Box d="flex" alignItems="baseline">
-            <Badge rounded="full" px="2" colorScheme="teal">
-              New
-            </Badge>
-            <Box
-              color="gray.500"
-              fontWeight="semibold"
-              letterSpacing="wide"
-              fontSize="xs"
-              textTransform="uppercase"
-              ml="2"
-            >
-              Some Info
-            </Box>
-          </Box>
-
-          <Box
-            mt="1"
-            as="h4"
-            lineHeight="tight"
-            isTruncated
-          >
-            {property.title}
-          </Box> */}
-
           <Box fontWeight="semibold">
             Price: {boxPrice ? property.formattedPrice : <Spinner size='xs' mx="2"/>}
             <Box as="span" color={useColorModeValue("gray.600", "gray.200")} fontSize="sm">
               for {count} {count==='1'? "NFT": "NFTs"}
             </Box>
           </Box>
-
-          {/* <Box d="flex" mt="2" alignItems="center">
-            {Array(5)
-              .fill("")
-              .map((_, i) => (
-                <StarIcon
-                  key={i}
-                  color={i < property.rating ? "teal.500" : "gray.300"}
-                />
-              ))}
-            <Box as="span" ml="2" color={useColorModeValue("gray.600", "gray.200")} fontSize="sm">
-              Rarity?
-            </Box>
-          </Box> */}
         </Box>
         <ConfirmationProgress 
           step={confirmationProgressData.step}
@@ -293,28 +254,6 @@ const MintModal = (props) => {
             >
             Mint
         </Button>
-        {/* <Center>Or</Center>
-        <Button
-            fontFamily={'heading'}
-            my={2}
-            w={'full'}
-            h={12}
-            bgGradient="linear(to-r, brand.150,brand.150)"
-            color={'white'}
-            _hover={{
-                bgGradient: 'linear(to-r, brand.150,brand.150)',
-                boxShadow: 'xl',
-            }}
-            _active={{
-                bgGradient: 'linear(to-r, brand.150,brand.150)',
-                boxShadow: 'xl',
-            }}
-            onClick={mintAndUnbox}
-            isLoading={isLoadingMintAndUnbox}
-            isDisabled={isLoadingMint}
-            >
-            Mint &#38; Unbox
-        </Button> */}
       </Box>
     </Flex>
   );
