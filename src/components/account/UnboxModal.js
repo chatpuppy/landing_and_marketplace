@@ -1,30 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Flex, Image, Badge, useColorModeValue, Button, Center, useToast, Spinner } from "@chakra-ui/react";
-import BoxImageSrc from "assets/mysteryBox.jpg"
-import { ethers } from "ethers";
-import nft_manager_v2_abi from "abi/nft_manager_v2_abi.json"
+// import { ethers } from "ethers";
 import { useAuth } from "contexts/AuthContext";
-import { NFT_MANAGER_V2_ADDRESS, TOKEN_NAME} from 'constants';
+import { sortLayer, mergeLayers } from "avatar";
+import mergeImages from 'merge-images';
 
 const UnboxModal = (props) => {
 
     const [ isLoading, setIsLoading ] = useState(false);
-    const { currentAccount, currentNetwork } = useAuth()
+    const [ imageBase64, setImageBase64 ] = useState('');
+    // const { currentAccount, currentNetwork } = useAuth();
 
-    const NFT_manager_contract_address = NFT_MANAGER_V2_ADDRESS;
     const toast = useToast()
-    const { metadata } = props;
+    const { metadata, tokenId } = props;
     const id = 'toast'
+  
+    const parseMetadata = (md) => {
+      const sortedLayers = sortLayer(md.toHexString().substr(10, 12));
+      const mergedLayers = mergeLayers(sortedLayers);
+      if(mergedLayers.images.length === 0) return null;
+  
+      let level = 0;
+      let experience = 0;
+      let rarity = 1;
+      for(let i = 0; i < mergedLayers.layers.length; i++) {
+        level = level + mergedLayers.layers[i].level;
+        experience = experience + mergedLayers.layers[i].experience;
+        rarity = rarity * mergedLayers.layers[i].rarity / 1000000;
+      }
+  
+      return {
+        metadata: md.toHexString(),
+        level,
+        experience,
+        rarity: (rarity * 1000000).toFixed(4),
+        images: mergedLayers.images,
+        layers: mergedLayers.layers
+      }
+    }
 
-    const property = {
-        imageUrl: BoxImageSrc,
-        imageAlt: "Mystery Box",
-        title: "Title Info about the product",
-        rating: 4,
-    };
+    useEffect(() => {
+      console.log('loading metadata for ', metadata.toHexString());
+      const parsedMetadata = parseMetadata(metadata);
+      if(parsedMetadata !== null) {
+        mergeImages(parsedMetadata.images).then((b64) => {
+          setImageBase64(b64);
+        });
+      }
+  
+    }, [metadata])
 
     const upload = () => {
-
+      console.log(metadata);
     }
 
     return (
@@ -39,12 +66,12 @@ const UnboxModal = (props) => {
         maxW="sm"
       >
         <Image
-          src={property.imageUrl}
-          alt={property.imageAlt}
-          roundedTop="lg"
+          src={tokenId > 0 && imageBase64 !== '' ? imageBase64 : './avatar/loading.jpg'}
+          alt="Unboxed NFT"
         />
 
-        <Box p="6">
+        <Box mt={5} mb={5}>
+          TokenId: #{tokenId}
         </Box>
         <Button
             fontFamily={'heading'}
@@ -64,7 +91,7 @@ const UnboxModal = (props) => {
             onClick={upload}
             isLoading={isLoading}
             >
-            Upload
+            Upload to IPFS
         </Button>
       </Box>
     </Flex>
