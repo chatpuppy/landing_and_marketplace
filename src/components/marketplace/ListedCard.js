@@ -10,7 +10,7 @@ import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
 import { useNavigate } from "react-router-dom";
 import BuyDialog from "./BuyDialog";
 import { MARKETPLACE_ADDRESS, ETHERSCAN_BASE_URL } from "constants";
-import { sortLayer, mergeLayers } from "avatar";
+import { sortLayer, mergeLayers, parseMetadata } from "avatar";
 import mergeImages from 'merge-images';
 import BoxImageSrc from "assets/mysteryBox.jpg"
 import {BiHelpCircle} from 'react-icons/bi';
@@ -41,7 +41,7 @@ const ListedCard = (props) => {
   const strRarity = "RARITY: <br/>Probability of same NFT<br/> in 1,000,000 NFTs, <br/>lower means more value.";
   const strOwner = "OWNER: <br/>Seller of NFT";
 
-  console.log(props);
+  // console.log(props);
 
   const unlistNFT = async() => {
     setIsLoading(true)
@@ -142,32 +142,6 @@ const ListedCard = (props) => {
     }
   }
 
-  const parseMetadata = (md) => {
-    // Ex. 0x0622000602030a020501
-    const sortedLayers = sortLayer(md.toHexString().substr(10, 12));
-    const mergedLayers = mergeLayers(sortedLayers);
-    if(mergedLayers.images.length === 0) return null;
-
-    // console.log('images', mergedLayers.images);
-    let level = 0;
-    let experience = 0;
-    let rarity = 1;
-    for(let i = 0; i < mergedLayers.layers.length; i++) {
-      level = level + mergedLayers.layers[i].level;
-      experience = experience + mergedLayers.layers[i].experience;
-      rarity = rarity * mergedLayers.layers[i].rarity / 1000000;
-    }
-    console.log(level, experience);
-    return {
-      metadata: md.toHexString(),
-      level,
-      experience,
-      rarity: (rarity * 1000000).toFixed(4),
-      images: mergedLayers.images,
-      layers: mergedLayers.layers
-    }
-  }
-
   let parsedMetadata;
   if(unboxed) {
     parsedMetadata = parseMetadata(metadata);
@@ -200,7 +174,7 @@ const ListedCard = (props) => {
         w="full"
         roundedTop="lg"
         fit="cover"
-        src={unboxed && parsedMetadata !== null ? (imageBase64 === '' ? './avatar/loading.jpg' : imageBase64) : BoxImageSrc}
+        src={unboxed && parsedMetadata !== null ? (imageBase64 === '' ? './images/loading.jpg' : imageBase64) : BoxImageSrc}
         alt="NFT Avatar"
       />
       <Box px={4} py={2}>
@@ -227,7 +201,7 @@ const ListedCard = (props) => {
         </chakra.h1>
           <chakra.h1
             color={useColorModeValue("gray.800", "gray.800")}
-            fontSize="md"
+            fontSize="sm"
             // textTransform="uppercase"
           >
           {unboxed && parsedMetadata !== null? 
@@ -238,7 +212,7 @@ const ListedCard = (props) => {
         </chakra.h1>
           <chakra.h1
             color={useColorModeValue("gray.800", "gray.800")}
-            fontSize="md"
+            fontSize="sm"
             // textTransform="uppercase"
           >
           {unboxed && parsedMetadata !== null? 
@@ -246,10 +220,23 @@ const ListedCard = (props) => {
             <BiHelpCircle fontSize="xs" data-tip={strRarity} data-for="rat"/>
             &nbsp;Rat: {parsedMetadata.rarity}
           </Flex>  : 'and get NFT'}
-        </chakra.h1>
+          </chakra.h1>
+
           <chakra.h1
             color={useColorModeValue("gray.800", "gray.800")}
-            fontSize="md"
+            fontSize="sm"
+            // textTransform="uppercase"
+          >
+          {unboxed && parsedMetadata !== null? 
+          <Flex>
+            <BiHelpCircle fontSize="xs" data-tip={strRarity} data-for="rat"/>
+            &nbsp;Order#: {orderId}
+          </Flex>  : '.'}
+          </chakra.h1>
+
+          <chakra.h1
+            color={useColorModeValue("gray.800", "gray.800")}
+            fontSize="sm"
             // textTransform="uppercase"
           >
            {currentAccount.toLowerCase() !== owner.toLowerCase() ? 
@@ -261,7 +248,7 @@ const ListedCard = (props) => {
         <Divider h={2} mb={1}/>
         <chakra.h1
           color={useColorModeValue("gray.800","gray.800")}
-          fontSize="md"
+          fontSize="sm"
           fontWeight="bold"
         >
           Price: {parseInt(price["_hex"], 16)/Math.pow(10, 18)} CPT

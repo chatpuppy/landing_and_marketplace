@@ -40,21 +40,21 @@ export default function Marketplace() {
         //connects with the contract
         const NFTCoreConnectedContract = new ethers.Contract(NFT_core_contract_address, nft_core_abi, signer);
         const NFTMarketplaceConnectedContract = new ethers.Contract(NFT_marketplace_contract_address, nft_marketplace_abi, signer);
-        let ordersArr = await NFTMarketplaceConnectedContract.onSaleOrders()
+        let ordersArr = await NFTMarketplaceConnectedContract.onSaleOrders();// ######
         ordersArr = ordersArr.map(x=>parseInt(x["_hex"], 16))
         let listedOrdersArr = [];
 
         for(let i=0; i<ordersArr.length; i++) {
             let _order = Object.assign([], await NFTMarketplaceConnectedContract.orders(ordersArr[i]));
             const _metadata = await NFTCoreConnectedContract.tokenMetaData(_order.tokenId);
-            _order.push(ordersArr[i]);
             listedOrdersArr.push({
+                orderId: ordersArr[i],
                 ..._order,
                 ..._metadata,
                 ...{unboxed: _metadata._artifacts > 0},
             });
         }
-        console.log(listedOrdersArr);
+        // console.log('===', listedOrdersArr);
         setListedNFTs(listedOrdersArr);
     } catch(err) {
         console.log(err)

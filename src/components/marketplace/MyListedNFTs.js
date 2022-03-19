@@ -27,8 +27,8 @@ export default function MyListedNFTs() {
                         key={parseInt(_ownedListedNFTs[index]['tokenId']["_hex"], 16)} 
                         tokenId={parseInt(_ownedListedNFTs[index]['tokenId']["_hex"], 16)} 
                         owner={_ownedListedNFTs[index]['seller']}
-                        orderId={_ownedListedNFTs[index][5]}
-                        price={_ownedListedNFTs[index][4]}
+                        orderId={_ownedListedNFTs[index]['orderId']}
+                        price={_ownedListedNFTs[index]['price']}
                         unboxed={_ownedListedNFTs[index]['unboxed']}
                         metadata={_ownedListedNFTs[index]['_artifacts']}
                         dna={_ownedListedNFTs[index]['_dna']}

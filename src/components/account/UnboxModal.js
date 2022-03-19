@@ -1,54 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { Box, Text, Flex, Image, Badge, useColorModeValue, Button, Center, useToast, Spinner } from "@chakra-ui/react";
 import { useAuth } from "contexts/AuthContext";
-import { sortLayer, mergeLayers } from "avatar";
+import { sortLayer, mergeLayers, parseMetadata } from "avatar";
 import mergeImages from 'merge-images';
-import { NFT_STORAGE_TOKEN, NFT_DESCRIPTION, NFT_NAME } from '../../constants';
+import { NFT_STORAGE_TOKEN, NFT_DESCRIPTION, NFT_NAME, NFT_TOKEN_ADDRESS } from '../../constants';
 import { NFTStorage, File, Blob } from 'nft.storage'
+import { ethers, utils, BigNumber } from "ethers";
+import nft_manager_v2_abi from "abi/nft_manager_v2_abi.json";
+import nft_core_abi from "abi/nft_core_abi.json"
+import ConfirmationProgress from '../ConfirmationProgress';
 
 const UnboxModal = (props) => {
+    const NFT_core_contract_address = NFT_TOKEN_ADDRESS;
 
     const [ isLoading, setIsLoading ] = useState(false);
     const [ nftMetadata, setNftMetadata ] = useState({ipnft: '', url: ''});
     const [ imageBase64, setImageBase64 ] = useState('');
     const [ parsedMd, setParsedMd ] = useState(null);
+    const [ hiddenConfirmationProgress, setHiddenConfirmationProgress] = useState(true);
+    const [ confirmationProgressData, setConfirmationProgressData ] = useState({value: 5, message: 'Start...', step: 1});
+
     const client = new NFTStorage({ token: NFT_STORAGE_TOKEN });
+    const { currentAccount } = useAuth();
 
     const toast = useToast()
     const { artifacts, tokenId, dna } = props;
     const id = 'toast'
-  
-    const parseMetadata = (md) => {
-      const sortedLayers = sortLayer(md.toHexString().substr(10, 12));
-      const mergedLayers = mergeLayers(sortedLayers);
-      if(mergedLayers.images.length === 0) return null;
-  
-      let level = 0;
-      let experience = 0;
-      let rarity = 1;
-      let properties = [];
-      for(let i = 0; i < mergedLayers.layers.length; i++) {
-        level = level + mergedLayers.layers[i].level;
-        experience = experience + mergedLayers.layers[i].experience;
-        rarity = rarity * mergedLayers.layers[i].rarity / 1000000;
-        properties.push({
-          trait_type:  mergedLayers.layers[i].boxName,
-          value:  mergedLayers.layers[i].itemName,
-          level: mergedLayers.layers[i].level,
-          experience: mergedLayers.layers[i].experience,
-          rarity: mergedLayers.layers[i].rarity / 1000000
-        })
-      }
-      return {
-        artifacts: md.toHexString(),
-        level,
-        experience,
-        properties,
-        rarity: (rarity * 1000000).toFixed(4),
-        images: mergedLayers.images,
-        layers: mergedLayers.layers
-      }
-    }
 
     const uploadNFT = async(imageFile, pmd) => {
       const metadata = await client.store({
@@ -62,7 +39,7 @@ const UnboxModal = (props) => {
         level: pmd.level,
         experience: pmd.experience,
         rarity: pmd.rarity,
-        properties: pmd.properties
+        attributes: pmd.properties
       })
       setNftMetadata(metadata);
     }
@@ -92,8 +69,61 @@ const UnboxModal = (props) => {
       }
     }, [artifacts])
 
+    const updateMetadata = async() => {
+      console.log('updateMetadata')
+      if(!currentAccount) return;
+      if(nftMetadata.ipnft === '') return;
+      setIsLoading(true);
+      try {
+        const { ethereum } = window; //injected by metamask
+        //connect to an ethereum node
+        const provider = new ethers.providers.Web3Provider(ethereum); 
+        //gets the account
+        const signer = provider.getSigner(); 
+        //connects with the contract
+        const NFTCoreConnectedContract = new ethers.Contract(NFT_core_contract_address, nft_core_abi, signer);
+
+        try {
+          setHiddenConfirmationProgress(false);
+          setConfirmationProgressData({step: '1/3', value: 33, message: 'Start...'});
+
+          const tx = await NFTCoreConnectedContract.updateTokenURI(tokenId, nftMetadata.url);
+          setConfirmationProgressData({step: '2/3', value: 66, message: 'Updating, waiting for confirmation...'});
+          await tx.wait(2);
+          setConfirmationProgressData({step: '3/3', value: 100, message: 'You have got 2 confirmations, update success...'});
+
+          setIsLoading(false);
+        } catch (err) {
+          if(err.code === 4001) {
+            toast({
+              title: 'Upload NFT',
+              description: 'User cancel the transaction',
+              status: 'warning',
+              duration: 4000,
+              isClosable: true,
+            });
+            setHiddenConfirmationProgress(true);
+            setIsLoading(false);
+          } else {
+            toast({
+              title: 'Upload NFT',
+              description: `Error ${err.data.message}`,
+              status: 'error',
+              duration: 4000,
+              isClosable: true,
+            })
+            setHiddenConfirmationProgress(true);
+            setIsLoading(false)    
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+
+    }
+
     return (
-    <Flex
+    <Box
       bg={useColorModeValue("white", "gray.700")}
       w="full"
       alignItems="center"
@@ -101,9 +131,10 @@ const UnboxModal = (props) => {
     >
       <Box
         bg={useColorModeValue("white", "gray.700")}
-        maxW="sm"
+        p={1}
       >
         <Image
+          rounded='lg'
           src={tokenId > 0 && imageBase64 !== '' ? imageBase64 : './images/uploadipfs.jpg'}
           alt="Unboxed NFT"
         />
@@ -121,7 +152,22 @@ const UnboxModal = (props) => {
         </Box>
         }
       </Box>
-    </Flex>
+      <Box>
+      <ConfirmationProgress 
+        hidden={hiddenConfirmationProgress}
+        step={confirmationProgressData.step}
+        value={confirmationProgressData.value}
+        message={confirmationProgressData.message}
+      />
+      <Button 
+        w={'full'}
+        isLoading={isLoading}
+        isDisabled={nftMetadata.ipnft===''}
+        onClick={updateMetadata}>
+        Upload metadata to blockchain
+      </Button>
+      </Box>
+    </Box>
   );
 };
 

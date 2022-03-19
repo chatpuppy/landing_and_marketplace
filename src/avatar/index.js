@@ -49,6 +49,33 @@ export const sortLayer = (itemIds) => {
 	return sortedArray;
 }
 
+export const parseMetadata = (md) => {
+	let mdStr = md.toHexString();
+	if(mdStr.length === 20) mdStr = '0x00' + mdStr.substr(2, 18);
+	const sortedLayers = sortLayer(mdStr.substr(10, 12));
+	const mergedLayers = mergeLayers(sortedLayers);
+	if(mergedLayers.images.length === 0) return null;
+
+	let level = 0;
+	let experience = 0;
+	let rarity = 1;
+	for(let i = 0; i < mergedLayers.layers.length; i++) {
+		level = level + mergedLayers.layers[i].level;
+		experience = experience + mergedLayers.layers[i].experience;
+		rarity = rarity * mergedLayers.layers[i].rarity / 1000000;
+	}
+
+	return {
+		artifacts: md.toHexString(),
+		level,
+		experience,
+		rarity: (rarity * 1000000).toFixed(4),
+		images: mergedLayers.images,
+		layers: mergedLayers.layers
+	}
+}
+
+
 // Following function is for testing only
 const probability = () => {
 	let itemsArray = {};

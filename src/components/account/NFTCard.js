@@ -3,18 +3,17 @@ import { chakra, Box, Image, Flex, useColorModeValue, Button,
   AlertDialog, AlertDialogBody, AlertDialogFooter, ModalCloseButton,
   AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, useToast, Center
 } from "@chakra-ui/react";
-// import nft_manager_abi from "abi/nft_manager_abi.json";
 import nft_manager_v2_abi from "abi/nft_manager_v2_abi.json";
 import nft_core_abi from "abi/nft_core_abi.json"
 import { useAuth } from "contexts/AuthContext";
 import { ethers, utils, BigNumber } from "ethers";
 import ListNFT from "./ListNFT";
 import {NFT_TOKEN_ADDRESS, NFT_MANAGER_V2_ADDRESS} from 'constants';
-import { sortLayer, mergeLayers } from "avatar";
+import { sortLayer, mergeLayers, parseMetadata } from "avatar";
 import mergeImages from 'merge-images';
 import {BiHelpCircle} from 'react-icons/bi';
 import ReactTooltip from 'react-tooltip';
-import CoonfirmationProgress from '../ConfirmationProgress';
+import ConfirmationProgress from '../ConfirmationProgress';
 import UnboxModal from './UnboxModal';
 
 const NFTCard = (props) => {
@@ -149,30 +148,6 @@ const NFTCard = (props) => {
     }
   }
 
-  const parseMetadata = (md) => {
-    const sortedLayers = sortLayer(md.toHexString().substr(10, 12));
-    const mergedLayers = mergeLayers(sortedLayers);
-    if(mergedLayers.images.length === 0) return null;
-
-    let level = 0;
-    let experience = 0;
-    let rarity = 1;
-    for(let i = 0; i < mergedLayers.layers.length; i++) {
-      level = level + mergedLayers.layers[i].level;
-      experience = experience + mergedLayers.layers[i].experience;
-      rarity = rarity * mergedLayers.layers[i].rarity / 1000000;
-    }
-
-    return {
-      artifacts: md.toHexString(),
-      level,
-      experience,
-      rarity: (rarity * 1000000).toFixed(4),
-      images: mergedLayers.images,
-      layers: mergedLayers.layers
-    }
-  }
-
   let parsedMetadata;
   if(unboxed) {
     parsedMetadata = parseMetadata(metadata);
@@ -304,13 +279,13 @@ const NFTCard = (props) => {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-              Reveal Mystery Box
+              Open Mystery Box
             </AlertDialogHeader>
 
             <AlertDialogBody>
               Are you sure? You can't undo this action afterwards.
               <Box h={5}></Box>
-              <CoonfirmationProgress 
+              <ConfirmationProgress 
                 hidden={hiddenConfirmationProgress}
                 step={confirmationProgressData.step}
                 value={confirmationProgressData.value}
@@ -349,9 +324,9 @@ const NFTCard = (props) => {
               />
             </AlertDialogBody>
             <AlertDialogFooter>
-              <Button ref={cancelRef1} onClick={onClose1}>
+              {/* <Button ref={cancelRef1} onClick={onClose1}>
                 Close
-              </Button>
+              </Button> */}
               {/* <Button isLoading={isUploading} onClick={upload} colorScheme='blue' ml={3}>
                 Upload
               </Button>             */}
