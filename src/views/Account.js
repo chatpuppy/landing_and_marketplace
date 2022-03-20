@@ -4,8 +4,6 @@ import NavBar from 'components/NavBar';
 import { useAuth } from 'contexts/AuthContext';
 import { ethers } from "ethers";
 import nft_core_abi from "abi/nft_core_abi.json"
-// import nft_manager_abi from "abi/nft_manager_abi.json";
-// import nft_manager_v2_abi from "abi/nft_manager_v2_abi.json";
 import { SimpleGrid, useColorModeValue, Skeleton, useToast,
     Tabs, TabList, TabPanels, Tab, TabPanel, Stack, Box, Flex, SkeletonCircle, SkeletonText
 } from '@chakra-ui/react';
@@ -15,16 +13,17 @@ import BoxImageSrc from "assets/mysteryBox.jpg"
 import { AiOutlineStar } from "react-icons/ai"
 import { BsBoxSeam } from "react-icons/bs"
 import EmptyList from 'components/EmptyList';
-import {NFT_TOKEN_ADDRESS, NFT_MANAGER_ADDRESS, NFT_MANAGER_V2_ADDRESS, MARKETPLACE_ADDRESS} from 'constants';
+import {NFT_TOKEN_ADDRESS, MARKETPLACE_ADDRESS} from 'constants';
 
 export default function Account() {
     const NFT_core_contract_address = NFT_TOKEN_ADDRESS
-    // const NFT_manager_contract_address = NFT_MANAGER_V2_ADDRESS
 
     const [ isLoading, setIsLoading ] = useState(false);
     const { currentAccount, setOwnedNFTs, setApproved } = useAuth();
     const [ boxedItems, setBoxedItems ] = useState([]);
     const [ unboxedItems, setUnboxedItems ] = useState([]);
+    const _tabIndex = localStorage.getItem('account_tab_index') === null ? 0 : localStorage.getItem('account_tab_index') * 1;
+    const [ tabIndex, setTabIndex ] = useState(_tabIndex);
     const toast = useToast();
     const id = 'toast'
 
@@ -140,13 +139,18 @@ export default function Account() {
         return arr;
     }
 
+    const handleTabsChange = (index) => {
+        localStorage.setItem('account_tab_index', index);
+        setTabIndex(index);
+    }
+
     return (
         <>
         <NavBar />
         {/* <PageName name="My NFTs" pic="./images/banner_list.jpg" /> */}
         {
         currentAccount ?
-        <Tabs rounded="lg" m="auto" isLazy isFitted colorScheme="blue">
+        <Tabs rounded="lg" m="auto" isLazy isFitted colorScheme="blue" defaultIndex={tabIndex} onChange={handleTabsChange}>
             <TabList mb='1em' m="auto" w="80%">
                 <Tab _focus={{outline: "none"}} color={color}>
                     <BsBoxSeam pr="2"/>
@@ -172,7 +176,7 @@ export default function Account() {
             </TabPanels>
         </Tabs>
         :
-        <Tabs rounded="lg" m="auto" isLazy isFitted colorScheme="blue">
+        <Tabs rounded="lg" m="auto" isLazy isFitted colorScheme="blue" defaultIndex={tabIndex} onChange={handleTabsChange}>
             <TabList mb='1em' m="auto" w="80%">
                 <Tab _focus={{outline: "none"}} color={color}>
                     <BsBoxSeam pr="2"/>

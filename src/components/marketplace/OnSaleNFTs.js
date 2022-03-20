@@ -43,7 +43,6 @@ export default function OnSaleNFTs() {
     }, [currentAccount, listedNFTs, setOnSaleItems, onSaleItems])
 
     useEffect(() => {
-
         let isConnected = false;
         if(!isConnected) {
             if(listedNFTs) {

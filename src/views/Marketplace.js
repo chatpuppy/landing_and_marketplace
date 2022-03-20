@@ -24,6 +24,8 @@ export default function Marketplace() {
   const NFT_core_contract_address = NFT_TOKEN_ADDRESS
 
   const [ isLoading, setIsLoading ] = useState(false);
+  const _tabIndex = localStorage.getItem('marketplace_tab_index') === null ? 0 : localStorage.getItem('marketplace_tab_index') * 1;
+  const [ tabIndex, setTabIndex ] = useState(_tabIndex);
   const { currentAccount, setListedNFTs } = useAuth()
   const toast = useToast()
   const id = 'toast'
@@ -40,7 +42,7 @@ export default function Marketplace() {
         //connects with the contract
         const NFTCoreConnectedContract = new ethers.Contract(NFT_core_contract_address, nft_core_abi, signer);
         const NFTMarketplaceConnectedContract = new ethers.Contract(NFT_marketplace_contract_address, nft_marketplace_abi, signer);
-        let ordersArr = await NFTMarketplaceConnectedContract.onSaleOrders();// ######
+        let ordersArr = await NFTMarketplaceConnectedContract.onSaleOrders();
         ordersArr = ordersArr.map(x=>parseInt(x["_hex"], 16))
         let listedOrdersArr = [];
 
@@ -62,7 +64,6 @@ export default function Marketplace() {
         setIsLoading(false)
     }
   }, [currentAccount, NFT_core_contract_address, NFT_marketplace_contract_address, setListedNFTs])
-
 
   useEffect(() => {
     let isConnected = false;
@@ -102,13 +103,18 @@ export default function Marketplace() {
     return arr;
   }
 
+  const handleTabsChange = (index) => {
+    localStorage.setItem('marketplace_tab_index', index);
+    setTabIndex(index);
+  }
+
   return (
       <>
       <NavBar />
       {/* <PageName name="Marketplace" pic="./images/banner_marketplace.jpg"/> */}
       {
         currentAccount ?
-        <Tabs rounded="lg" m="auto" isLazy isFitted colorScheme="blue" defaultIndex={0}>
+        <Tabs rounded="lg" m="auto" isLazy isFitted colorScheme="blue" defaultIndex={tabIndex} onChange={handleTabsChange}>
             <TabList mb='1em' m="auto" w="80%">
                 <Tab _focus={{outline: "none"}} color={color}>
                     <BsBoxSeam pr="2"/>
@@ -133,7 +139,7 @@ export default function Marketplace() {
             </TabPanels>
         </Tabs>
         :
-        <Tabs rounded="lg" m="auto" isLazy isFitted colorScheme="blue" defaultIndex={1}>
+        <Tabs rounded="lg" m="auto" isLazy isFitted colorScheme="blue" defaultIndex={tabIndex} onChange={handleTabsChange}>
             <TabList mb='1em' m="auto" w="80%">
                 <Tab _focus={{outline: "none"}} color={color}>
                     <BsBoxSeam pr="2"/>

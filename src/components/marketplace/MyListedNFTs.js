@@ -44,7 +44,6 @@ export default function MyListedNFTs() {
     }, [currentAccount, myListedItems, listedNFTs])
 
     useEffect(() => {
-
         let isConnected = false;
         if(!isConnected) {
             if(listedNFTs) {
