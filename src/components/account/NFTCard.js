@@ -166,7 +166,12 @@ const NFTCard = (props) => {
 
   const uploadIPFS = () => {
     // ######
-
+    setUnboxModalParams({
+      artifacts: metadata, 
+      tokenId: number, 
+      dna
+    }); 
+    setIsOpen1(true);
   }
 
   return (
@@ -330,6 +335,7 @@ const NFTCard = (props) => {
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>
+
       <AlertDialog
         isCentered={true}
         isOpen={isOpen1}
@@ -339,7 +345,7 @@ const NFTCard = (props) => {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-              Unbox Result
+              NFT Avatar
             </AlertDialogHeader>
             <ModalCloseButton onClick={onClose1}/>
             <AlertDialogBody>

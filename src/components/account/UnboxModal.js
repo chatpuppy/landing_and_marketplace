@@ -133,6 +133,11 @@ const UnboxModal = (props) => {
         bg={useColorModeValue("white", "gray.700")}
         p={1}
       >
+        <Box mb={3} fontSize="sm" color={useColorModeValue("gray.600", "white")}>
+        {imageBase64 !== '' ? 
+          "Congrat! you have got a special NFT. If you want to trade it on OpenSea, please sign and Save metadata URI." 
+          : "Please wait a few seconds until the image and metadata was uploaded to IPFS."}
+        </Box>
         <Image
           rounded='lg'
           src={tokenId > 0 && imageBase64 !== '' ? imageBase64 : './images/uploadipfs.jpg'}
@@ -140,15 +145,20 @@ const UnboxModal = (props) => {
         />
 
         {nftMetadata.ipnft === '' || parsedMd === null ? '' :
-        <Box mt={5} mb={5} fontSize="md" color="gray.600">
+        <Box 
+          // eslint-disable-next-line react-hooks/rules-of-hooks
+          color={useColorModeValue("gray.600", "white")}
+          mt={5} 
+          mb={5} 
+          fontSize="sm">
           <Text>TokenId: #{tokenId}</Text>
           <Text>Level: {parsedMd.level}</Text>
           <Text>Exp: {parsedMd.experience}</Text>
           <Text>Rarity: {parsedMd.rarity}</Text>
           <Text>Artifacts: {artifacts.toHexString()}</Text>
           {/* <Text>DNA: {dna}</Text> */}
-          <Text>IPFS Cid: {nftMetadata.ipnft}</Text>
-          <Text>Metadata: <a href={nftMetadata.url} target="_blank">{nftMetadata.url.substr(0, 20) + "..." + nftMetadata.url.substr(nftMetadata.url.length - 20, 20)}</a></Text>
+          {/* <Text>IPFS Cid: {nftMetadata.ipnft}</Text> */}
+          <Text>Metadata: <a href={nftMetadata.url} target="_blank" rel="noreferrer">{nftMetadata.url.substr(0, 20) + "..." + nftMetadata.url.substr(nftMetadata.url.length - 20, 20)}</a></Text>
         </Box>
         }
       </Box>
@@ -164,7 +174,7 @@ const UnboxModal = (props) => {
         isLoading={isLoading}
         isDisabled={nftMetadata.ipnft===''}
         onClick={updateMetadata}>
-        Upload metadata to blockchain
+        Save metadata URI
       </Button>
       </Box>
     </Box>
