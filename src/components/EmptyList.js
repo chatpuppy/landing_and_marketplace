@@ -12,7 +12,9 @@ const EmptyList = () => {
     return (
         <Flex
         bg={useColorModeValue("white", "gray.800")}
-        p={50}
+        p={5}
+        ml={10}
+        mr={10}
         w="full"
         alignItems="center"
         justifyContent="center"

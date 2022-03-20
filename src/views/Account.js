@@ -7,7 +7,7 @@ import nft_core_abi from "abi/nft_core_abi.json"
 // import nft_manager_abi from "abi/nft_manager_abi.json";
 // import nft_manager_v2_abi from "abi/nft_manager_v2_abi.json";
 import { SimpleGrid, useColorModeValue, Skeleton, useToast,
-    Tabs, TabList, TabPanels, Tab, TabPanel, Stack
+    Tabs, TabList, TabPanels, Tab, TabPanel, Stack, Box, Flex, SkeletonCircle, SkeletonText
 } from '@chakra-ui/react';
 import NFTCard from 'components/account/NFTCard';
 import PageName from 'components/PageName';
@@ -124,7 +124,21 @@ export default function Account() {
         };
     }, [getOwnedTokens, toast]);
     
-    const color = useColorModeValue("black", "white")
+    const color = useColorModeValue("black", "white");
+
+    const skeleton = <Flex w="full" p={5} ml={10} mr={10}>
+    <Box w="md" pl={10} pr={10} pt={20} pd={20} h="md" maxW="md" max="auto" shadow="lg" rounded="lg" bg={useColorModeValue("gray.50", "gray.700")}>
+    <SkeletonCircle size="100"/><SkeletonText mt='6' noOfLines={4} spacing='4'/>
+    </Box>
+    </Flex>;
+
+    const skeletons = (count) => {
+        let arr = [];
+        for(let i = 0; i < count; i++) {
+            arr.push(skeleton);
+        }
+        return arr;
+    }
 
     return (
         <>
@@ -132,14 +146,6 @@ export default function Account() {
         {/* <PageName name="My NFTs" pic="./images/banner_list.jpg" /> */}
         {
         currentAccount ?
-        isLoading 
-        ? 
-        <Stack >
-            <Skeleton bg="gray.400" height='20px' />
-            <Skeleton bg="gray.400" height='60vh' />
-            <Skeleton bg="gray.400" height='20px' />
-        </Stack>
-        : 
         <Tabs rounded="lg" m="auto" isLazy isFitted colorScheme="blue">
             <TabList mb='1em' m="auto" w="80%">
                 <Tab _focus={{outline: "none"}} color={color}>
@@ -155,12 +161,12 @@ export default function Account() {
             <TabPanels>
                 <TabPanel m='auto' w='80%'>
                     <SimpleGrid columns={[1, null, 4]} >
-                        {boxedItems.length===0 ? <EmptyList /> : boxedItems}
+                        {isLoading ? skeletons(8) : boxedItems.length===0 ? <EmptyList /> : boxedItems}
                     </SimpleGrid>
                 </TabPanel>
                 <TabPanel m='auto' w='80%'>
                     <SimpleGrid columns={[1, null, 4]} >
-                        {unboxedItems.length===0 ? <EmptyList /> : unboxedItems}
+                        {isLoading ? skeletons(8) : unboxedItems.length===0 ? <EmptyList /> : unboxedItems}
                     </SimpleGrid>
                 </TabPanel>
             </TabPanels>
@@ -181,12 +187,12 @@ export default function Account() {
             <TabPanels>
                 <TabPanel m='auto' w='80%'>
                     <SimpleGrid columns={[1, null, 4]} >
-                        <EmptyList />
+                        {isLoading ? skeletons(8) : <EmptyList />}
                     </SimpleGrid>
                 </TabPanel>
                 <TabPanel m='auto' w='80%'>
                     <SimpleGrid columns={[1, null, 4]} >
-                        <EmptyList />
+                        {isLoading ? skeletons(8) : <EmptyList />}
                     </SimpleGrid>
                 </TabPanel>
             </TabPanels>

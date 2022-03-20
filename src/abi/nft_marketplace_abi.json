@@ -259,8 +259,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [],
@@ -273,8 +272,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [],
@@ -287,8 +285,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [],
@@ -301,8 +298,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [],
@@ -315,8 +311,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -335,8 +330,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -360,8 +354,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -380,8 +373,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -423,8 +415,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [],
@@ -437,8 +428,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -482,8 +472,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -538,8 +527,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -563,8 +551,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [],
@@ -577,8 +564,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [],
@@ -591,8 +577,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -611,8 +596,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -631,8 +615,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [],
@@ -645,8 +628,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -670,8 +652,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -690,8 +671,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -715,8 +695,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -735,8 +714,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -760,8 +738,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -790,8 +767,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [],
@@ -804,8 +780,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -881,8 +856,7 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function",
-		"constant": true
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -939,6 +913,13 @@
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "cancelAllOrders",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -954,7 +935,6 @@
 		"name": "matchOrder",
 		"outputs": [],
 		"stateMutability": "payable",
-		"type": "function",
-		"payable": true
+		"type": "function"
 	}
 ]

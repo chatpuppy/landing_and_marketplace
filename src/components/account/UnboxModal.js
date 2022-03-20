@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Text, Flex, Image, Badge, useColorModeValue, Button, Center, useToast, Spinner } from "@chakra-ui/react";
+import { Box, Text, Flex, Image, Badge, useColorModeValue, Button, Stack, useToast, Spinner, SkeletonCircle, SkeletonText, Skeleton } from "@chakra-ui/react";
 import { useAuth } from "contexts/AuthContext";
 import { sortLayer, mergeLayers, parseMetadata } from "avatar";
 import mergeImages from 'merge-images';
@@ -138,11 +138,17 @@ const UnboxModal = (props) => {
           "Congrat! you have got a special NFT. If you want to trade it on OpenSea, please sign and Save metadata URI." 
           : "Please wait a few seconds until the image and metadata was uploaded to IPFS."}
         </Box>
+        {tokenId > 0 && imageBase64 !== '' ? 
         <Image
           rounded='lg'
-          src={tokenId > 0 && imageBase64 !== '' ? imageBase64 : './images/uploadipfs.jpg'}
+          src={imageBase64}
           alt="Unboxed NFT"
-        />
+        /> : 
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        <Box w={"sm"} h={"sm"} border={1} rounded={10} mb={3} p={10} bg={useColorModeValue("gray.50", "gray.600")}>
+          <SkeletonCircle size={"200"}/>
+          <SkeletonText mt='4' noOfLines={4} spacing='4'/>
+        </Box>}
 
         {nftMetadata.ipnft === '' || parsedMd === null ? '' :
         <Box 

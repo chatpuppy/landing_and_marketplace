@@ -217,7 +217,7 @@ const MintModal = (props) => {
         <Image
           src={property.imageUrl}
           alt={property.imageAlt}
-          roundedTop="lg"
+          rounded="lg"
         />
 
         <Box p="6">

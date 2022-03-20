@@ -8,7 +8,7 @@ export default function OnSaleNFTs() {
 
     const { currentAccount, listedNFTs } = useAuth()
     const [ onSaleItems, setOnSaleItems ] = useState([]);
-    const [ isLoading, setIsLoading ] = useState()
+    const [ isLoading, setIsLoading ] = useState();
 
     const setOnSaleNFTs = useCallback(async() => {
         setIsLoading(true);

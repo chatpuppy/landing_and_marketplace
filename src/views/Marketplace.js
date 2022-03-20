@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Footer from 'components/Footer';
 import NavBar from 'components/NavBar';
 import { Tabs, TabList, Tab, TabPanels, TabPanel, SimpleGrid,
-  useColorModeValue, useToast, Stack, Skeleton
+  useColorModeValue, useToast, Stack, SkeletonCircle, SkeletonText, Box, Flex
 } from '@chakra-ui/react';
 import { AiOutlineStar } from "react-icons/ai"
 import { BsBoxSeam } from "react-icons/bs"
@@ -88,6 +88,19 @@ export default function Marketplace() {
     }
   }, [getListedNFTs, toast])
   
+  const skeleton = <Flex w="full" p={5} ml={10} mr={10}>
+      <Box w="md" pl={10} pr={10} pt={20} pd={20} h="md" maxW="md" max="auto" shadow="lg" rounded="lg" bg={useColorModeValue("gray.50", "gray.700")}>
+      <SkeletonCircle size="100"/><SkeletonText mt='6' noOfLines={4} spacing='4'/>
+      </Box>
+      </Flex>;
+
+  const skeletons = (count) => {
+    let arr = [];
+    for(let i = 0; i < count; i++) {
+        arr.push(skeleton);
+    }
+    return arr;
+  }
 
   return (
       <>
@@ -95,14 +108,6 @@ export default function Marketplace() {
       {/* <PageName name="Marketplace" pic="./images/banner_marketplace.jpg"/> */}
       {
         currentAccount ?
-        isLoading 
-        ? 
-        <Stack >
-            <Skeleton bg="gray.400" height='20px' />
-            <Skeleton bg="gray.400" height='60vh' />
-            <Skeleton bg="gray.400" height='20px' />
-        </Stack>
-        : 
         <Tabs rounded="lg" m="auto" isLazy isFitted colorScheme="blue" defaultIndex={0}>
             <TabList mb='1em' m="auto" w="80%">
                 <Tab _focus={{outline: "none"}} color={color}>
@@ -117,12 +122,12 @@ export default function Marketplace() {
             <TabPanels>
                 <TabPanel m='auto' w='80%'>
                     <SimpleGrid columns={[1, null, 4]} >
-                        <OnSaleNFTs />
+                        {isLoading ? skeletons(8) : <OnSaleNFTs/>}
                     </SimpleGrid>
                 </TabPanel>
                 <TabPanel m='auto' w='80%'>
                     <SimpleGrid columns={[1, null, 4]}>
-                        <MyListedNFT />
+                        {isLoading ? skeletons(8) : <MyListedNFT/>}
                     </SimpleGrid>
                 </TabPanel>
             </TabPanels>
@@ -143,12 +148,12 @@ export default function Marketplace() {
             <TabPanels>
                 <TabPanel m='auto' w='80%'>
                     <SimpleGrid columns={[1, null, 4]} >
-                        <EmptyList />
+                        {isLoading ? skeletons() : <EmptyList />}
                     </SimpleGrid>
                 </TabPanel>
                 <TabPanel m='auto' w='80%'>
                     <SimpleGrid columns={[1, null, 4]} >
-                        <EmptyList />
+                        {isLoading ? skeletons() : <EmptyList />}
                     </SimpleGrid>
                 </TabPanel>
             </TabPanels>
