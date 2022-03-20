@@ -126,7 +126,7 @@ export default function Account() {
     
     const color = useColorModeValue("black", "white");
 
-    const skeleton = <Flex w="full" p={5} ml={10} mr={10}>
+    const skeleton = <Flex w="full" p={5}>
     <Box w="md" pl={10} pr={10} pt={20} pd={20} h="md" maxW="md" max="auto" shadow="lg" rounded="lg" bg={useColorModeValue("gray.50", "gray.700")}>
     <SkeletonCircle size="100"/><SkeletonText mt='6' noOfLines={4} spacing='4'/>
     </Box>

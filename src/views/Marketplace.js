@@ -88,7 +88,7 @@ export default function Marketplace() {
     }
   }, [getListedNFTs, toast])
   
-  const skeleton = <Flex w="full" p={5} ml={10} mr={10}>
+  const skeleton = <Flex w="full" p={5}>
       <Box w="md" pl={10} pr={10} pt={20} pd={20} h="md" maxW="md" max="auto" shadow="lg" rounded="lg" bg={useColorModeValue("gray.50", "gray.700")}>
       <SkeletonCircle size="100"/><SkeletonText mt='6' noOfLines={4} spacing='4'/>
       </Box>
@@ -120,12 +120,12 @@ export default function Marketplace() {
                 </Tab>
             </TabList>
             <TabPanels>
-                <TabPanel m='auto' w='80%'>
+                <TabPanel ml='10%' w='80%'>
                     <SimpleGrid columns={[1, null, 4]} >
                         {isLoading ? skeletons(8) : <OnSaleNFTs/>}
                     </SimpleGrid>
                 </TabPanel>
-                <TabPanel m='auto' w='80%'>
+                <TabPanel ml='10%' w='80%'>
                     <SimpleGrid columns={[1, null, 4]}>
                         {isLoading ? skeletons(8) : <MyListedNFT/>}
                     </SimpleGrid>
