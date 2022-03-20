@@ -52,9 +52,11 @@ export default function Account() {
                 _id = parseInt(_id["_hex"], 16);
                 // const _type = await NFTManagerConnectedContract.boxStatus(_id); // 需要用另外方法判断是否unboxed，否则在NFTManager升级后，数据会丢失
                 const _metadata = await NFTCoreConnectedContract.tokenMetaData(_id);
+                const _uri = await NFTCoreConnectedContract.tokenURI(_id);
                 _ownedNFTs.push([_id, _metadata._artifacts > 0 ? 1 : 0]);
                 const data = {
                     id: _id, 
+                    uri: _uri,
                     metadata: _metadata._artifacts, 
                     dna: _metadata._dna
                 };
@@ -72,6 +74,7 @@ export default function Account() {
                     metadata={_boxedItems[index].metadata}
                     dna={_boxedItems[index].dna}
                     src={BoxImageSrc}
+                    uri={''}
                 />
                 )))
             }
@@ -84,6 +87,7 @@ export default function Account() {
                     metadata={_unboxedItems[index].metadata}
                     dna={_unboxedItems[index].dna}
                     src={null}
+                    uri={_unboxedItems[index].uri}
                 />
                 )))
             }

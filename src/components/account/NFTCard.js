@@ -6,10 +6,10 @@ import { chakra, Box, Image, Flex, useColorModeValue, Button,
 import nft_manager_v2_abi from "abi/nft_manager_v2_abi.json";
 import nft_core_abi from "abi/nft_core_abi.json"
 import { useAuth } from "contexts/AuthContext";
-import { ethers, utils, BigNumber } from "ethers";
+import { ethers } from "ethers";
 import ListNFT from "./ListNFT";
 import {NFT_TOKEN_ADDRESS, NFT_MANAGER_V2_ADDRESS} from 'constants';
-import { sortLayer, mergeLayers, parseMetadata } from "avatar";
+import { parseMetadata } from "avatar";
 import mergeImages from 'merge-images';
 import {BiHelpCircle} from 'react-icons/bi';
 import ReactTooltip from 'react-tooltip';
@@ -17,7 +17,6 @@ import ConfirmationProgress from '../ConfirmationProgress';
 import UnboxModal from './UnboxModal';
 
 const NFTCard = (props) => {
-
   const NFT_manager_contract_address = NFT_MANAGER_V2_ADDRESS;
   const NFT_core_contract_address = NFT_TOKEN_ADDRESS;
 
@@ -29,7 +28,7 @@ const NFTCard = (props) => {
 
   const toast = useToast();
   const { currentAccount } = useAuth();
-  const { src, number, unboxed, metadata, dna } = props;
+  const { src, number, unboxed, metadata, dna, uri } = props;
   const bg = useColorModeValue("white", "gray.200")
   const buttonbg = useColorModeValue("gray.900", "gray.900")
 
@@ -43,7 +42,8 @@ const NFTCard = (props) => {
   const strLevel = "LEVEL: <br/>Sum of levels of each traits, <br/>higher means more value.";
   const strExperience = "EXPERIENCE: <br/>Sum of each trait's experience, <br/>higher means more value.";
   const strRarity = "RARITY: <br/>Probability of same NFT<br/> in 1,000,000 NFTs, <br/>lower means more value.";
-  const strArtifacts = "ARTIFACTS: <br/>metadata of NFT on chain";
+  const strArtifacts = "ARTIFACTS: <br/>Artifacts of NFT on chain";
+  const strMeta = "Metadata on IPFS <br/>If you did't upload while unboxing, <br/>you can upload to IPFS now";
 
   const unboxNFT = async() => {
     setIsLoading(true);
@@ -158,6 +158,17 @@ const NFTCard = (props) => {
     }
   }
 
+  const getUri = (uri) => {
+    if(uri.substr(0, 5) === "ipfs:") return uri;
+    else if(uri.substr(0, 2) === "Qm") return "ipfs://" + uri + "/metadata.json";
+    else if(uri.substr(0, 7) === "bafyrei") return "ipfs://" + uri + "/metadata.json";
+  }
+
+  const uploadIPFS = () => {
+    // ######
+
+  }
+
   return (
     <Flex
       bg={useColorModeValue("white", "gray.800")}
@@ -192,7 +203,7 @@ const NFTCard = (props) => {
           </chakra.h1>
           <chakra.h1
             color={useColorModeValue("gray.800", "gray.800")}
-            fontSize="md"
+            fontSize="sm"
             // textTransform="uppercase"
           >
           {unboxed && parsedMetadata !== null ? 
@@ -203,7 +214,7 @@ const NFTCard = (props) => {
           </chakra.h1>
           <chakra.h1
             color={useColorModeValue("gray.800", "gray.800")}
-            fontSize="md"
+            fontSize="sm"
             // textTransform="uppercase"
           >
           {unboxed && parsedMetadata !== null? 
@@ -214,7 +225,7 @@ const NFTCard = (props) => {
           </chakra.h1>
           <chakra.h1
             color={useColorModeValue("gray.800", "gray.800")}
-            fontSize="md"
+            fontSize="sm"
             // textTransform="uppercase"
           >
           {unboxed && parsedMetadata !== null? 
@@ -223,17 +234,31 @@ const NFTCard = (props) => {
             &nbsp;Rat: {parsedMetadata.rarity}
           </Flex>  : ''}
           </chakra.h1>
+
           <chakra.h1
-            color={useColorModeValue("gray.500", "gray.500")}
+            color={useColorModeValue("gray.800", "gray.800")}
             fontSize="sm"
             // textTransform="uppercase"
           >
           {unboxed && parsedMetadata !== null ? 
           <Flex>
-            <BiHelpCircle fontSize="xs" data-tip={strArtifacts} data-for="meta"/>
-            &nbsp;Meta: {parsedMetadata.artifacts.substr(2)}
+            <BiHelpCircle fontSize="xs" data-tip={strArtifacts} data-for="artifacts"/>
+            &nbsp;Art: {parsedMetadata.artifacts.substr(2)}
           </Flex> : ''}
           </chakra.h1>
+
+          <chakra.h1
+            color={useColorModeValue("gray.800", "gray.800")}
+            fontSize="sm"
+            // textTransform="uppercase"
+          >
+          {unboxed && parsedMetadata !== null ? 
+          <Flex>
+            <BiHelpCircle fontSize="xs" data-tip={strMeta} data-for="meta"/>
+            &nbsp;Metadata: {uri === '' ? <Button size="sx" w={"50%"} fontSize={8} ml={3} mr={3} mt={1} onClick={uploadIPFS}>Upload to IPFS</Button> : <a href={getUri(uri)} target="_blank">&nbsp;&nbsp;Open in IPFS</a>}
+          </Flex> : ''}
+          </chakra.h1>
+
         </Box>
         {unboxed ? 
         <Center my="2"
@@ -269,6 +294,7 @@ const NFTCard = (props) => {
       <ReactTooltip id="level" effect="solid" multiline={true} />
       <ReactTooltip id="exp" effect="solid" multiline={true} />
       <ReactTooltip id="rat" effect="solid" multiline={true} />
+      <ReactTooltip id="artifacts" effect="solid" multiline={true} />
       <ReactTooltip id="meta" effect="solid" multiline={true} />
       <AlertDialog
         isCentered={true}

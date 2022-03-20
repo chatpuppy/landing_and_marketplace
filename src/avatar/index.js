@@ -59,14 +59,23 @@ export const parseMetadata = (md) => {
 	let level = 0;
 	let experience = 0;
 	let rarity = 1;
+	let properties = [];
 	for(let i = 0; i < mergedLayers.layers.length; i++) {
 		level = level + mergedLayers.layers[i].level;
 		experience = experience + mergedLayers.layers[i].experience;
 		rarity = rarity * mergedLayers.layers[i].rarity / 1000000;
+		properties.push({
+			trait_type: mergedLayers.layers[i].boxName,
+			value: mergedLayers.layers[i].itemName,
+			level: mergedLayers.layers[i].level,
+			experience: mergedLayers.layers[i].experience,
+			rarity: mergedLayers.layers[i].rarity
+		})
 	}
 
 	return {
 		artifacts: md.toHexString(),
+		properties,
 		level,
 		experience,
 		rarity: (rarity * 1000000).toFixed(4),

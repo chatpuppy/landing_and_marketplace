@@ -40,8 +40,7 @@ const ListedCard = (props) => {
   const strExperience = "EXPERIENCE: <br/>Sum of each trait's experience, <br/>higher means more value.";
   const strRarity = "RARITY: <br/>Probability of same NFT<br/> in 1,000,000 NFTs, <br/>lower means more value.";
   const strOwner = "OWNER: <br/>Seller of NFT";
-
-  // console.log(props);
+  const strOrder = "Order ID";
 
   const unlistNFT = async() => {
     setIsLoading(true)
@@ -153,7 +152,7 @@ const ListedCard = (props) => {
     }
   }
 
-  const showUrl = (addr) => <a href={ETHERSCAN_BASE_URL + addr} target='_blank' rel="noreferrer">Owner: {addr.substr(0, 5) + "..." + addr.substr(addr.length - 6, 6)}</a>
+  const showUrl = (addr) => <a href={ETHERSCAN_BASE_URL + addr} target='_blank' rel="noreferrer">Owner: {addr.substr(0, 8) + "..." + addr.substr(addr.length - 6, 6)}</a>
 
   return (
   <Flex
@@ -222,17 +221,17 @@ const ListedCard = (props) => {
           </Flex>  : 'and get NFT'}
           </chakra.h1>
 
-          <chakra.h1
+          {/* <chakra.h1
             color={useColorModeValue("gray.800", "gray.800")}
             fontSize="sm"
             // textTransform="uppercase"
           >
           {unboxed && parsedMetadata !== null? 
           <Flex>
-            <BiHelpCircle fontSize="xs" data-tip={strRarity} data-for="rat"/>
+            <BiHelpCircle fontSize="xs" data-tip={strOrder} data-for="order"/>
             &nbsp;Order#: {orderId}
-          </Flex>  : '.'}
-          </chakra.h1>
+          </Flex>  : '-'}
+          </chakra.h1> */}
 
           <chakra.h1
             color={useColorModeValue("gray.800", "gray.800")}
@@ -248,7 +247,7 @@ const ListedCard = (props) => {
         <Divider h={2} mb={1}/>
         <chakra.h1
           color={useColorModeValue("gray.800","gray.800")}
-          fontSize="sm"
+          fontSize="md"
           fontWeight="bold"
         >
           Price: {parseInt(price["_hex"], 16)/Math.pow(10, 18)} CPT
@@ -298,7 +297,7 @@ const ListedCard = (props) => {
       <ReactTooltip id="exp" effect="solid" multiline={true} />
       <ReactTooltip id="rat" effect="solid" multiline={true} />
       <ReactTooltip id="owner" effect="solid" multiline={true} />
-
+      <ReactTooltip id="order" effect="solid" multiline={true} />
       <Modal 
         isOpen={isOpen} 
         // onClose={onClose}

@@ -68,7 +68,7 @@ export default function MintGrid() {
 return (
     <Box position={'relative'}>
     <Container
-        as={SimpleGrid}
+        // as={SimpleGrid}
         columns={{ base: 1, md: 1 }}
         spacing={{ base: 10, lg: 32 }}
         py={{ base: 10, sm: 20, lg: 32 }}
@@ -76,11 +76,12 @@ return (
         align={'center'}>
         <Stack
         bg={useColorModeValue('gray.50', 'white')}
-        border="2px"
+        border="1px"
+        borderColor="gray.300"
         rounded={'xl'}
         p={{ base: 4, sm: 6, md: 8 }}
         spacing={{ base: 8 }}
-        maxW={{ lg: 'lg' }}>
+        maxW={{ lg: 'sm' }}>
             <Stack spacing={4}>
                 <Heading
                 color={'gray.800'}
@@ -144,9 +145,9 @@ return (
                 </Button>
             </Box>
             <Stack spacing={2}>
-            <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }} textAlign="left">
+            {/* <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }} textAlign="left">
             &#9900; You can only mint a mystery avatar or mint &#38; unbox simultaneously. 
-            </Text>
+            </Text> */}
             <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }} textAlign="left">
             &#9900; If you only mint, you will not know what the exact avatar is until it is unboxed.
             </Text>
