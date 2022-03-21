@@ -28,14 +28,14 @@ const NFTCard = (props) => {
 
   const toast = useToast();
   const { currentAccount } = useAuth();
-  const { src, number, unboxed, metadata, dna, uri } = props;
+  const { src, number, unboxed, metadata, dna, uri, callback } = props;
   const bg = useColorModeValue("white", "gray.200")
   const buttonbg = useColorModeValue("gray.900", "gray.900")
 
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen1, setIsOpen1] = useState(false);
   const onClose = () => setIsOpen(false);
-  const onClose1 = () => setIsOpen1(false);
+  const onClose1 = () => {setIsOpen1(false); callback(number)};
   const cancelRef = useRef();
   const cancelRef1 = useRef();
 
@@ -103,7 +103,7 @@ const NFTCard = (props) => {
                 clearInterval(t);
                 setHiddenConfirmationProgress(true);
                 setIsLoading(false);
-                onClose();
+                onClose(); // Close the current dialog box
               } else {
                 count++;
               }
@@ -184,6 +184,7 @@ const NFTCard = (props) => {
       <Box
         maxW="xs"
         mx="auto"
+        h="lg"
         bg={useColorModeValue("white", "gray.200")}
         shadow="lg"
         rounded="lg"
@@ -259,7 +260,7 @@ const NFTCard = (props) => {
           {unboxed && parsedMetadata !== null ? 
           <Flex>
             <BiHelpCircle fontSize="xs" data-tip={strMeta} data-for="meta"/>
-            &nbsp;Metadata: {uri === '' ? <Button size="sx" w={"50%"} fontSize={8} ml={3} mr={3} mt={1} onClick={uploadIPFS}>Upload to IPFS</Button> : <a href={getUri(uri)} target="_blank">&nbsp;&nbsp;Open in IPFS</a>}
+            &nbsp;Metadata: {uri === '' ? <Button size="sx" w={"50%"} fontSize={8} ml={3} mr={3} mt={1} onClick={uploadIPFS}>Upload to IPFS</Button> : <a href={getUri(uri)} target="_blank" rel="noreferrer">&nbsp;&nbsp;Open in IPFS</a>}
           </Flex> : ''}
           </chakra.h1>
 
@@ -267,7 +268,10 @@ const NFTCard = (props) => {
         {unboxed ? 
         <Center my="2"
         >
-          <ListNFT number={number}/>
+          <ListNFT 
+            number={number}
+            callback={(tokenId) => callback(tokenId)}
+          />
         </Center>
         :
         <Flex
@@ -290,7 +294,10 @@ const NFTCard = (props) => {
           >
             Unbox
           </Button>
-          <ListNFT number={number}/>
+          <ListNFT 
+            number={number}
+            callback={(tokenId) => callback(tokenId)}
+          />
         </Flex>
         }
         
@@ -352,6 +359,7 @@ const NFTCard = (props) => {
                 tokenId={unboxModalParams.tokenId}
                 artifacts={unboxModalParams.artifacts}
                 dna={unboxModalParams.dna}
+                callback={(tokenId) => callback(tokenId)}
               />
             </AlertDialogBody>
             <AlertDialogFooter>

@@ -129,9 +129,11 @@ export default function BuyDialog(props) {
 
     return (
         <>
-        <Button mb={3} colorScheme='blue' onClick={() => setIsOpen(true)}>
-            Buy
-        </Button>
+        <Box textAlign="right" w="full">
+            <Button mt={-12} colorScheme='blue' onClick={() => setIsOpen(true)}>
+                Buy
+            </Button>
+        </Box>
 
         <AlertDialog
             isOpen={isOpen}

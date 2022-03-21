@@ -15,7 +15,7 @@ import ConfirmationProgress from '../ConfirmationProgress';
 
 export default function ListNFT(props) {
 
-    const { number } = props;
+    const { number, callback } = props;
     let navigate = useNavigate();
     const toast = useToast();
 
@@ -64,9 +64,10 @@ export default function ListNFT(props) {
           setConfirmationProgressData({step: '4/5', value: 80, message: 'List NFT and wait confirmation...'});
           await tx.wait(2);
           setConfirmationProgressData({step: '5/5', value: 100, message: 'You have got 2 confirmations, done!'})
-          
+          callback(number);
+
           setTimeout(()=>{
-            setIsLoading(false)
+            setIsLoading(false);
             onClose();
           }, 1500)
         } catch(err) {

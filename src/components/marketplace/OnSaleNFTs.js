@@ -55,6 +55,10 @@ export default function OnSaleNFTs() {
         }
     }, [setOnSaleNFTs, listedNFTs])
     
+    const deleteFromOnSaleItems = (key) => {
+        // ######
+    }
+
     return (
         <>
             {onSaleItems.length===0 ?

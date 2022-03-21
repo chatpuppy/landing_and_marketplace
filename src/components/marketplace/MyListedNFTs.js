@@ -56,6 +56,10 @@ export default function MyListedNFTs() {
         }
     }, [listedNFTs, setMyLitedNFTs])
     
+    const deleteFromMyListedItems = (key) => {
+        // ######
+    }
+
     return (
         <>
             {myListedItems.length===0 ?

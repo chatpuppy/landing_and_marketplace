@@ -24,7 +24,7 @@ const UnboxModal = (props) => {
     const { currentAccount } = useAuth();
 
     const toast = useToast()
-    const { artifacts, tokenId, dna } = props;
+    const { artifacts, tokenId, dna, callback } = props;
     const id = 'toast'
 
     const uploadNFT = async(imageFile, pmd) => {
@@ -91,7 +91,7 @@ const UnboxModal = (props) => {
           setConfirmationProgressData({step: '2/3', value: 66, message: 'Updating, waiting for confirmation...'});
           await tx.wait(2);
           setConfirmationProgressData({step: '3/3', value: 100, message: 'You have got 2 confirmations, update success...'});
-
+          
           setIsLoading(false);
         } catch (err) {
           if(err.code === 4001) {
@@ -104,6 +104,7 @@ const UnboxModal = (props) => {
             });
             setHiddenConfirmationProgress(true);
             setIsLoading(false);
+            callback(tokenId);
           } else {
             toast({
               title: 'Upload NFT',
@@ -114,6 +115,7 @@ const UnboxModal = (props) => {
             })
             setHiddenConfirmationProgress(true);
             setIsLoading(false)    
+            callback(tokenId);
           }
         }
       } catch (err) {

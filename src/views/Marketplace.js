@@ -90,8 +90,8 @@ export default function Marketplace() {
   }, [getListedNFTs, toast])
   
   const skeleton = <Flex w="full" p={5}>
-      <Box w="md" pl={10} pr={10} pt={20} pd={20} h="md" maxW="md" max="auto" shadow="lg" rounded="lg" bg={useColorModeValue("gray.50", "gray.700")}>
-      <SkeletonCircle size="100"/><SkeletonText mt='6' noOfLines={4} spacing='4'/>
+      <Box w="md" pl={10} pr={10} pt={20} pd={20} h="lg" maxW="md" max="auto" shadow="lg" rounded="lg" bg={useColorModeValue("gray.50", "gray.700")}>
+      <SkeletonCircle size="100"/><SkeletonText mt='6' noOfLines={6} spacing='4'/>
       </Box>
       </Flex>;
 

@@ -4,8 +4,8 @@ import NavBar from 'components/NavBar';
 import { useAuth } from 'contexts/AuthContext';
 import { ethers } from "ethers";
 import nft_core_abi from "abi/nft_core_abi.json"
-import { SimpleGrid, useColorModeValue, Skeleton, useToast,
-    Tabs, TabList, TabPanels, Tab, TabPanel, Stack, Box, Flex, SkeletonCircle, SkeletonText
+import { SimpleGrid, useColorModeValue, useToast,
+    Tabs, TabList, TabPanels, Tab, TabPanel, Box, Flex, SkeletonCircle, SkeletonText
 } from '@chakra-ui/react';
 import NFTCard from 'components/account/NFTCard';
 import PageName from 'components/PageName';
@@ -26,6 +26,8 @@ export default function Account() {
     const [ tabIndex, setTabIndex ] = useState(_tabIndex);
     const toast = useToast();
     const id = 'toast'
+    let _boxedItems = [];
+    let _unboxedItems = [];
 
     const getOwnedTokens = useCallback(async() => {
         setIsLoading(true);
@@ -44,8 +46,6 @@ export default function Account() {
             setApproved(_approved);
             count = parseInt(count["_hex"], 16);
             let _ownedNFTs = []
-            let _boxedItems = []
-            let _unboxedItems = []
             for(let i=0; i<count; i++) {
                 let _id = await NFTCoreConnectedContract.tokenOfOwnerByIndex(currentAccount, i);
                 _id = parseInt(_id["_hex"], 16);
@@ -57,39 +57,15 @@ export default function Account() {
                     id: _id, 
                     uri: _uri,
                     metadata: _metadata._artifacts, 
-                    dna: _metadata._dna
+                    dna: _metadata._dna,
+                    deleted: false
                 };
                 if(_metadata._artifacts > 0) _unboxedItems.push(data);
                 else _boxedItems.push(data);
             }
 
-            setOwnedNFTs(_ownedNFTs)
-            if(_boxedItems.length!==0 && boxedItems.length===0) {
-                setBoxedItems(boxedItems.concat(Array.from({length: _boxedItems.length}, (_, i) => i).map((number, index)=>
-                <NFTCard 
-                    key={_boxedItems[index].id} 
-                    number={_boxedItems[index].id} 
-                    unboxed={false}
-                    metadata={_boxedItems[index].metadata}
-                    dna={_boxedItems[index].dna}
-                    src={BoxImageSrc}
-                    uri={''}
-                />
-                )))
-            }
-            if(_unboxedItems.length!==0 && unboxedItems.length===0) {
-                setUnboxedItems(unboxedItems.concat(Array.from({length: _unboxedItems.length}, (_, i) => i).map((number, index)=>
-                <NFTCard 
-                    key={_unboxedItems[index].id} 
-                    number={_unboxedItems[index].id} 
-                    unboxed={true}
-                    metadata={_unboxedItems[index].metadata}
-                    dna={_unboxedItems[index].dna}
-                    src={null}
-                    uri={_unboxedItems[index].uri}
-                />
-                )))
-            }
+            setOwnedNFTs(_ownedNFTs);
+            parseBoxes(_boxedItems, _unboxedItems);
         } catch(err) {
             console.log(err)
         } finally {
@@ -97,8 +73,45 @@ export default function Account() {
                 setIsLoading(false)
             }, 400);
         }
-    }, [currentAccount, setOwnedNFTs, boxedItems, unboxedItems, setApproved, NFT_core_contract_address])
+    }, [currentAccount, setApproved, setOwnedNFTs])
     
+    const parseBoxes = (_boxedItems, _unboxedItems) => {
+        if(_boxedItems.length !== 0 && boxedItems.length === 0) {
+            setBoxedItems(boxedItems.concat(Array.from({length: _boxedItems.length}, (_, i) => i).map((number, index)=> {
+            if(_boxedItems[index].deleted) return skeleton;
+            else return <NFTCard 
+                key={_boxedItems[index].id * 1} 
+                number={_boxedItems[index].id} 
+                unboxed={false}
+                metadata={_boxedItems[index].metadata}
+                dna={_boxedItems[index].dna}
+                src={BoxImageSrc}
+                uri={''}
+                callback={(tokenId) => deleteFromBoxedItems(tokenId)}
+            />}
+            )))
+        } else {
+            setBoxedItems(<EmptyList/>);
+        }
+        if(_unboxedItems.length !== 0 && unboxedItems.length === 0) {
+            setUnboxedItems(unboxedItems.concat(Array.from({length: _unboxedItems.length}, (_, i) => i).map((number, index)=> {
+            if(_unboxedItems[index].deleted) return skeleton;
+            else return <NFTCard 
+                key={_unboxedItems[index].id * 1} 
+                number={_unboxedItems[index].id} 
+                unboxed={true}
+                metadata={_unboxedItems[index].metadata}
+                dna={_unboxedItems[index].dna}
+                src={null}
+                uri={_unboxedItems[index].uri}
+                callback={(tokenId) => deleteFromUnboxedItems(tokenId)}
+            />}
+            )))
+        } else {
+            setUnboxedItems(<EmptyList/>);
+        }
+    }
+
     useEffect(() => {
         let isConnected = false;
         if(!isConnected) {
@@ -126,8 +139,8 @@ export default function Account() {
     const color = useColorModeValue("black", "white");
 
     const skeleton = <Flex w="full" p={5}>
-    <Box w="md" pl={10} pr={10} pt={20} pd={20} h="md" maxW="md" max="auto" shadow="lg" rounded="lg" bg={useColorModeValue("gray.50", "gray.700")}>
-    <SkeletonCircle size="100"/><SkeletonText mt='6' noOfLines={4} spacing='4'/>
+    <Box w="md" pl={10} pr={10} pt={20} pd={20} h="lg" maxW="md" max="auto" shadow="lg" rounded="lg" bg={useColorModeValue("gray.50", "gray.700")}>
+    <SkeletonCircle size="100"/><SkeletonText mt='6' noOfLines={6} spacing='4'/>
     </Box>
     </Flex>;
 
@@ -142,6 +155,46 @@ export default function Account() {
     const handleTabsChange = (index) => {
         localStorage.setItem('account_tab_index', index);
         setTabIndex(index);
+    }
+
+    const deleteFromBoxedItems = (key) => {
+        // ######
+        console.log('deleteFromBoxedItems', _boxedItems)
+        let deletedKey = 0;
+        for(let i = 0; i < _boxedItems.length; i++) {
+            const item = _boxedItems[i];
+            if(item.id === key) {
+                item.deleted = true;
+                deletedKey = i;
+                break;
+            }
+        }
+        console.log(_boxedItems);
+        parseBoxes(_boxedItems, _unboxedItems);
+        setTimeout(() => {
+            _boxedItems.splice(deletedKey, 1);
+            parseBoxes(_boxedItems, _unboxedItems);
+        }, 3000);
+    }
+
+    const deleteFromUnboxedItems = (key) => {
+        // ######
+        console.log('deleteFromUnboxedItems', _unboxedItems);
+        let deletedKey = 0;
+        for(let i = 0; i < _unboxedItems.length; i++) {
+            const item = _unboxedItems[i];
+            if(item.id === key) {
+                item.deleted = true;
+                deletedKey = i;
+                break;
+            }
+        }
+        console.log(_unboxedItems);
+        parseBoxes(_boxedItems, _unboxedItems);
+        setTimeout(() => {
+            _unboxedItems.splice(deletedKey, 1);
+            parseBoxes(_boxedItems, _unboxedItems);
+        }, 3000);
     }
 
     return (
@@ -164,12 +217,12 @@ export default function Account() {
             </TabList>
             <TabPanels>
                 <TabPanel m='auto' w='80%'>
-                    <SimpleGrid columns={[1, null, 4]} >
+                    <SimpleGrid columns={[1, null, 4]}>
                         {isLoading ? skeletons(8) : boxedItems.length===0 ? <EmptyList /> : boxedItems}
                     </SimpleGrid>
                 </TabPanel>
                 <TabPanel m='auto' w='80%'>
-                    <SimpleGrid columns={[1, null, 4]} >
+                    <SimpleGrid columns={[1, null, 4]}>
                         {isLoading ? skeletons(8) : unboxedItems.length===0 ? <EmptyList /> : unboxedItems}
                     </SimpleGrid>
                 </TabPanel>

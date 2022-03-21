@@ -165,6 +165,7 @@ const ListedCard = (props) => {
       <Box
       maxW="xs"
       mx="auto"
+      h="lg"
       bg={useColorModeValue("white", "gray.200")}
       shadow="lg"
       rounded="lg"
@@ -262,7 +263,7 @@ const ListedCard = (props) => {
       >
           {currentAccount.toLowerCase()===owner.toLowerCase() ? 
           <>
-          <Button mb={3} size="md" bg={buttonbg} color={bg}
+          <Button mb={3} mt={-2} size="md" bg={buttonbg} color={bg}
           fontWeight="bold" rounded="lg" textTransform="uppercase"
           _hover={{
               bg: "gray.500",
@@ -274,7 +275,7 @@ const ListedCard = (props) => {
           >
               EDIT
           </Button>
-          <Button mb={3} size="md" bg={buttonbg} color={bg}
+          <Button mb={3} mt={-2} size="md" bg={buttonbg} color={bg}
           fontWeight="bold" rounded="lg" textTransform="uppercase"
           _hover={{
               bg: "gray.500",

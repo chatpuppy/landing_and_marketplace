@@ -22,6 +22,7 @@ const EmptyList = () => {
       <Box
       maxW="xs"
       mx="auto"
+      h="lg"
       bg={useColorModeValue("white","gray.200")}
       shadow="lg"
       rounded="lg"
