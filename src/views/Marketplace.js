@@ -16,6 +16,7 @@ import { useAuth } from 'contexts/AuthContext';
 import PageName from 'components/PageName';
 import EmptyList from 'components/EmptyList';
 import { MARKETPLACE_ADDRESS, NFT_TOKEN_ADDRESS } from 'constants';
+import {skeleton} from '../components/common/LoadingSkeleton'
 
 export default function Marketplace() {
 
@@ -51,6 +52,7 @@ export default function Marketplace() {
             const _metadata = await NFTCoreConnectedContract.tokenMetaData(_order.tokenId);
             listedOrdersArr.push({
                 orderId: ordersArr[i],
+                deleted: false,
                 ..._order,
                 ..._metadata,
                 ...{unboxed: _metadata._artifacts > 0},
@@ -89,12 +91,6 @@ export default function Marketplace() {
     }
   }, [getListedNFTs, toast])
   
-  const skeleton = <Flex w="full" p={5}>
-      <Box w="md" pl={10} pr={10} pt={20} pd={20} h="lg" maxW="md" max="auto" shadow="lg" rounded="lg" bg={useColorModeValue("gray.50", "gray.700")}>
-      <SkeletonCircle size="100"/><SkeletonText mt='6' noOfLines={6} spacing='4'/>
-      </Box>
-      </Flex>;
-
   const skeletons = (count) => {
     let arr = [];
     for(let i = 0; i < count; i++) {

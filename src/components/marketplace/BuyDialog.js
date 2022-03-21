@@ -18,7 +18,7 @@ export default function BuyDialog(props) {
 
     const { currentAccount } = useAuth()
     const toast = useToast();
-    const { tokenId, price, orderId } = props;
+    const { tokenId, price, orderId, callback } = props;
     const [ isLoading, setIsLoading ] = useState(false);
     const [isOpen, setIsOpen] = useState(false)
     const [ hiddenConfirmationProgress, setHiddenConfirmationProgress] = useState(true);
@@ -67,6 +67,7 @@ export default function BuyDialog(props) {
                 await tx.wait(2);
                 setConfirmationProgressData({step: '5/5', value: 100, message: 'You have got 2 confirmations, done!'});
 
+                callback(orderId);
                 setTimeout(() => {
                     setIsLoading(false);
                     setIsOpen(false)

@@ -103,7 +103,7 @@ export default function ListNFT(props) {
 
     return (
       <>
-        <Button size="md" bg={buttonbg} color={bg} mb={3}
+        <Button size="md" bg={buttonbg} color={bg} mb={3} mt={-2}
           fontWeight="bold" rounded="lg" textTransform="uppercase"
           _hover={{
             bg: "gray.500",

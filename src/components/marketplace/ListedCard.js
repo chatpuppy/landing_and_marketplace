@@ -21,7 +21,7 @@ const ListedCard = (props) => {
 
   let navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { tokenId, owner, orderId, price, unboxed, metadata } = props;
+  const { tokenId, owner, orderId, price, unboxed, metadata, callback, updatePriceCallback } = props;
   const { currentAccount } = useAuth();
   const bg = useColorModeValue("gray.700", "gray.200")
   const buttonbg = useColorModeValue("white", "gray.900")
@@ -64,6 +64,7 @@ const ListedCard = (props) => {
           duration: 4000,
           isClosable: true,
         })
+        callback(orderId);
       } catch(err) {
         if(err.code === 4001) {
           toast({
@@ -110,6 +111,7 @@ const ListedCard = (props) => {
         await tx.wait(2);
         setConfirmationProgressData({step: '3/3', value: 100, message: 'You have got 2 confirmations, done!'});
 
+        updatePriceCallback(orderId, ethers.utils.parseEther(''+priceRef.current.value));
         setTimeout(() => {
           setIsUpdatingPrice(false);
           onClose();
@@ -273,7 +275,7 @@ const ListedCard = (props) => {
           }}
           onClick={onOpen}
           >
-              EDIT
+              Edit Price
           </Button>
           <Button mb={3} mt={-2} size="md" bg={buttonbg} color={bg}
           fontWeight="bold" rounded="lg" textTransform="uppercase"
@@ -290,7 +292,12 @@ const ListedCard = (props) => {
           </Button>
           </>
           : 
-          <BuyDialog price={price} tokenId={tokenId} orderId={orderId}/>
+          <BuyDialog 
+            price={price} 
+            tokenId={tokenId} 
+            orderId={orderId}
+            callback={(orderId) => callback(orderId)}
+          />
           }
         </Flex>
       </Box>

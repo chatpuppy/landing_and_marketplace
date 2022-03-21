@@ -14,6 +14,7 @@ import { AiOutlineStar } from "react-icons/ai"
 import { BsBoxSeam } from "react-icons/bs"
 import EmptyList from 'components/EmptyList';
 import {NFT_TOKEN_ADDRESS, MARKETPLACE_ADDRESS} from 'constants';
+import {skeleton} from '../components/common/LoadingSkeleton'
 
 export default function Account() {
     const NFT_core_contract_address = NFT_TOKEN_ADDRESS
@@ -138,11 +139,11 @@ export default function Account() {
     
     const color = useColorModeValue("black", "white");
 
-    const skeleton = <Flex w="full" p={5}>
-    <Box w="md" pl={10} pr={10} pt={20} pd={20} h="lg" maxW="md" max="auto" shadow="lg" rounded="lg" bg={useColorModeValue("gray.50", "gray.700")}>
-    <SkeletonCircle size="100"/><SkeletonText mt='6' noOfLines={6} spacing='4'/>
-    </Box>
-    </Flex>;
+    // const skeleton = <Flex w="full" p={5}>
+    // <Box w="md" pl={10} pr={10} pt={20} pd={20} h="lg" maxW="md" max="auto" shadow="lg" rounded="lg" bg={useColorModeValue("gray.50", "gray.700")}>
+    // <SkeletonCircle size="100"/><SkeletonText mt='6' noOfLines={6} spacing='4'/>
+    // </Box>
+    // </Flex>;
 
     const skeletons = (count) => {
         let arr = [];
@@ -158,7 +159,6 @@ export default function Account() {
     }
 
     const deleteFromBoxedItems = (key) => {
-        // ######
         console.log('deleteFromBoxedItems', _boxedItems)
         let deletedKey = 0;
         for(let i = 0; i < _boxedItems.length; i++) {
@@ -178,7 +178,6 @@ export default function Account() {
     }
 
     const deleteFromUnboxedItems = (key) => {
-        // ######
         console.log('deleteFromUnboxedItems', _unboxedItems);
         let deletedKey = 0;
         for(let i = 0; i < _unboxedItems.length; i++) {

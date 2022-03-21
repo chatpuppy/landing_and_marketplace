@@ -3,6 +3,7 @@ import { useAuth } from 'contexts/AuthContext';
 import ListedCard from './ListedCard';
 import { Stack, Skeleton } from '@chakra-ui/react';
 import EmptyList from 'components/EmptyList';
+import {skeleton} from '../common/LoadingSkeleton';
 
 export default function OnSaleNFTs() {
 
@@ -10,42 +11,51 @@ export default function OnSaleNFTs() {
     const [ onSaleItems, setOnSaleItems ] = useState([]);
     const [ isLoading, setIsLoading ] = useState();
 
+    let _onSaleNFTs = [];
+    
     const setOnSaleNFTs = useCallback(async() => {
         setIsLoading(true);
         if(!currentAccount) return;
-        let _ownedListedNFTs = [];
         try {
-            for(let i=0; i<listedNFTs.length; i++) {
-                if(listedNFTs[i]['seller'].toLowerCase() !== currentAccount.toLowerCase()) {
-                    _ownedListedNFTs.push(listedNFTs[i])
-                }
-            }
-            if(onSaleItems.length<_ownedListedNFTs.length) {
-                setOnSaleItems(onSaleItems.concat(Array.from({length: _ownedListedNFTs.length}, (_, i) => i).map((number, index) => 
-                    <ListedCard 
-                        key={parseInt(_ownedListedNFTs[index]['tokenId']["_hex"], 16)} 
-                        tokenId={parseInt(_ownedListedNFTs[index]['tokenId']["_hex"], 16)} 
-                        owner={_ownedListedNFTs[index]['seller']}
-                        orderId={_ownedListedNFTs[index]['orderId']}
-                        price={_ownedListedNFTs[index]['price']}
-                        unboxed={_ownedListedNFTs[index]['unboxed']}
-                        metadata={_ownedListedNFTs[index]['_artifacts']}
-                        dna={_ownedListedNFTs[index]['_dna']}
-                        paymentToken={_ownedListedNFTs[index]['paymentToken']}
-                    />
-                )))
+            if(_onSaleNFTs.length !== 0 && onSaleItems.length === 0) {
+                let arr = [];
+                _onSaleNFTs.map((number, index) => {
+                    if(_onSaleNFTs[index].deleted) arr.push(skeleton);
+                    else arr.push(
+                        <ListedCard 
+                            key={parseInt(_onSaleNFTs[index]['tokenId']["_hex"], 16)} 
+                            tokenId={parseInt(_onSaleNFTs[index]['tokenId']["_hex"], 16)} 
+                            owner={_onSaleNFTs[index]['seller']}
+                            orderId={_onSaleNFTs[index]['orderId']}
+                            price={_onSaleNFTs[index]['price']}
+                            unboxed={_onSaleNFTs[index]['unboxed']}
+                            metadata={_onSaleNFTs[index]['_artifacts']}
+                            dna={_onSaleNFTs[index]['_dna']}
+                            paymentToken={_onSaleNFTs[index]['paymentToken']}
+                            callback={(orderId) => deleteFromOnSaleItems(orderId)}
+                        />
+                    )
+                });
+                setOnSaleItems(arr);
+            } else {
+                setOnSaleItems(<EmptyList />);
             }
         } catch(err) {
             console.log(err)
         } finally {
             setIsLoading(false)
         }
-    }, [currentAccount, listedNFTs, setOnSaleItems, onSaleItems])
+    }, [currentAccount])
 
     useEffect(() => {
         let isConnected = false;
         if(!isConnected) {
             if(listedNFTs) {
+                for(let i=0; i<listedNFTs.length; i++) {
+                    if(listedNFTs[i]['seller'].toLowerCase() !== currentAccount.toLowerCase()) {
+                        _onSaleNFTs.push(listedNFTs[i])
+                    }
+                }
                 setOnSaleNFTs();
             }
         }
@@ -53,22 +63,35 @@ export default function OnSaleNFTs() {
         return () => {
             isConnected = true;
         }
-    }, [setOnSaleNFTs, listedNFTs])
+    }, [listedNFTs])
     
     const deleteFromOnSaleItems = (key) => {
-        // ######
+        let deletedKey = 0;
+        for(let i=0; i < _onSaleNFTs.length; i++) {
+            const item = _onSaleNFTs[i];
+            if(parseInt(item.orderId) === parseInt(key)) {
+                item.deleted = true;
+                deletedKey = i;
+                break;
+            }
+        }
+        setOnSaleNFTs();
+        setTimeout(() => {
+            _onSaleNFTs.splice(deletedKey, 1);
+            setOnSaleNFTs();
+        }, 3000);
     }
 
     return (
         <>
             {onSaleItems.length===0 ?
-            isLoading ?
-            <Stack p={50}>
-                <Skeleton bg="gray.400" height='20px' />
-                <Skeleton bg="gray.400" height='60vh' />
-                <Skeleton bg="gray.400" height='20px' />
-            </Stack>
-            :
+            // isLoading ?
+            // <Stack p={50}>
+            //     <Skeleton bg="gray.400" height='20px' />
+            //     <Skeleton bg="gray.400" height='60vh' />
+            //     <Skeleton bg="gray.400" height='20px' />
+            // </Stack>
+            // :
             <EmptyList />
             :
             onSaleItems
