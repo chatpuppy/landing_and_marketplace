@@ -9,7 +9,7 @@ import { ethers } from "ethers";
 import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
 import { useNavigate } from "react-router-dom";
 import BuyDialog from "./BuyDialog";
-import { MARKETPLACE_ADDRESS, ETHERSCAN_BASE_URL } from "constants";
+import { MARKETPLACE_ADDRESS, ETHERSCAN_BASE_URL, TOKEN_SYMBOL } from "constants";
 import { sortLayer, mergeLayers, parseMetadata } from "avatar";
 import mergeImages from 'merge-images';
 import BoxImageSrc from "assets/mysteryBox.jpg"
@@ -252,7 +252,7 @@ const ListedCard = (props) => {
           fontSize="md"
           fontWeight="bold"
         >
-          Price: {parseInt(price["_hex"], 16)/Math.pow(10, 18)} CPT
+          Price: {parseInt(price["_hex"], 16)/Math.pow(10, 18)} {TOKEN_SYMBOL}
         </chakra.h1>
       </Box>
       <Flex

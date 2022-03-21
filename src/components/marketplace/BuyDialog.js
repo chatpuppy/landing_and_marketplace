@@ -8,7 +8,7 @@ import cpt_abi from "abi/cpt_abi.json"
 import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
 import { ethers } from "ethers";
 import { useAuth } from 'contexts/AuthContext';
-import {TOKEN_ADDRESS, MARKETPLACE_ADDRESS} from 'constants';
+import {TOKEN_ADDRESS, MARKETPLACE_ADDRESS, TOKEN_SYMBOL} from 'constants';
 import ConfirmationProgress from '../ConfirmationProgress';
 
 export default function BuyDialog(props) {
@@ -149,7 +149,7 @@ export default function BuyDialog(props) {
                 </AlertDialogHeader>
                 <ModalCloseButton/>
                 <AlertDialogBody>
-                    {approved ? 'Buy' : 'Approve'} ID #{tokenId} for {parseInt(price["_hex"], 16)/ Math.pow(10, 18)} CPT
+                    {approved ? 'Buy' : 'Approve'} ID #{tokenId} for {parseInt(price["_hex"], 16)/ Math.pow(10, 18)} {TOKEN_SYMBOL}
                     <Box h={5}></Box>
                     <ConfirmationProgress 
                         hidden={hiddenConfirmationProgress}
