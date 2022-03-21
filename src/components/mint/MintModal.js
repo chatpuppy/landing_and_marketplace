@@ -240,14 +240,14 @@ const MintModal = (props) => {
             h={12}
             bgGradient="linear(to-r, brand.200,brand.200)"
             color={'white'}
-            // _hover={{
-            //     bgGradient: 'linear(to-r, brand.150,brand.150)',
-            //     boxShadow: 'xl',
-            // }}
-            // _active={{
-            //     bgGradient: 'linear(to-r, brand.200,brand.200)',
-            //     boxShadow: 'xl',
-            // }}
+            _hover={{
+                // bgGradient: 'linear(to-r, brand.150,brand.150)',
+                boxShadow: 'xl',
+            }}
+            _active={{
+                // bgGradient: 'linear(to-r, brand.200,brand.200)',
+                boxShadow: 'xl',
+            }}
             onClick={mint}
             isLoading={isLoadingMint}
             isDisabled={isLoadingMintAndUnbox}

@@ -57,14 +57,24 @@ const EmptyList = () => {
         py={2}
         roundedBottom="lg"
       >
-          <Button mb={3} bg={buttonbg} 
-          // _hover={{
-          //     bg: "gray.500",
-          // }}
-          // _focus={{
-          //     bg: "gray.600",
-          // }} 
-          onClick={()=>{navigate("/mint")}}>Mint</Button>
+          <Button 
+            mb={3} 
+            bgGradient="linear(to-r, brand.500, brand.500)" 
+            color={'gray.600'}
+            _hover={{
+              // bgGradient: 'linear(to-r, brand.150, brand.150)',
+              boxShadow: 'xl',
+            }}
+            _active={{
+              // bgGradient: 'linear(to-r, brand.200, brand.200)',
+              boxShadow: 'xl',
+            }}
+            // _focus={{
+            //     bg: "gray.600",
+            // }} 
+            onClick={()=>{navigate("/mint")}}>
+              Mint
+          </Button>
         </Flex>
       </Box>
       

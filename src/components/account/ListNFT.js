@@ -64,7 +64,10 @@ export default function ListNFT(props) {
           setConfirmationProgressData({step: '4/5', value: 80, message: 'List NFT and wait confirmation...'});
           await tx.wait(2);
           setConfirmationProgressData({step: '5/5', value: 100, message: 'You have got 2 confirmations, done!'})
-          callback(number);
+
+          setTimeout(() => {
+            callback(number);
+          }, 2000);
         } catch(err) {
           if(err.code === 4001) {
             toast({
@@ -98,14 +101,23 @@ export default function ListNFT(props) {
 
     return (
       <>
-        <Button size="md" bg={buttonbg} color={bg} mb={3} mt={-2}
-          fontWeight="bold" rounded="lg" textTransform="uppercase"
-          // _hover={{
-          //   bg: "gray.500",
-          // }}
-          // _focus={{
-          //   bg: "gray.600",
-          // }}
+        <Button 
+          size="md" 
+          mb={3} 
+          mt={3}
+          fontWeight="bold" 
+          rounded="lg" 
+          textTransform="uppercase"
+          color={'gray.600'}
+          bgGradient="linear(to-r, brand.500,brand.500)"
+          _hover={{
+            // bgGradient: 'linear(to-r, brand.150, brand.150)',
+            boxShadow: 'xl',
+          }}
+          _active={{
+            // bgGradient: 'linear(to-r, brand.200, brand.200)',
+            boxShadow: 'xl',
+          }}
           onClick={onOpen}
           isLoading={isLoading}
         >

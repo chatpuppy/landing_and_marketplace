@@ -264,28 +264,42 @@ const ListedCard = (props) => {
       >
           {currentAccount.toLowerCase()===owner.toLowerCase() ? 
           <>
-          <Button mb={3} mt={-2} size="md" bg={buttonbg} color={bg}
-          fontWeight="bold" rounded="lg" textTransform="uppercase"
-          // _hover={{
-          //     bg: "gray.500",
-          // }}
-          // _focus={{
-          //     bg: "gray.600",
-          // }}
-          onClick={onOpen}
-          >
-              Edit Price
+          <Button 
+            mb={3} 
+            mt={-2} 
+            size="md" 
+            bgGradient="linear(to-r, brand.500,brand.500)" 
+            color={'gray.600'}
+            fontWeight="bold" rounded="lg" textTransform="uppercase"
+            _hover={{
+              // bgGradient: 'linear(to-r, brand.150, brand.150)',
+              boxShadow: 'xl',
+            }}
+            _active={{
+              // bgGradient: 'linear(to-r, brand.200, brand.200)',
+              boxShadow: 'xl',
+            }}
+            onClick={onOpen}
+            >
+                Edit Price
           </Button>
-          <Button mb={3} mt={-2} size="md" bg={buttonbg} color={bg}
-          fontWeight="bold" rounded="lg" textTransform="uppercase"
-          // _hover={{
-          //     bg: "gray.500",
-          // }}
-          // _focus={{
-          //     bg: "gray.600",
-          // }}
-          onClick={unlistNFT}
-          isLoading={isLoading}
+          <Button 
+            mb={3} 
+            mt={-2} 
+            size="md" 
+            bgGradient="linear(to-r, brand.500,brand.500)" 
+            color={'gray.600'}
+            fontWeight="bold" rounded="lg" textTransform="uppercase"
+            _hover={{
+              // bgGradient: 'linear(to-r, brand.150, brand.150)',
+              boxShadow: 'xl',
+            }}
+            _active={{
+              // bgGradient: 'linear(to-r, brand.200, brand.200)',
+              boxShadow: 'xl',
+            }}
+            onClick={unlistNFT}
+            isLoading={isLoading}
           >
               UNLIST
           </Button>

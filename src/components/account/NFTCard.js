@@ -220,6 +220,8 @@ const NFTCard = (props) => {
           >
             Id #{number}
           </chakra.h1>
+        </Box>
+        <Box px={4} mt={-6}>
           <chakra.h1
             color={useColorModeValue("gray.800", "gray.800")}
             fontSize="sm"
@@ -298,11 +300,20 @@ const NFTCard = (props) => {
             bg={bg}
             roundedBottom="lg"
         >
-          <Button size="md" bg={buttonbg} color={bg}
+          <Button 
+            size="md" 
+            bg={buttonbg} 
+            color={bg}
             fontWeight="bold" rounded="lg" textTransform="uppercase"
-            // _hover={{
-            //   bg: "gray.500",
-            // }}
+            bgGradient="linear(to-r, brand.500,brand.500)"
+            _hover={{
+              // bgGradient: 'linear(to-r, brand.150, brand.150)',
+              boxShadow: 'xl',
+            }}
+            _active={{
+              // bgGradient: 'linear(to-r, brand.200, brand.200)',
+              boxShadow: 'xl',
+            }}
             // _focus={{
             //   bg: "gray.600",
             // }}

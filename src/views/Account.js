@@ -78,36 +78,48 @@ export default function Account() {
     
     const parseBoxes = (_boxedItems, _unboxedItems) => {
         if(_boxedItems.length !== 0 && boxedItems.length === 0) {
-            setBoxedItems(boxedItems.concat(Array.from({length: _boxedItems.length}, (_, i) => i).map((number, index)=> {
-            if(_boxedItems[index].deleted) return skeleton(index);
-            else return <NFTCard 
-                key={_boxedItems[index].id * 1} 
-                number={_boxedItems[index].id} 
-                unboxed={false}
-                metadata={_boxedItems[index].metadata}
-                dna={_boxedItems[index].dna}
-                src={BoxImageSrc}
-                uri={''}
-                callback={(tokenId, type) => deleteFromBoxedItems(tokenId, type)}
-            />}
-            )))
+            let arr = [];
+            try{
+                _boxedItems.map((data, index) => {
+                if(_boxedItems[index].deleted) arr.push(skeleton(index));
+                else arr.push(<NFTCard 
+                    key={_boxedItems[index].id * 1} 
+                    number={_boxedItems[index].id} 
+                    unboxed={false}
+                    metadata={_boxedItems[index].metadata}
+                    dna={_boxedItems[index].dna}
+                    src={BoxImageSrc}
+                    uri={''}
+                    callback={(tokenId, type) => deleteFromBoxedItems(tokenId, type)}
+                />)}
+                )
+                setBoxedItems(arr);
+            } catch(e){
+                console.log(e);
+            }
         } else {
             setBoxedItems(<EmptyList/>);
         }
         if(_unboxedItems.length !== 0 && unboxedItems.length === 0) {
-            setUnboxedItems(unboxedItems.concat(Array.from({length: _unboxedItems.length}, (_, i) => i).map((number, index)=> {
-            if(_unboxedItems[index].deleted) return skeleton(index);
-            else return <NFTCard 
-                key={_unboxedItems[index].id * 1} 
-                number={_unboxedItems[index].id} 
-                unboxed={true}
-                metadata={_unboxedItems[index].metadata}
-                dna={_unboxedItems[index].dna}
-                src={null}
-                uri={_unboxedItems[index].uri}
-                callback={(tokenId, type) => deleteFromUnboxedItems(tokenId, type)}
-            />}
-            )))
+            let arr = [];
+            try {
+                _unboxedItems.map((data, index) => {
+                if(_unboxedItems[index].deleted) arr.push(skeleton(index));
+                else arr.push(<NFTCard 
+                    key={_unboxedItems[index].id * 1} 
+                    number={_unboxedItems[index].id} 
+                    unboxed={true}
+                    metadata={_unboxedItems[index].metadata}
+                    dna={_unboxedItems[index].dna}
+                    src={null}
+                    uri={_unboxedItems[index].uri}
+                    callback={(tokenId, type) => deleteFromUnboxedItems(tokenId, type)}
+                />)}
+                )
+                setUnboxedItems(arr);    
+            } catch(e) {
+                console.log(e);
+            }
         } else {
             setUnboxedItems(<EmptyList/>);
         }
@@ -158,7 +170,7 @@ export default function Account() {
         let deletedKey = 0;
         for(let i = 0; i < _boxedItems.length; i++) {
             const item = _boxedItems[i];
-            if(item.id === key) {
+            if(parseInt(item.id) === parseInt(key)) {
                 item.deleted = true;
                 deletedKey = i;
                 break;
@@ -177,7 +189,7 @@ export default function Account() {
         let deletedKey = 0;
         for(let i = 0; i < _unboxedItems.length; i++) {
             const item = _unboxedItems[i];
-            if(item.id === key) {
+            if(parseInt(item.id) === parseInt(key)) {
                 item.deleted = true;
                 deletedKey = i;
                 break;
