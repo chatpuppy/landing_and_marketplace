@@ -5,6 +5,7 @@ import { useAuth } from "contexts/AuthContext";
 import { useDonate } from "contexts/DonateContext";
 import { getNameSaleById } from "utils/getNameSaleById";
 import PriceRangeComponent  from "./PriceRangeComponent";
+import {CHAIN_ID, CHAIN_NAME} from '../../constants';
 
 import { ethers } from "ethers";
 
@@ -20,7 +21,7 @@ export const BeneficiaryView = () => {
     let participant = uint8[0];
 
     const actionRedeem = async() => {
-      if (!currentAccount && !currentNetwork === 42) return 0
+      if (!currentAccount && !currentNetwork === CHAIN_ID) return 0
       setIsLoading(true);
       try {
         await tokenVestingContract.redeem(participant)
@@ -41,7 +42,7 @@ export const BeneficiaryView = () => {
     }
 
     const actionRelease = async() => {
-      if (!currentAccount && !currentNetwork === 42) return 0
+      if (!currentAccount && !currentNetwork === CHAIN_ID) return 0
       setIsLoading(true);
       try {
         await tokenVestingContract.release(participant)

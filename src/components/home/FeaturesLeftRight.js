@@ -2,12 +2,9 @@ import React from "react";
 import Design2 from "assets/design2.png"
 import Design3 from "assets/design3.png"
 import Design4 from "assets/design4.png"
-import { Link as RouterLink } from "react-router-dom";
 import {
   Box, chakra, SimpleGrid, useColorModeValue,
   Image,
-  ButtonGroup,
-  Button
 } from "@chakra-ui/react";
 
 export default function FeaturesLeftRight() {

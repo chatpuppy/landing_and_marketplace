@@ -1,18 +1,15 @@
 import React, { useState } from "react";
-import { Box, Flex, Image, Badge, useColorModeValue, Button, Center, useToast, Spinner } from "@chakra-ui/react";
-import { StarIcon } from "@chakra-ui/icons";
+import { Box, Flex, Image, useColorModeValue, Button, useToast, Spinner } from "@chakra-ui/react";
 import BoxImageSrc from "assets/mysteryBox.jpg"
 import { ethers } from "ethers";
-import nft_manager_abi from "abi/nft_manager_abi";
 import nft_manager_v2_abi from "abi/nft_manager_v2_abi.json"
 import { useAuth } from "contexts/AuthContext";
-import { NFT_MANAGER_ADDRESS, NFT_MANAGER_V2_ADDRESS, TOKEN_NAME} from 'constants';
+import { CHAIN_ID, CHAIN_NAME, NFT_MANAGER_V2_ADDRESS, TOKEN_NAME} from 'constants';
 import ConfirmationProgress from '../ConfirmationProgress';
 
 const MintModal = (props) => {
 
     const [ isLoadingMint, setIsLoadingMint ] = useState(false);
-    const [ isLoadingMintAndUnbox, setIsLoadingMintAndUnbox ] = useState(false);
     const { currentAccount, currentNetwork } = useAuth()
     const [ hiddenConfirmationProgress, setHiddenConfirmationProgress] = useState(true);
     const [ confirmationProgressData, setConfirmationProgressData ] = useState({value: 5, message: 'Start', step: 1});
@@ -59,19 +56,19 @@ const MintModal = (props) => {
         return;
       }
 
-      // if(currentNetwork!==42) {
-      //   if (!toast.isActive(id)) {
-      //     toast({
-      //       id,
-      //       title: 'Wrong network',
-      //       description: "Please change network to Kovan Testnet",
-      //       status: 'error',
-      //       duration: 4000,
-      //       isClosable: true,
-      //     })
-      //   }
-      //   return;
-      // }
+      if(currentNetwork!==CHAIN_ID) {
+        if (!toast.isActive(id)) {
+          toast({
+            id,
+            title: 'Wrong network',
+            description: `Please change network to ${CHAIN_NAME}`,
+            status: 'error',
+            duration: 4000,
+            isClosable: true,
+          })
+        }
+        return;
+      }
 
       setIsLoadingMint(true);
 
@@ -121,87 +118,87 @@ const MintModal = (props) => {
       }
     }
 
-    const mintAndUnbox = async() => {
+    // const mintAndUnbox = async() => {
 
-      if(!window.ethereum) {
-        if (!toast.isActive(id)) {
-          toast({
-            id,
-            title: 'No wallet found',
-            description: "Please install Metamask",
-            status: 'error',
-            duration: 4000,
-            isClosable: true,
-          })
-        }
-        return;
-      } 
+    //   if(!window.ethereum) {
+    //     if (!toast.isActive(id)) {
+    //       toast({
+    //         id,
+    //         title: 'No wallet found',
+    //         description: "Please install Metamask",
+    //         status: 'error',
+    //         duration: 4000,
+    //         isClosable: true,
+    //       })
+    //     }
+    //     return;
+    //   } 
 
-      if(!currentAccount) {
-        if (!toast.isActive(id)) {
-          toast({
-            id,
-            title: 'Not connected',
-            description: "Please connect an account",
-            status: 'error',
-            duration: 4000,
-            isClosable: true,
-          })
-        }
-        return;
-      }
+    //   if(!currentAccount) {
+    //     if (!toast.isActive(id)) {
+    //       toast({
+    //         id,
+    //         title: 'Not connected',
+    //         description: "Please connect an account",
+    //         status: 'error',
+    //         duration: 4000,
+    //         isClosable: true,
+    //       })
+    //     }
+    //     return;
+    //   }
 
-      // if(currentNetwork!==42) {
-      //   if (!toast.isActive(id)) {
-      //     toast({
-      //       id,
-      //       title: 'Wrong network',
-      //       description: "Please change network to Kovan Testnet",
-      //       status: 'error',
-      //       duration: 4000,
-      //       isClosable: true,
-      //     })
-      //   }
-      //   return;
-      // }
+    //   if(currentNetwork !== CHAIN_ID) {
+    //     if (!toast.isActive(id)) {
+    //       toast({
+    //         id,
+    //         title: 'Wrong network',
+    //         description: `Please change network to ${CHAIN_NAME}`,
+    //         status: 'error',
+    //         duration: 4000,
+    //         isClosable: true,
+    //       })
+    //     }
+    //     return;
+    //   }
 
-      setIsLoadingMintAndUnbox(true)
+    //   setIsLoadingMintAndUnbox(true)
       
-      try {
-          const { ethereum } = window; //injected by metamask
-          //connect to an ethereum node
-          const provider = new ethers.providers.Web3Provider(ethereum); 
-          //gets the account
-          const signer = provider.getSigner();
-          //connects with the contract
-          const options = {value: ethers.utils.parseEther((count*boxPrice).toString())}
-          const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_v2_abi, signer);
-          try {
-            await NFTManagerConnectedContract.buyMintAndUnbox(options);
-            toast({
-              title: 'Minted & Unboxed!',
-              description: "Unboxed a Mystery Box!",
-              status: 'success',
-              duration: 4000,
-              isClosable: true,
-            })
-            setTimeout(()=>{
-                window.location.reload();
-            }, 5000)
-          } catch(err) {
-            toast({
-              title: 'Buy, mint and unbox NFT error',
-              description: `${err.data.message}`,
-              status: 'error',
-              duration: 4000,
-              isClosable: true,
-            });
-            setIsLoadingMintAndUnbox(false);
-          }
-      } catch(err) {
-          console.log(err)
-      }
-    }
+    //   try {
+    //       const { ethereum } = window; //injected by metamask
+    //       //connect to an ethereum node
+    //       const provider = new ethers.providers.Web3Provider(ethereum); 
+    //       //gets the account
+    //       const signer = provider.getSigner();
+    //       //connects with the contract
+    //       const options = {value: ethers.utils.parseEther((count*boxPrice).toString())}
+    //       const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_v2_abi, signer);
+    //       try {
+    //         await NFTManagerConnectedContract.buyMintAndUnbox(options);
+    //         toast({
+    //           title: 'Minted & Unboxed!',
+    //           description: "Unboxed a Mystery Box!",
+    //           status: 'success',
+    //           duration: 4000,
+    //           isClosable: true,
+    //         })
+    //         setTimeout(()=>{
+    //             window.location.reload();
+    //         }, 5000)
+    //       } catch(err) {
+    //         toast({
+    //           title: 'Buy, mint and unbox NFT error',
+    //           description: `${err.data.message}`,
+    //           status: 'error',
+    //           duration: 4000,
+    //           isClosable: true,
+    //         });
+    //         setIsLoadingMintAndUnbox(false);
+    //       }
+    //   } catch(err) {
+    //       console.log(err)
+    //   }
+    // }
 
     return (
     <Flex
@@ -250,7 +247,6 @@ const MintModal = (props) => {
             }}
             onClick={mint}
             isLoading={isLoadingMint}
-            isDisabled={isLoadingMintAndUnbox}
             >
             Mint
         </Button>

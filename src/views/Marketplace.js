@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Footer from 'components/Footer';
 import NavBar from 'components/NavBar';
-import { Tabs, TabList, Tab, TabPanels, TabPanel, SimpleGrid,
-  useColorModeValue, useToast, Stack, SkeletonCircle, SkeletonText, Box, Flex
-} from '@chakra-ui/react';
+import { Tabs, TabList, Tab, TabPanels, TabPanel, SimpleGrid, useColorModeValue, useToast} from '@chakra-ui/react';
 import { AiOutlineStar } from "react-icons/ai"
 import { BsBoxSeam } from "react-icons/bs"
 import OnSaleNFTs from 'components/marketplace/OnSaleNFTs';
@@ -12,11 +10,11 @@ import { ethers } from "ethers";
 import nft_marketplace_abi from "abi/nft_marketplace_abi.json";
 import nft_core_abi from "abi/nft_core_abi.json";
 import { useAuth } from 'contexts/AuthContext';
-// import FAQ from 'components/FAQ';
-import PageName from 'components/PageName';
+// import PageName from 'components/PageName';
 import EmptyList from 'components/EmptyList';
 import { MARKETPLACE_ADDRESS, NFT_TOKEN_ADDRESS } from 'constants';
 import {skeleton} from '../components/common/LoadingSkeleton'
+import AddressFooter from 'components/AddressFooter';
 
 export default function Marketplace() {
 
@@ -161,7 +159,7 @@ export default function Marketplace() {
             </TabPanels>
         </Tabs>
       }
-      {/* <FAQ /> */}
+      <AddressFooter/>
       <Footer />
       </>
   );

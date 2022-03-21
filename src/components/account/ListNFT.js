@@ -2,34 +2,28 @@ import React, { useState, useRef } from 'react'
 import {
     Modal, ModalOverlay, ModalContent,
     ModalHeader, ModalBody, Select,
-    ModalCloseButton, Button, useDisclosure, useToast,
-    useColorModeValue, FormControl, FormLabel, Input, Box
+    ModalCloseButton, Button, useDisclosure, useToast, 
+    FormControl, FormLabel, Input, Box
 } from '@chakra-ui/react'
 import { ethers } from "ethers";
 import nft_core_abi from "abi/nft_core_abi.json"
 import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
 import { useAuth } from 'contexts/AuthContext';
-import { useNavigate } from "react-router-dom";
 import { TOKEN_ADDRESS, NFT_TOKEN_ADDRESS, MARKETPLACE_ADDRESS, TOKEN_SYMBOL } from 'constants';
 import ConfirmationProgress from '../ConfirmationProgress';
 
 export default function ListNFT(props) {
 
     const { number, callback } = props;
-    let navigate = useNavigate();
     const toast = useToast();
 
     const [ isLoading, setIsLoading ] = useState(false);
     const [ token, setToken ] = useState(TOKEN_ADDRESS);
     const [ hiddenConfirmationProgress, setHiddenConfirmationProgress] = useState(true);
     const [ confirmationProgressData, setConfirmationProgressData ] = useState({value: 5, message: 'Start', step: 1});
-  
     const { currentAccount, approved } = useAuth()
     const priceRef = useRef();
-
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const bg = useColorModeValue("gray.700", "gray.200")
-    const buttonbg = useColorModeValue("white", "gray.900")
 
     const NFT_core_contract_address = NFT_TOKEN_ADDRESS;
     const NFT_marketplace_contract_address = MARKETPLACE_ADDRESS;

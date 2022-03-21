@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import {
-    Box, Stack, Heading, Text, Container, Button, SimpleGrid, 
+    Box, Stack, Heading, Text, Container, Button, 
     useBreakpointValue, Icon, useNumberInput, useColorModeValue,
     Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody,
     ModalCloseButton, useDisclosure
@@ -9,7 +9,7 @@ import MintModal from './MintModal';
 import { ethers } from 'ethers';
 // import nft_manager_abi from "abi/nft_manager_abi";
 import nft_manager_v2_abi from "abi/nft_manager_v2_abi";
-import { NFT_MANAGER_ADDRESS, NFT_MANAGER_V2_ADDRESS} from 'constants';
+import { NFT_MANAGER_V2_ADDRESS} from 'constants';
 
 export default function MintGrid() {
 

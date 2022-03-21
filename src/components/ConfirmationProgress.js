@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box, Progress } from "@chakra-ui/react";
-
-import { useColorModeValue } from "@chakra-ui/react";
 
 const ConfirmationProgress = (props) => {
 	const { hidden, message, value, step } = props;

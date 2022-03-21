@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Box, Text, Flex, Image, Badge, useColorModeValue, Button, Stack, useToast, Spinner, SkeletonCircle, SkeletonText, Skeleton } from "@chakra-ui/react";
+import { Box, Text, Image, useColorModeValue, Button, useToast, SkeletonCircle, SkeletonText, Heading } from "@chakra-ui/react";
 import { useAuth } from "contexts/AuthContext";
-import { sortLayer, mergeLayers, parseMetadata } from "avatar";
+import { parseMetadata } from "avatar";
 import mergeImages from 'merge-images';
 import { NFT_STORAGE_TOKEN, NFT_DESCRIPTION, NFT_NAME, NFT_TOKEN_ADDRESS } from '../../constants';
-import { NFTStorage, File, Blob } from 'nft.storage'
-import { ethers, utils, BigNumber } from "ethers";
-import nft_manager_v2_abi from "abi/nft_manager_v2_abi.json";
+import { NFTStorage, File } from 'nft.storage'
+import { ethers } from "ethers";
 import nft_core_abi from "abi/nft_core_abi.json"
 import ConfirmationProgress from '../ConfirmationProgress';
 
@@ -19,13 +18,14 @@ const UnboxModal = (props) => {
     const [ parsedMd, setParsedMd ] = useState(null);
     const [ hiddenConfirmationProgress, setHiddenConfirmationProgress] = useState(true);
     const [ confirmationProgressData, setConfirmationProgressData ] = useState({value: 5, message: 'Start...', step: 1});
+    const [ hideUploadButton, setHideUploadButton] = useState(false);
+    const [ message1, setMessage1 ] = useState("Congrat! you have got a special NFT. If you want to trade it on OpenSea, please sign and Save metadata URI.");
 
     const client = new NFTStorage({ token: NFT_STORAGE_TOKEN });
     const { currentAccount } = useAuth();
 
     const toast = useToast()
     const { artifacts, tokenId, dna, callback } = props;
-    const id = 'toast'
 
     const uploadNFT = async(imageFile, pmd) => {
       const metadata = await client.store({
@@ -66,6 +66,7 @@ const UnboxModal = (props) => {
           setImageBase64(b64);
         });
       }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [artifacts])
 
     const updateMetadata = async() => {
@@ -83,6 +84,7 @@ const UnboxModal = (props) => {
 
         try {
           setHiddenConfirmationProgress(false);
+          setHideUploadButton(false);
           setConfirmationProgressData({step: '1/3', value: 33, message: 'Start...'});
 
           const tx = await NFTCoreConnectedContract.updateTokenURI(tokenId, nftMetadata.url);
@@ -91,6 +93,9 @@ const UnboxModal = (props) => {
           setConfirmationProgressData({step: '3/3', value: 100, message: 'You have got 2 confirmations, update success...'});
           
           setIsLoading(false);
+          setMessage1('You have saved your metadata to NFT, now you can trade it on OpenSea marketplace!');
+          setHiddenConfirmationProgress(true);
+          setHideUploadButton(true);
         } catch (err) {
           if(err.code === 4001) {
             toast({
@@ -134,11 +139,14 @@ const UnboxModal = (props) => {
         color={useColorModeValue("gray.600", "white")}
         p={1}
       >
-        <Box mb={3} fontSize="sm">
+        <Heading 
+          mb={3} 
+          fontSize="md" 
+        >
         {imageBase64 !== '' ? 
-          "Congrat! you have got a special NFT. If you want to trade it on OpenSea, please sign and Save metadata URI." 
+          message1
           : "Please wait a few seconds until the image and metadata was uploaded to IPFS."}
-        </Box>
+        </Heading>
         {tokenId > 0 && imageBase64 !== '' ? 
         <Image
           rounded='lg'
@@ -155,10 +163,10 @@ const UnboxModal = (props) => {
           // color={"gray.600"}
           // bg={"gray.100"}
           rounded={10}
-          p={3}
+          p={2}
           mt={5} 
           mb={5} 
-          fontSize="sm">
+          fontSize="md">
           <Text>TokenId: #{tokenId}</Text>
           <Text>Level: {parsedMd.level}</Text>
           <Text>Exp: {parsedMd.experience}</Text>
@@ -166,24 +174,26 @@ const UnboxModal = (props) => {
           <Text>Artifacts: {artifacts.toHexString()}</Text>
           {/* <Text>DNA: {dna}</Text> */}
           {/* <Text>IPFS Cid: {nftMetadata.ipnft}</Text> */}
-          <Text>Metadata: <a href={nftMetadata.url} target="_blank" rel="noreferrer">{nftMetadata.url.substr(0, 20) + "..." + nftMetadata.url.substr(nftMetadata.url.length - 20, 20)}</a></Text>
+          <Text color={"brand.200"}><a href={nftMetadata.url} target="_blank" rel="noreferrer">{nftMetadata.url.substr(0, 20) + "..." + nftMetadata.url.substr(nftMetadata.url.length - 20, 20)}</a></Text>
         </Box>
         }
       </Box>
       <Box>
-      <ConfirmationProgress 
-        hidden={hiddenConfirmationProgress}
-        step={confirmationProgressData.step}
-        value={confirmationProgressData.value}
-        message={confirmationProgressData.message}
-      />
-      <Button 
-        w={'full'}
-        isLoading={isLoading}
-        isDisabled={nftMetadata.ipnft===''}
-        onClick={updateMetadata}>
-        Save metadata URI
-      </Button>
+        <ConfirmationProgress 
+          hidden={hiddenConfirmationProgress}
+          step={confirmationProgressData.step}
+          value={confirmationProgressData.value}
+          message={confirmationProgressData.message}
+        />
+      {hideUploadButton ? '' :
+        <Button 
+          w={'full'}
+          isLoading={isLoading}
+          isDisabled={nftMetadata.ipnft===''}
+          onClick={updateMetadata}>
+          Save metadata URI
+        </Button>
+      }
       </Box>
     </Box>
   );

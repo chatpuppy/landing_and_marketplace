@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useAuth } from 'contexts/AuthContext';
 import ListedCard from './ListedCard';
-import { Stack, Skeleton } from '@chakra-ui/react';
 import EmptyList from 'components/EmptyList';
 import {skeleton} from '../common/LoadingSkeleton';
 
@@ -44,6 +43,7 @@ export default function OnSaleNFTs() {
         } catch(err) {
             console.log(err)
         } 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentAccount])
 
     useEffect(() => {
@@ -62,6 +62,7 @@ export default function OnSaleNFTs() {
         return () => {
             isConnected = true;
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [listedNFTs])
     
     const deleteFromOnSaleItems = (key) => {

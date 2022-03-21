@@ -6,13 +6,14 @@ import { ethers } from "ethers";
 import nft_core_abi from "abi/nft_core_abi.json"
 import { SimpleGrid, useColorModeValue, useToast, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 import NFTCard from 'components/account/NFTCard';
-import PageName from 'components/PageName';
+// import PageName from 'components/PageName';
 import BoxImageSrc from "assets/mysteryBox.jpg"
 import { AiOutlineStar } from "react-icons/ai"
 import { BsBoxSeam } from "react-icons/bs"
 import EmptyList from 'components/EmptyList';
 import {NFT_TOKEN_ADDRESS, MARKETPLACE_ADDRESS} from 'constants';
 import {skeleton} from '../components/common/LoadingSkeleton'
+import AddressFooter from 'components/AddressFooter';
 
 export default function Account() {
     const NFT_core_contract_address = NFT_TOKEN_ADDRESS
@@ -84,6 +85,7 @@ export default function Account() {
         if(_boxedItems.length !== 0 && boxedItems.length === 0) {
             let arr = [];
             try{
+                // eslint-disable-next-line array-callback-return
                 _boxedItems.map((data, index) => {
                 if(_boxedItems[index].deleted) arr.push(skeleton(index));
                 else arr.push(<NFTCard 
@@ -95,8 +97,8 @@ export default function Account() {
                     src={BoxImageSrc}
                     uri={''}
                     callback={(tokenId, type) => deleteFromBoxedItems(tokenId, type)}
-                />)}
-                )
+                />)
+                })
                 setBoxedItems(arr);
             } catch(e){
                 console.log(e);
@@ -107,6 +109,7 @@ export default function Account() {
         if(_unboxedItems.length !== 0 && unboxedItems.length === 0) {
             let arr = [];
             try {
+                // eslint-disable-next-line array-callback-return
                 _unboxedItems.map((data, index) => {
                 if(_unboxedItems[index].deleted) arr.push(skeleton(index));
                 else arr.push(<NFTCard 
@@ -265,6 +268,7 @@ export default function Account() {
             </TabPanels>
         </Tabs>
         }
+        <AddressFooter/>
         <Footer />
         </>
     );

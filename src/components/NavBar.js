@@ -10,15 +10,14 @@ import {
 import { HamburgerIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { useAuth } from "contexts/AuthContext";
 import LoginButton from "components/LoginButton";
+import { CHAIN_ID, CHAIN_NAME } from '../constants';
 
 export default function NavBar() {
   const bg = useColorModeValue("white", "gray.800");
   const mobileNav = useDisclosure();
 
   const [ path, setPath ] = useState("");
-
   const { currentNetwork } = useAuth();
-
   const [ shadow, setShadow ] = useState("");
 
   const handleScroll = () => {
@@ -39,23 +38,23 @@ export default function NavBar() {
   return (
     
     <React.Fragment >
-      {/* ###### */}
-      {/* <Alert status='warning' justifyContent='center'>
+      {path !== "/" ? 
+      <Alert status='warning' justifyContent='center'>
         <AlertIcon />
-        <AlertTitle mr={2}>Only Available on Kovan Testnet now!</AlertTitle> 
+        <AlertTitle mr={2}>Only Available on {CHAIN_NAME} now!</AlertTitle> 
         <AlertDescription>Please <Link isExternal style={{textDecoration: 'underline'}} href="https://discord.gg/QN658sJWkk">join our discord <ExternalLinkIcon /></Link> for more information.</AlertDescription>
-        <CloseButton position='absolute' right='8px' top='8px' />
-      </Alert>
+        {/* <CloseButton position='absolute' right='8px' top='8px'/> */}
+      </Alert> : <></>}
       {
-        currentNetwork!==42 && path!=="/" ?
+        currentNetwork !== CHAIN_ID && path !== "/" ?
         <Alert status='error' justifyContent='center'>
           <AlertIcon />
           <AlertTitle mr={2}>Wrong network detected!</AlertTitle>
-          <AlertDescription>Please change network to Kovan.</AlertDescription>
-          <CloseButton position='absolute' right='8px' top='8px' />
+          <AlertDescription>Please change network to {CHAIN_NAME}.</AlertDescription>
+          {/* <CloseButton position='absolute' right='8px' top='8px'/> */}
         </Alert>
         : <></>
-      } */}
+      }
       <chakra.header 
         style={{position: "sticky",
         top: 0}}

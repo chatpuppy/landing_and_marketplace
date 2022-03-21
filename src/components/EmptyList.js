@@ -4,11 +4,7 @@ import { useNavigate } from "react-router-dom";
 import BoxImageSrc from "assets/mysteryBox.jpg"
 
 const EmptyList = () => {
-
     const navigate = useNavigate()
-
-    const buttonbg = useColorModeValue("white", "gray.900")
-
     return (
         <Flex
         bg={useColorModeValue("white", "gray.800")}

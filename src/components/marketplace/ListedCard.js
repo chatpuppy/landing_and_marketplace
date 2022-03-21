@@ -7,10 +7,9 @@ import { chakra, Box, Image, Flex, useColorModeValue, Button, useToast,
 import { useAuth } from "contexts/AuthContext";
 import { ethers } from "ethers";
 import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
-import { useNavigate } from "react-router-dom";
 import BuyDialog from "./BuyDialog";
 import { MARKETPLACE_ADDRESS, ETHERSCAN_BASE_URL, TOKEN_SYMBOL } from "constants";
-import { sortLayer, mergeLayers, parseMetadata } from "avatar";
+import { parseMetadata } from "avatar";
 import mergeImages from 'merge-images';
 import BoxImageSrc from "assets/mysteryBox.jpg"
 import {BiHelpCircle} from 'react-icons/bi';
@@ -19,12 +18,9 @@ import ConfirmationProgress from "../ConfirmationProgress";
 
 const ListedCard = (props) => {
 
-  let navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { tokenId, owner, orderId, price, unboxed, metadata, callback, updatePriceCallback } = props;
   const { currentAccount } = useAuth();
-  const bg = useColorModeValue("gray.700", "gray.200")
-  const buttonbg = useColorModeValue("white", "gray.900")
   const NFT_marketplace_contract_address = MARKETPLACE_ADDRESS;
   const [ isLoading, setIsLoading ] = useState(false);
   const [ isUpdatingPrice, setIsUpdatingPrice ] = useState(false);
@@ -40,7 +36,7 @@ const ListedCard = (props) => {
   const strExperience = "EXPERIENCE: <br/>Sum of each trait's experience, <br/>higher means more value.";
   const strRarity = "RARITY: <br/>Probability of same NFT<br/> in 1,000,000 NFTs, <br/>lower means more value.";
   const strOwner = "OWNER: <br/>Seller of NFT";
-  const strOrder = "Order ID";
+  // const strOrder = "Order ID";
 
   const unlistNFT = async() => {
     setIsLoading(true)
