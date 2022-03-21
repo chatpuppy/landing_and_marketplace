@@ -9,21 +9,21 @@ export default function OnSaleNFTs() {
 
     const { currentAccount, listedNFTs } = useAuth()
     const [ onSaleItems, setOnSaleItems ] = useState([]);
-    const [ isLoading, setIsLoading ] = useState();
+    // const [ isLoading, setIsLoading ] = useState();
 
     let _onSaleNFTs = [];
     
     const setOnSaleNFTs = useCallback(async() => {
-        setIsLoading(true);
+        // setIsLoading(true);
         if(!currentAccount) return;
         try {
             if(_onSaleNFTs.length !== 0 && onSaleItems.length === 0) {
                 let arr = [];
                 _onSaleNFTs.map((number, index) => {
-                    if(_onSaleNFTs[index].deleted) arr.push(skeleton);
+                    if(_onSaleNFTs[index].deleted) arr.push(skeleton(index));
                     else arr.push(
                         <ListedCard 
-                            key={parseInt(_onSaleNFTs[index]['tokenId']["_hex"], 16)} 
+                            key={parseInt(_onSaleNFTs[index]['orderId'])} 
                             tokenId={parseInt(_onSaleNFTs[index]['tokenId']["_hex"], 16)} 
                             owner={_onSaleNFTs[index]['seller']}
                             orderId={_onSaleNFTs[index]['orderId']}
@@ -42,9 +42,7 @@ export default function OnSaleNFTs() {
             }
         } catch(err) {
             console.log(err)
-        } finally {
-            setIsLoading(false)
-        }
+        } 
     }, [currentAccount])
 
     useEffect(() => {

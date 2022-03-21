@@ -79,7 +79,7 @@ export default function Account() {
     const parseBoxes = (_boxedItems, _unboxedItems) => {
         if(_boxedItems.length !== 0 && boxedItems.length === 0) {
             setBoxedItems(boxedItems.concat(Array.from({length: _boxedItems.length}, (_, i) => i).map((number, index)=> {
-            if(_boxedItems[index].deleted) return skeleton;
+            if(_boxedItems[index].deleted) return skeleton(index);
             else return <NFTCard 
                 key={_boxedItems[index].id * 1} 
                 number={_boxedItems[index].id} 
@@ -88,7 +88,7 @@ export default function Account() {
                 dna={_boxedItems[index].dna}
                 src={BoxImageSrc}
                 uri={''}
-                callback={(tokenId) => deleteFromBoxedItems(tokenId)}
+                callback={(tokenId, type) => deleteFromBoxedItems(tokenId, type)}
             />}
             )))
         } else {
@@ -96,7 +96,7 @@ export default function Account() {
         }
         if(_unboxedItems.length !== 0 && unboxedItems.length === 0) {
             setUnboxedItems(unboxedItems.concat(Array.from({length: _unboxedItems.length}, (_, i) => i).map((number, index)=> {
-            if(_unboxedItems[index].deleted) return skeleton;
+            if(_unboxedItems[index].deleted) return skeleton(index);
             else return <NFTCard 
                 key={_unboxedItems[index].id * 1} 
                 number={_unboxedItems[index].id} 
@@ -105,7 +105,7 @@ export default function Account() {
                 dna={_unboxedItems[index].dna}
                 src={null}
                 uri={_unboxedItems[index].uri}
-                callback={(tokenId) => deleteFromUnboxedItems(tokenId)}
+                callback={(tokenId, type) => deleteFromUnboxedItems(tokenId, type)}
             />}
             )))
         } else {
@@ -129,7 +129,7 @@ export default function Account() {
                 }
                 return;
             }
-            getOwnedTokens()
+            getOwnedTokens();
         }
 
         return () => {
@@ -139,16 +139,10 @@ export default function Account() {
     
     const color = useColorModeValue("black", "white");
 
-    // const skeleton = <Flex w="full" p={5}>
-    // <Box w="md" pl={10} pr={10} pt={20} pd={20} h="lg" maxW="md" max="auto" shadow="lg" rounded="lg" bg={useColorModeValue("gray.50", "gray.700")}>
-    // <SkeletonCircle size="100"/><SkeletonText mt='6' noOfLines={6} spacing='4'/>
-    // </Box>
-    // </Flex>;
-
     const skeletons = (count) => {
         let arr = [];
         for(let i = 0; i < count; i++) {
-            arr.push(skeleton);
+            arr.push(skeleton(i));
         }
         return arr;
     }
@@ -158,8 +152,9 @@ export default function Account() {
         setTabIndex(index);
     }
 
-    const deleteFromBoxedItems = (key) => {
-        console.log('deleteFromBoxedItems', _boxedItems)
+    const deleteFromBoxedItems = (key, type) => {
+        // console.log('deleteFromBoxedItems', _boxedItems)
+        if(type === 1) return; 
         let deletedKey = 0;
         for(let i = 0; i < _boxedItems.length; i++) {
             const item = _boxedItems[i];
@@ -169,7 +164,6 @@ export default function Account() {
                 break;
             }
         }
-        console.log(_boxedItems);
         parseBoxes(_boxedItems, _unboxedItems);
         setTimeout(() => {
             _boxedItems.splice(deletedKey, 1);
@@ -177,8 +171,9 @@ export default function Account() {
         }, 3000);
     }
 
-    const deleteFromUnboxedItems = (key) => {
-        console.log('deleteFromUnboxedItems', _unboxedItems);
+    const deleteFromUnboxedItems = (key, type) => {
+        // console.log('deleteFromUnboxedItems', _unboxedItems);
+        if(type === 1) return;
         let deletedKey = 0;
         for(let i = 0; i < _unboxedItems.length; i++) {
             const item = _unboxedItems[i];
@@ -188,7 +183,6 @@ export default function Account() {
                 break;
             }
         }
-        console.log(_unboxedItems);
         parseBoxes(_boxedItems, _unboxedItems);
         setTimeout(() => {
             _unboxedItems.splice(deletedKey, 1);

@@ -57,12 +57,13 @@ const EmptyList = () => {
         py={2}
         roundedBottom="lg"
       >
-          <Button mb={3} bg={buttonbg} _hover={{
-              bg: "gray.500",
-          }}
-          _focus={{
-              bg: "gray.600",
-          }} 
+          <Button mb={3} bg={buttonbg} 
+          // _hover={{
+          //     bg: "gray.500",
+          // }}
+          // _focus={{
+          //     bg: "gray.600",
+          // }} 
           onClick={()=>{navigate("/mint")}}>Mint</Button>
         </Flex>
       </Box>

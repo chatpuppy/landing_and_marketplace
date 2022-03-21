@@ -262,16 +262,21 @@ export const DonateView = () => {
             w={"full"}
             bgGradient="linear(to-r, red.400,pink.400)"
             color={"white"}
-            _hover={{
-              bgGradient: "linear(to-r, red.400,pink.400)",
-              boxShadow: "xl",
-            }}
+            // _hover={{
+            //   bgGradient: "linear(to-r, red.400,pink.400)",
+            //   boxShadow: "xl",
+            // }}
             onClick={onOpen}
           >
             Donate
           </Button>
         </Box>
-        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <Modal 
+          isOpen={isOpen} 
+          onClose={onClose} 
+          closeOnOverlayClick={false}
+          isCentered
+        >
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>Confirmation</ModalHeader>

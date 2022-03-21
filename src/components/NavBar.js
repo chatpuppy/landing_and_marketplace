@@ -115,9 +115,9 @@ export default function NavBar() {
               {path==="/" ? <></> : <LoginButton />}
             </HStack>
             <Button size="md" bg="brand.100" color="white"
-            _hover={{
-              backgroundColor: "brand.200"
-            }}
+            // _hover={{
+            //   backgroundColor: "brand.200"
+            // }}
             >
               <Link href='http://test.puppy.chat:9200' isExternal
               style={{textDecoration: 'none'}}>

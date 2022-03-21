@@ -29,13 +29,15 @@ const NFTCard = (props) => {
   const toast = useToast();
   const { currentAccount } = useAuth();
   const { src, number, unboxed, metadata, dna, uri, callback } = props;
+  const [tokenUri, setTokenUri] = useState(uri);
   const bg = useColorModeValue("white", "gray.200")
   const buttonbg = useColorModeValue("gray.900", "gray.900")
 
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen1, setIsOpen1] = useState(false);
+  const [unboxModalType, setUnboxModalType] = useState(0); // unbox - 0, upload to IPFS - 1
   const onClose = () => setIsOpen(false);
-  const onClose1 = () => {setIsOpen1(false); callback(number)};
+  const onClose1 = () => {setIsOpen1(false); handleUnboxDone(number, unboxModalType)};
   const cancelRef = useRef();
   const cancelRef1 = useRef();
 
@@ -87,11 +89,9 @@ const NFTCard = (props) => {
             // Get NFT metadata every 1.5 second, to make sure the unboxed is fullfil
             let count = 0;
             const t = setInterval(async()=>{
-              // const _type = await NFTManagerConnectedContract.boxStatus(number);
               const _metadata = await NFTCoreConnectedContract.tokenMetaData(number);
-              console.log("_artifacts", _metadata._artifacts);
+              // console.log("_artifacts", _metadata._artifacts);
               if(_metadata._artifacts > 0 || count > 20) {
-                // console.log(_metadata, number);
                 // Popup unbox modal dialog box to upload to ipfs network, and show the picture and artifacts, level, experience, ipfs
                 setUnboxModalParams({
                   artifacts: _metadata._artifacts, 
@@ -99,6 +99,7 @@ const NFTCard = (props) => {
                   dna: _metadata._dna
                 }); 
                 setIsOpen1(true);
+                setUnboxModalType(0);
                 setConfirmationProgressData({step: '4/4', value: 100, message: 'Congrat! you have got an exclusive NFT'});
                 clearInterval(t);
                 setHiddenConfirmationProgress(true);
@@ -158,10 +159,10 @@ const NFTCard = (props) => {
     }
   }
 
-  const getUri = (uri) => {
-    if(uri.substr(0, 5) === "ipfs:") return uri;
-    else if(uri.substr(0, 2) === "Qm") return "ipfs://" + uri + "/metadata.json";
-    else if(uri.substr(0, 7) === "bafyrei") return "ipfs://" + uri + "/metadata.json";
+  const getUri = (_uri) => {
+    if(_uri.substr(0, 5) === "ipfs:") return _uri;
+    else if(_uri.substr(0, 2) === "Qm") return "ipfs://" + _uri + "/metadata.json";
+    else if(_uri.substr(0, 7) === "bafyrei") return "ipfs://" + _uri + "/metadata.json";
   }
 
   const uploadIPFS = () => {
@@ -171,6 +172,19 @@ const NFTCard = (props) => {
       dna
     }); 
     setIsOpen1(true);
+    setUnboxModalType(1);
+  }
+
+  const handleUnboxDone = async(_tokenId, _type) => {
+    if(_type === 1) {
+      const { ethereum } = window;
+      const provider = new ethers.providers.Web3Provider(ethereum); 
+      const signer = provider.getSigner(); 
+      const NFTCoreConnectedContract = new ethers.Contract(NFT_core_contract_address, nft_core_abi, signer);
+      const _tokenURI = await NFTCoreConnectedContract.tokenURI(number);
+      setTokenUri(_tokenURI);
+    }
+    callback(_tokenId, _type);
   }
 
   return (
@@ -260,7 +274,9 @@ const NFTCard = (props) => {
           {unboxed && parsedMetadata !== null ? 
           <Flex>
             <BiHelpCircle fontSize="xs" data-tip={strMeta} data-for="meta"/>
-            &nbsp;Metadata: {uri === '' ? <Button size="sx" w={"50%"} fontSize={8} ml={3} mr={3} mt={1} onClick={uploadIPFS}>Upload to IPFS</Button> : <a href={getUri(uri)} target="_blank" rel="noreferrer">&nbsp;&nbsp;Open in IPFS</a>}
+            &nbsp;Metadata: {tokenUri === '' ? 
+              <Button size="sx" w={"50%"} fontSize={8} ml={3} mr={3} mt={1} onClick={uploadIPFS}>Upload to IPFS</Button> 
+              : <a href={getUri(tokenUri)} target="_blank" rel="noreferrer">&nbsp;&nbsp;Open in IPFS</a>}
           </Flex> : ''}
           </chakra.h1>
 
@@ -270,7 +286,7 @@ const NFTCard = (props) => {
         >
           <ListNFT 
             number={number}
-            callback={(tokenId) => callback(tokenId)}
+            callback={(tokenId) => callback(tokenId, unboxModalType)}
           />
         </Center>
         :
@@ -284,19 +300,19 @@ const NFTCard = (props) => {
         >
           <Button size="md" bg={buttonbg} color={bg}
             fontWeight="bold" rounded="lg" textTransform="uppercase"
-            _hover={{
-              bg: "gray.500",
-            }}
-            _focus={{
-              bg: "gray.600",
-            }}
+            // _hover={{
+            //   bg: "gray.500",
+            // }}
+            // _focus={{
+            //   bg: "gray.600",
+            // }}
             onClick={() => setIsOpen(true)}
           >
             Unbox
           </Button>
           <ListNFT 
             number={number}
-            callback={(tokenId) => callback(tokenId)}
+            callback={(tokenId) => callback(tokenId, unboxModalType)}
           />
         </Flex>
         }
@@ -343,23 +359,24 @@ const NFTCard = (props) => {
       </AlertDialog>
 
       <AlertDialog
-        isCentered={true}
+        isCentered
         isOpen={isOpen1}
         leastDestructiveRef={cancelRef1}
-        // onClose={onClose1}
+        closeOnOverlayClick={false}
+        onClose={onClose1}
       >
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
               NFT Avatar
             </AlertDialogHeader>
-            <ModalCloseButton onClick={onClose1}/>
+            <ModalCloseButton/>
             <AlertDialogBody>
               <UnboxModal 
                 tokenId={unboxModalParams.tokenId}
                 artifacts={unboxModalParams.artifacts}
                 dna={unboxModalParams.dna}
-                callback={(tokenId) => callback(tokenId)}
+                callback={(tokenId) => handleUnboxDone(tokenId, unboxModalType)}
               />
             </AlertDialogBody>
             <AlertDialogFooter>

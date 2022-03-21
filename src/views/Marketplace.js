@@ -94,7 +94,7 @@ export default function Marketplace() {
   const skeletons = (count) => {
     let arr = [];
     for(let i = 0; i < count; i++) {
-        arr.push(skeleton);
+        arr.push(skeleton(i));
     }
     return arr;
   }
@@ -150,12 +150,12 @@ export default function Marketplace() {
             <TabPanels>
                 <TabPanel m='auto' w='80%'>
                     <SimpleGrid columns={[1, null, 4]} >
-                        {isLoading ? skeletons() : <EmptyList />}
+                        {isLoading ? skeletons(8) : <EmptyList />}
                     </SimpleGrid>
                 </TabPanel>
                 <TabPanel m='auto' w='80%'>
                     <SimpleGrid columns={[1, null, 4]} >
-                        {isLoading ? skeletons() : <EmptyList />}
+                        {isLoading ? skeletons(8) : <EmptyList />}
                     </SimpleGrid>
                 </TabPanel>
             </TabPanels>

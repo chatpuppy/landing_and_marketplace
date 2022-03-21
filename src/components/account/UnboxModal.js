@@ -39,7 +39,7 @@ const UnboxModal = (props) => {
         level: pmd.level,
         experience: pmd.experience,
         rarity: pmd.rarity,
-        attributes: pmd.properties
+        attributes: pmd.properties,
       })
       setNftMetadata(metadata);
     }
@@ -57,7 +57,6 @@ const UnboxModal = (props) => {
     }
 
     useEffect(() => {
-      // console.log('loading metadata for ', artifacts.toHexString());
       const parsedMetadata = parseMetadata(artifacts);
       if(parsedMetadata !== null) {
         setParsedMd(parsedMetadata);
@@ -70,7 +69,6 @@ const UnboxModal = (props) => {
     }, [artifacts])
 
     const updateMetadata = async() => {
-      console.log('updateMetadata')
       if(!currentAccount) return;
       if(nftMetadata.ipnft === '') return;
       setIsLoading(true);
@@ -133,9 +131,10 @@ const UnboxModal = (props) => {
     >
       <Box
         bg={useColorModeValue("white", "gray.700")}
+        color={useColorModeValue("gray.600", "white")}
         p={1}
       >
-        <Box mb={3} fontSize="sm" color={useColorModeValue("gray.600", "white")}>
+        <Box mb={3} fontSize="sm">
         {imageBase64 !== '' ? 
           "Congrat! you have got a special NFT. If you want to trade it on OpenSea, please sign and Save metadata URI." 
           : "Please wait a few seconds until the image and metadata was uploaded to IPFS."}
@@ -146,16 +145,17 @@ const UnboxModal = (props) => {
           src={imageBase64}
           alt="Unboxed NFT"
         /> : 
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        <Box w={"sm"} h={"sm"} border={1} rounded={10} mb={3} p={10} bg={useColorModeValue("gray.50", "gray.600")}>
+        <Box w={"sm"} h={"sm"} border={1} rounded={10} mb={3} p={10}>
           <SkeletonCircle size={"200"}/>
           <SkeletonText mt='4' noOfLines={4} spacing='4'/>
         </Box>}
 
         {nftMetadata.ipnft === '' || parsedMd === null ? '' :
         <Box 
-          // eslint-disable-next-line react-hooks/rules-of-hooks
-          color={useColorModeValue("gray.600", "white")}
+          // color={"gray.600"}
+          // bg={"gray.100"}
+          rounded={10}
+          p={3}
           mt={5} 
           mb={5} 
           fontSize="sm">

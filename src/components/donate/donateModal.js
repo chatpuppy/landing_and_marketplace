@@ -97,14 +97,14 @@ const DonateModal = (props) => {
                 w={'full'}
                 bgGradient="linear(to-r, red.400,pink.400)"
                 color={'white'}
-                _hover={{
-                    bgGradient: 'linear(to-r, red.400,pink.400)',
-                    boxShadow: 'xl',
-                }}
-                _active={{
-                    bgGradient: 'linear(to-r, red.200,pink.200)',
-                    boxShadow: 'xl',
-                }}
+                // _hover={{
+                //     bgGradient: 'linear(to-r, red.400,pink.400)',
+                //     boxShadow: 'xl',
+                // }}
+                // _active={{
+                //     bgGradient: 'linear(to-r, red.200,pink.200)',
+                //     boxShadow: 'xl',
+                // }}
                 onClick={sendDonate}
                 isLoading={isLoading}
                 isDisabled={isDonated}

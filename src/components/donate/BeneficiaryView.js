@@ -76,10 +76,10 @@ export const BeneficiaryView = () => {
         w={"full"}
         bgGradient="linear(to-r, red.400,pink.400)"
         color={"white"}
-        _hover={{
-          bgGradient: "linear(to-r, red.400,pink.400)",
-          boxShadow: "xl",
-        }}
+        // _hover={{
+        //   bgGradient: "linear(to-r, red.400,pink.400)",
+        //   boxShadow: "xl",
+        // }}
         onClick={actionRelease}
       >
         Release
@@ -90,10 +90,10 @@ export const BeneficiaryView = () => {
         w={"full"}
         bgGradient="linear(to-r, red.400,pink.400)"
         color={"white"}
-        _hover={{
-          bgGradient: "linear(to-r, red.400,pink.400)",
-          boxShadow: "xl",
-        }}
+        // _hover={{
+        //   bgGradient: "linear(to-r, red.400,pink.400)",
+        //   boxShadow: "xl",
+        // }}
         onClick={actionRedeem}
       >
         Redeem

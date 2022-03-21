@@ -68,10 +68,6 @@ export default function BuyDialog(props) {
                 setConfirmationProgressData({step: '5/5', value: 100, message: 'You have got 2 confirmations, done!'});
 
                 callback(orderId);
-                setTimeout(() => {
-                    setIsLoading(false);
-                    setIsOpen(false)
-                }, 2000);
             } catch (err) {
                 if(err.code === 4001) {
                     toast({
@@ -139,7 +135,8 @@ export default function BuyDialog(props) {
         <AlertDialog
             isOpen={isOpen}
             leastDestructiveRef={cancelRef}
-            // onClose={onClose}
+            closeOnOverlayClick={false}
+            onClose={onClose}
             isCentered
         >
             <AlertDialogOverlay>
@@ -150,7 +147,7 @@ export default function BuyDialog(props) {
                     /> */}
                     {approved ? 'Confirm Purchase' : 'Approve Purchase'}
                 </AlertDialogHeader>
-                <ModalCloseButton onClick={onClose}/>
+                <ModalCloseButton/>
                 <AlertDialogBody>
                     {approved ? 'Buy' : 'Approve'} ID #{tokenId} for {parseInt(price["_hex"], 16)/ Math.pow(10, 18)} CPT
                     <Box h={5}></Box>

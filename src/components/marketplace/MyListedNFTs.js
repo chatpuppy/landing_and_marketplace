@@ -10,19 +10,19 @@ export default function MyListedNFTs() {
     const { currentAccount, listedNFTs } = useAuth()
     // const [ onSaleItems, setOnSaleItems ] = useState([]);
     const [ myListedItems, setMyListedItems ] = useState([]);
-    const [ isLoading, setIsLoading ] = useState()
+    // const [ isLoading, setIsLoading ] = useState()
 
     let _ownedListedNFTs = [];
 
     const setMyListedNFTs = useCallback(() => {
-        setIsLoading(true);
+        // setIsLoading(true);
         if(!currentAccount) return;
         try {
             // if(myListedItems.length < _ownedListedNFTs.length) {
             if(_ownedListedNFTs.length !== 0 && myListedItems.length === 0) {
                 let arr = [];
                 _ownedListedNFTs.map((number, index) => {
-                    if(_ownedListedNFTs[index].deleted) arr.push(skeleton);
+                    if(_ownedListedNFTs[index].deleted) arr.push(skeleton(index));
                     else arr.push(<ListedCard 
                         key={parseInt(_ownedListedNFTs[index]['orderId'])}
                         tokenId={parseInt(_ownedListedNFTs[index]['tokenId']["_hex"], 16)} 
@@ -43,9 +43,7 @@ export default function MyListedNFTs() {
             }
         } catch(err) {
             console.log(err)
-        } finally {
-            setIsLoading(false)
-        }
+        } 
     }, [currentAccount]);
 
     useEffect(() => {
@@ -57,7 +55,6 @@ export default function MyListedNFTs() {
                         _ownedListedNFTs.push(listedNFTs[i])
                     }
                 }
-                console.log("===", _ownedListedNFTs)
                 setMyListedNFTs();
             }
         }
@@ -68,7 +65,6 @@ export default function MyListedNFTs() {
     }, [listedNFTs])
     
     const deleteFromMyListedItems = (key) => {
-        console.log('deleteFromOwnedListedNFTs', _ownedListedNFTs);
         let deletedKey = 0;
         for(let i = 0; i < _ownedListedNFTs.length; i++) {
             const item = _ownedListedNFTs[i];
@@ -86,9 +82,6 @@ export default function MyListedNFTs() {
     }
 
     const updatePice = (orderId, price) => {
-        console.log('updatePice', orderId, price);
-        // ######
-        console.log(_ownedListedNFTs);
         for(let i = 0; i < _ownedListedNFTs.length; i++) {
             const item = _ownedListedNFTs[i];
             if(parseInt(item.orderId) === parseInt(orderId)) {
@@ -96,7 +89,6 @@ export default function MyListedNFTs() {
                 break;
             }
         }
-        console.log(_ownedListedNFTs);
         setMyListedNFTs();
     }
 

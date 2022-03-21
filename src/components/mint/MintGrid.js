@@ -100,44 +100,20 @@ return (
                 </Text>
             </Stack>
             <Box as={'form'} mt={10}>
-                {/*
-                <Stack spacing={4}>
-                    <HStack maxW='320px'>
-                    <Button bg="gray.300" color="black" {...dec}
-                    _hover={{
-                        bg:"gray.400"
-                    }}
-                    _active={{
-                        bg:"gray.300"
-                    }}
-                    >-</Button>
-                    <Input color="black" outlineColor="gray.300" {...input} />
-                    <Button bg="gray.300" color="black"  {...inc}
-                    _hover={{
-                        bg:"gray.400"
-                    }}
-                    _active={{
-                        bg:"gray.300"
-                    }}
-                    >+</Button>
-                    <p>Avatar{input.value==="1"? "": "s"}</p>
-                    </HStack>
-                </Stack>
-                */}
                 <Button
                 fontFamily={'heading'}
                 w={'full'}
                 h={12}
                 bgGradient="linear(to-r, brand.200,brand.200)"
                 color={'white'}
-                _hover={{
-                    bgGradient: 'linear(to-r, brand.150,brand.150)',
-                    boxShadow: 'xl',
-                }}
-                _active={{
-                    bgGradient: 'linear(to-r, brand.200,brand.200)',
-                    boxShadow: 'xl',
-                }}
+                // _hover={{
+                //     bgGradient: 'linear(to-r, brand.150,brand.150)',
+                //     boxShadow: 'xl',
+                // }}
+                // _active={{
+                //     bgGradient: 'linear(to-r, brand.200,brand.200)',
+                //     boxShadow: 'xl',
+                // }}
                 onClick={onOpen}
                 >
                 
@@ -165,13 +141,14 @@ return (
     />
     <Modal 
         isOpen={isOpen} 
-        // onClose={onClose} 
+        onClose={onClose} 
+        closeOnOverlayClick={false}
         isCentered
     >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Confirmation</ModalHeader>
-          <ModalCloseButton onClick={onClose}/>
+          <ModalCloseButton/>
           <ModalBody>
             <MintModal count={input.value} boxPrice={boxPrice}/>
           </ModalBody>

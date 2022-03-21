@@ -31,9 +31,10 @@ import Logo from "assets/logo.png"
         alignItems={'center'}
         justifyContent={'center'}
         transition={'background 0.3s ease'}
-        _hover={{
-          bg: useColorModeValue('blackAlpha.200', 'whiteAlpha.200'),
-        }}>
+        // _hover={{
+        //   bg: useColorModeValue('blackAlpha.200', 'whiteAlpha.200'),
+        // }}
+        >
         <VisuallyHidden>{label}</VisuallyHidden>
         {children}
       </chakra.button>

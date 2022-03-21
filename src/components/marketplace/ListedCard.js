@@ -147,7 +147,6 @@ const ListedCard = (props) => {
   if(unboxed) {
     parsedMetadata = parseMetadata(metadata);
     if(parsedMetadata !== null) {
-      // console.log("===", tokenId, parsedMetadata.level, parsedMetadata.layers, parsedMetadata.images);
       mergeImages(parsedMetadata.images).then((b64) => {
         setImageBase64(b64);
       });
@@ -267,24 +266,24 @@ const ListedCard = (props) => {
           <>
           <Button mb={3} mt={-2} size="md" bg={buttonbg} color={bg}
           fontWeight="bold" rounded="lg" textTransform="uppercase"
-          _hover={{
-              bg: "gray.500",
-          }}
-          _focus={{
-              bg: "gray.600",
-          }}
+          // _hover={{
+          //     bg: "gray.500",
+          // }}
+          // _focus={{
+          //     bg: "gray.600",
+          // }}
           onClick={onOpen}
           >
               Edit Price
           </Button>
           <Button mb={3} mt={-2} size="md" bg={buttonbg} color={bg}
           fontWeight="bold" rounded="lg" textTransform="uppercase"
-          _hover={{
-              bg: "gray.500",
-          }}
-          _focus={{
-              bg: "gray.600",
-          }}
+          // _hover={{
+          //     bg: "gray.500",
+          // }}
+          // _focus={{
+          //     bg: "gray.600",
+          // }}
           onClick={unlistNFT}
           isLoading={isLoading}
           >
@@ -308,12 +307,14 @@ const ListedCard = (props) => {
       <ReactTooltip id="order" effect="solid" multiline={true} />
       <Modal 
         isOpen={isOpen} 
-        // onClose={onClose}
+        closeOnOverlayClick={false}
+        onClose={onClose}
+        isCentered
       >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Update Price</ModalHeader>
-          <ModalCloseButton onClick={onClose}/>
+          <ModalCloseButton/>
           <ModalBody>
             <form onSubmit={updatePrice}>
                 <FormControl id="price" isRequired mb="2">

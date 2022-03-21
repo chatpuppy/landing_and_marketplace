@@ -27,7 +27,7 @@ export default function ListNFT(props) {
     const { currentAccount, approved } = useAuth()
     const priceRef = useRef();
 
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const bg = useColorModeValue("gray.700", "gray.200")
     const buttonbg = useColorModeValue("white", "gray.900")
 
@@ -65,11 +65,6 @@ export default function ListNFT(props) {
           await tx.wait(2);
           setConfirmationProgressData({step: '5/5', value: 100, message: 'You have got 2 confirmations, done!'})
           callback(number);
-
-          setTimeout(()=>{
-            setIsLoading(false);
-            onClose();
-          }, 1500)
         } catch(err) {
           if(err.code === 4001) {
             toast({
@@ -105,12 +100,12 @@ export default function ListNFT(props) {
       <>
         <Button size="md" bg={buttonbg} color={bg} mb={3} mt={-2}
           fontWeight="bold" rounded="lg" textTransform="uppercase"
-          _hover={{
-            bg: "gray.500",
-          }}
-          _focus={{
-            bg: "gray.600",
-          }}
+          // _hover={{
+          //   bg: "gray.500",
+          // }}
+          // _focus={{
+          //   bg: "gray.600",
+          // }}
           onClick={onOpen}
           isLoading={isLoading}
         >
@@ -118,13 +113,15 @@ export default function ListNFT(props) {
         </Button>
   
         <Modal 
+          isCentered
           isOpen={isOpen} 
-          // onClose={onClose}
+          closeOnOverlayClick={false}
+          onClose={onClose}
         >
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>List NFT</ModalHeader>
-            <ModalCloseButton onClick={onClose}/>
+            <ModalCloseButton/>
             <ModalBody>
                 <form onSubmit={listNFT}>
                     <FormControl id="token" isRequired>
