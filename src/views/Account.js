@@ -4,9 +4,7 @@ import NavBar from 'components/NavBar';
 import { useAuth } from 'contexts/AuthContext';
 import { ethers } from "ethers";
 import nft_core_abi from "abi/nft_core_abi.json"
-import { SimpleGrid, useColorModeValue, useToast,
-    Tabs, TabList, TabPanels, Tab, TabPanel, Box, Flex, SkeletonCircle, SkeletonText
-} from '@chakra-ui/react';
+import { SimpleGrid, useColorModeValue, useToast, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 import NFTCard from 'components/account/NFTCard';
 import PageName from 'components/PageName';
 import BoxImageSrc from "assets/mysteryBox.jpg"
@@ -31,8 +29,13 @@ export default function Account() {
     let _unboxedItems = [];
 
     const getOwnedTokens = useCallback(async() => {
+        console.log("getOwnedToken");
         setIsLoading(true);
         if(!currentAccount) return;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        _boxedItems = [];
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        _unboxedItems = [];
         try {
             const { ethereum } = window; //injected by metamask
             //connect to an ethereum node
@@ -77,6 +80,7 @@ export default function Account() {
     }, [currentAccount, setApproved, setOwnedNFTs])
     
     const parseBoxes = (_boxedItems, _unboxedItems) => {
+        console.log("parseBoxes");
         if(_boxedItems.length !== 0 && boxedItems.length === 0) {
             let arr = [];
             try{
@@ -126,6 +130,7 @@ export default function Account() {
     }
 
     useEffect(() => {
+        console.log('useEffect');
         let isConnected = false;
         if(!isConnected) {
             if(!window.ethereum) {

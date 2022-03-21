@@ -96,7 +96,7 @@ export default function ListNFT(props) {
     }
 
     const handleTokenChange = (e) => {
-        setToken(e.target.value)
+      setToken(e.target.value)
     }
 
     return (
@@ -139,7 +139,7 @@ export default function ListNFT(props) {
                     <FormControl id="token" isRequired>
                         <FormLabel>Token Name</FormLabel>
                         <Select isReadOnly onChange={handleTokenChange} placeholder='CPT' value={TOKEN_ADDRESS}>
-
+                          <option value={TOKEN_ADDRESS}>CPT</option>
                         </Select>
                     </FormControl>
                     <FormControl id="price" isRequired my="2">

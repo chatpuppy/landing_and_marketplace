@@ -21,6 +21,7 @@ export default function MyListedNFTs() {
             // if(myListedItems.length < _ownedListedNFTs.length) {
             if(_ownedListedNFTs.length !== 0 && myListedItems.length === 0) {
                 let arr = [];
+                // eslint-disable-next-line array-callback-return
                 _ownedListedNFTs.map((number, index) => {
                     if(_ownedListedNFTs[index].deleted) arr.push(skeleton(index));
                     else arr.push(<ListedCard 
