@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { chakra, Box, Image, Flex, useColorModeValue, Button,
   AlertDialog, AlertDialogBody, AlertDialogFooter, ModalCloseButton,
-  AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, useToast, Center
+  AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, useToast, Center, Text
 } from "@chakra-ui/react";
 import nft_manager_v2_abi from "abi/nft_manager_v2_abi.json";
 import nft_core_abi from "abi/nft_core_abi.json"
@@ -292,6 +292,10 @@ const NFTCard = (props) => {
           />
         </Center>
         :
+        <Box>
+        <Text ml={5} mr={5} mt={5} color={"gray.500"}>
+            Click UNBOX button to open this mystery box, or click SELL button to list it on marketplace.
+        </Text>
         <Flex
             alignItems="center"
             justifyContent="space-between"
@@ -307,16 +311,11 @@ const NFTCard = (props) => {
             fontWeight="bold" rounded="lg" textTransform="uppercase"
             bgGradient="linear(to-r, brand.500,brand.500)"
             _hover={{
-              // bgGradient: 'linear(to-r, brand.150, brand.150)',
               boxShadow: 'xl',
             }}
             _active={{
-              // bgGradient: 'linear(to-r, brand.200, brand.200)',
               boxShadow: 'xl',
             }}
-            // _focus={{
-            //   bg: "gray.600",
-            // }}
             onClick={() => setIsOpen(true)}
           >
             Unbox
@@ -326,6 +325,7 @@ const NFTCard = (props) => {
             callback={(tokenId) => callback(tokenId, unboxModalType)}
           />
         </Flex>
+        </Box>
         }
         
       </Box>
@@ -338,14 +338,15 @@ const NFTCard = (props) => {
         isCentered={true}
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}
-        // onClose={onClose}
+        closeOnOverlayClick={false}
+        onClose={onClose}
       >
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
               Open Mystery Box
             </AlertDialogHeader>
-
+            <ModalCloseButton />
             <AlertDialogBody>
               It'll take around one minute to open/unbox it, please click Unbox Button if you want to continue.
               <Box h={5}></Box>
@@ -358,9 +359,6 @@ const NFTCard = (props) => {
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button isLoading={isLoading} ref={cancelRef} onClick={onClose}>
-                Cancel
-              </Button>
               <Button isLoading={isLoading} onClick={unboxNFT} colorScheme='blue' ml={3}>
                 Unbox
               </Button>
