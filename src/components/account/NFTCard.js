@@ -84,7 +84,7 @@ const NFTCard = (props) => {
             const tx = await NFTManagerConnectedContract.unbox(number);
             setConfirmationProgressData({step: '2/4', value: 50, message: 'Unboxing...'});
             await tx.wait(2);
-            setConfirmationProgressData({step: '3/4', value: 75, message: 'Generating random NFT metadata for about 10 seconds...'});
+            setConfirmationProgressData({step: '3/4', value: 75, message: 'Generating random NFT metadata by ChainLink VRF Oracle, it will take around 10 seconds...'});
 
             // Get NFT metadata every 1.5 second, to make sure the unboxed is fullfil
             let count = 0;
@@ -347,7 +347,7 @@ const NFTCard = (props) => {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Are you sure? You can't undo this action afterwards.
+              It'll take around one minute to open/unbox it, please click Unbox Button if you want to continue.
               <Box h={5}></Box>
               <ConfirmationProgress 
                 hidden={hiddenConfirmationProgress}

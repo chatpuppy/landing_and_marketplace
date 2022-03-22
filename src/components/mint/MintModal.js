@@ -217,11 +217,11 @@ const MintModal = (props) => {
           rounded="lg"
         />
 
-        <Box p="6">
+        <Box pt="5" pb="5">
           <Box fontWeight="semibold">
             Price: {boxPrice ? property.formattedPrice : <Spinner size='xs' mx="2"/>}
             <Box as="span" color={useColorModeValue("gray.600", "gray.200")} fontSize="sm">
-              for {count} {count==='1'? "NFT": "NFTs"}
+              for {count} {count==='1'? "Mystery Box": "Mystery Boxes"}
             </Box>
           </Box>
         </Box>

@@ -87,7 +87,7 @@ return (
                 color={'gray.800'}
                 lineHeight={1.1}
                 fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}>
-                Mint mystery puppy avatars
+                Mint ChatPuppy NFT
                 {/* <Text
                     as={'span'}
                     bgGradient="linear(to-r, red.400,pink.400)"
@@ -96,7 +96,7 @@ return (
                 </Text> */}
                 </Heading>
                 <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }} textAlign="left">
-                Acquire NFTs for avatar in ChatPuppy, with which you can get premium access to ChatPuppy's exclusive features!
+                Get a NFT for avatar, with which you can get premium access to ChatPuppy Dapp's exclusive features!
                 </Text>
             </Stack>
             <Box as={'form'} mt={10}>
@@ -125,10 +125,10 @@ return (
             &#9900; You can only mint a mystery avatar or mint &#38; unbox simultaneously. 
             </Text> */}
             <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }} textAlign="left">
-            &#9900; If you only mint, you will not know what the exact avatar is until it is unboxed.
+            &#9900; After you mint, you will get a Mystery Box but you don't know what the exact avatar is until it is unboxed.
             </Text>
             <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }} textAlign="left">
-            &#9900; The mystery avatars and NFTs are all available for selling.
+            &#9900; The Mystery Box and unboxed NFTs are all available for sale.
             </Text>
             </Stack>
         </Stack>
@@ -147,7 +147,7 @@ return (
     >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Confirmation</ModalHeader>
+          <ModalHeader>Mint</ModalHeader>
           <ModalCloseButton/>
           <ModalBody>
             <MintModal count={input.value} boxPrice={boxPrice}/>
