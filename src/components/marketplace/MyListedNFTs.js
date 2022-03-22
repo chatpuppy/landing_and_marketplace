@@ -96,13 +96,6 @@ export default function MyListedNFTs() {
     return (
         <>
             {myListedItems.length===0 ?
-            // isLoading ?
-            // <Stack p={50}>
-            //     <Skeleton bg="gray.400" height='20px' />
-            //     <Skeleton bg="gray.400" height='60vh' />
-            //     <Skeleton bg="gray.400" height='20px' />
-            // </Stack>
-            // :
             <EmptyList />
             :
             myListedItems

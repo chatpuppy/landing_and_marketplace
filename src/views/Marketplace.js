@@ -109,7 +109,7 @@ export default function Marketplace() {
       {
         currentAccount ?
         <Tabs rounded="lg" m="auto" isLazy isFitted colorScheme="blue" defaultIndex={tabIndex} onChange={handleTabsChange}>
-            <TabList mb='1em' m="auto" w="80%">
+            <TabList mb='1em' m="auto" w={['90%', null, '80%']}>
                 <Tab _focus={{outline: "none"}} color={color}>
                     <BsBoxSeam pr="2"/>
                     <span style={{marginLeft: "10px"}}>On Sale NFTs</span> 
@@ -120,12 +120,12 @@ export default function Marketplace() {
                 </Tab>
             </TabList>
             <TabPanels>
-                <TabPanel ml='10%' w='80%'>
+                <TabPanel m='auto' w={['90%', null, '78%']}>
                     <SimpleGrid columns={[1, null, 4]} >
                         {isLoading ? skeletons(8) : <OnSaleNFTs/>}
                     </SimpleGrid>
                 </TabPanel>
-                <TabPanel ml='10%' w='80%'>
+                <TabPanel m='auto' w={['90%', null, '78%']}>
                     <SimpleGrid columns={[1, null, 4]}>
                         {isLoading ? skeletons(8) : <MyListedNFT/>}
                     </SimpleGrid>
@@ -134,7 +134,7 @@ export default function Marketplace() {
         </Tabs>
         :
         <Tabs rounded="lg" m="auto" isLazy isFitted colorScheme="blue" defaultIndex={tabIndex} onChange={handleTabsChange}>
-            <TabList mb='1em' m="auto" w="80%">
+            <TabList mb='1em' m="auto" w={['90%', null, '80%']}>
                 <Tab _focus={{outline: "none"}} color={color}>
                     <BsBoxSeam pr="2"/>
                     <span style={{marginLeft: "10px"}}>Mystery Box</span>
@@ -146,12 +146,12 @@ export default function Marketplace() {
                 </Tab>
             </TabList>
             <TabPanels>
-                <TabPanel m='auto' w='80%'>
+                <TabPanel m='auto' w={['90%', null, '78%']}>
                     <SimpleGrid columns={[1, null, 4]} >
                         {isLoading ? skeletons(8) : <EmptyList />}
                     </SimpleGrid>
                 </TabPanel>
-                <TabPanel m='auto' w='80%'>
+                <TabPanel m='auto' w={['90%', null, '78%']}>
                     <SimpleGrid columns={[1, null, 4]} >
                         {isLoading ? skeletons(8) : <EmptyList />}
                     </SimpleGrid>

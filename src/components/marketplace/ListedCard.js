@@ -154,7 +154,7 @@ const ListedCard = (props) => {
   return (
   <Flex
       bg={useColorModeValue("white", "gray.800")}
-      p={5}
+      p={4}
       w="full"
       alignItems="center"
       justifyContent="center"

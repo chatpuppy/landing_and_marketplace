@@ -145,11 +145,11 @@ export default function BuyDialog(props) {
                     {/* <Progress hasStripe isAnimated value={approved ? 50 : 0} colorScheme='blue' my="4"
                     size="md" rounded="sm"
                     /> */}
-                    {approved ? 'Confirm Purchase' : 'Approve Purchase'}
+                    {approved ? 'Confirm' : 'Approve'}
                 </AlertDialogHeader>
                 <ModalCloseButton/>
                 <AlertDialogBody>
-                    {approved ? 'Buy' : 'Approve'} ID #{tokenId} for {parseInt(price["_hex"], 16)/ Math.pow(10, 18)} {TOKEN_SYMBOL}
+                    {approved ? 'Buy' : 'Approve'} ChatPuppy NFT Token ID #{tokenId} with {parseInt(price["_hex"], 16)/ Math.pow(10, 18)} {TOKEN_SYMBOL}?
                     <Box h={5}></Box>
                     <ConfirmationProgress 
                         hidden={hiddenConfirmationProgress}

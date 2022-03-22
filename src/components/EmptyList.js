@@ -8,9 +8,7 @@ const EmptyList = () => {
     return (
         <Flex
         bg={useColorModeValue("white", "gray.800")}
-        p={5}
-        ml={10}
-        mr={10}
+        p={4}
         w="full"
         alignItems="center"
         justifyContent="center"
@@ -28,7 +26,7 @@ const EmptyList = () => {
         roundedTop="lg"
         fit="cover"
         src={BoxImageSrc}
-        alt="NIKE AIR"
+        alt="ChatPuppy NFT"
       />
       <Box px={4} py={2}>
         <chakra.h1
