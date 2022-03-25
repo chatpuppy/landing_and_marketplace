@@ -228,7 +228,7 @@ export const DonateView = () => {
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
       useNumberInput({
         step: 0.001, 
-        defaultValue: 0.05, // ###### 测试时使用小一点的数
+        defaultValue: 0.05,
         min: 0.04,
         max: 0.06,
         precision: 3,

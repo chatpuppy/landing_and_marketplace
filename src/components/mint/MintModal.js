@@ -4,7 +4,7 @@ import BoxImageSrc from "assets/mysteryBox.jpg"
 import { ethers } from "ethers";
 import nft_manager_v2_abi from "abi/nft_manager_v2_abi.json"
 import { useAuth } from "contexts/AuthContext";
-import { CHAIN_ID, CHAIN_NAME, NFT_MANAGER_V2_ADDRESS, TOKEN_NAME} from 'constants';
+import { getNetworkConfig, supportedChainNames, supportedChainIds} from 'constants';
 import ConfirmationProgress from '../ConfirmationProgress';
 
 const MintModal = (props) => {
@@ -14,7 +14,8 @@ const MintModal = (props) => {
     const [ hiddenConfirmationProgress, setHiddenConfirmationProgress] = useState(true);
     const [ confirmationProgressData, setConfirmationProgressData ] = useState({value: 5, message: 'Start', step: 1});
 
-    const NFT_manager_contract_address = NFT_MANAGER_V2_ADDRESS;
+    const networkConfig = getNetworkConfig(currentNetwork);
+    const NFT_manager_contract_address = networkConfig.supportChainlinkVRFV2 ? networkConfig.nftManagerV2Address : networkConfig.nftManagerAddress;
     const toast = useToast()
     const { count, boxPrice } = props;
     const id = 'toast'
@@ -23,7 +24,7 @@ const MintModal = (props) => {
         imageUrl: BoxImageSrc,
         imageAlt: "Mystery Box",
         title: "Title Info about the product",
-        formattedPrice: (count*boxPrice).toString() + ` ${TOKEN_NAME} `,
+        formattedPrice: (count*boxPrice).toString() + ` ${networkConfig.tokenName} `,
         rating: 4,
     };
 
@@ -56,12 +57,12 @@ const MintModal = (props) => {
         return;
       }
 
-      if(currentNetwork!==CHAIN_ID) {
+      if(!supportedChainIds.includes(parseInt(currentNetwork))) {
         if (!toast.isActive(id)) {
           toast({
             id,
             title: 'Wrong network',
-            description: `Please change network to ${CHAIN_NAME}`,
+            description: `Please change network to ${supportedChainNames().join(', ')}`,
             status: 'error',
             duration: 4000,
             isClosable: true,
@@ -148,12 +149,12 @@ const MintModal = (props) => {
     //     return;
     //   }
 
-    //   if(currentNetwork !== CHAIN_ID) {
+    // if(!supportedChainIds.includes(parseInt(currentNetwork))) {
     //     if (!toast.isActive(id)) {
     //       toast({
     //         id,
     //         title: 'Wrong network',
-    //         description: `Please change network to ${CHAIN_NAME}`,
+    //         description: `Please change network to ${supportedChainNames().join(', ')}`,
     //         status: 'error',
     //         duration: 4000,
     //         isClosable: true,

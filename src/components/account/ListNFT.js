@@ -9,24 +9,25 @@ import { ethers } from "ethers";
 import nft_core_abi from "abi/nft_core_abi.json"
 import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
 import { useAuth } from 'contexts/AuthContext';
-import { TOKEN_ADDRESS, NFT_TOKEN_ADDRESS, MARKETPLACE_ADDRESS, TOKEN_SYMBOL } from 'constants';
+import { getNetworkConfig } from 'constants';
 import ConfirmationProgress from '../ConfirmationProgress';
 
 export default function ListNFT(props) {
 
     const { number, callback } = props;
     const toast = useToast();
-
     const [ isLoading, setIsLoading ] = useState(false);
-    const [ token, setToken ] = useState(TOKEN_ADDRESS);
     const [ hiddenConfirmationProgress, setHiddenConfirmationProgress] = useState(true);
     const [ confirmationProgressData, setConfirmationProgressData ] = useState({value: 5, message: 'Start', step: 1});
-    const { currentAccount, approved } = useAuth()
+    const { currentAccount, approved, currentNetwork } = useAuth()
     const priceRef = useRef();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const NFT_core_contract_address = NFT_TOKEN_ADDRESS;
-    const NFT_marketplace_contract_address = MARKETPLACE_ADDRESS;
+    const networkConfig = getNetworkConfig(currentNetwork);
+    const [ token, setToken ] = useState(networkConfig.tokenAddress);
+
+    const NFT_core_contract_address = networkConfig.nftTokenAddress;
+    const NFT_marketplace_contract_address = networkConfig.marketplaceAddress;
     
     const listNFT = async(e) => {
       e.preventDefault();
@@ -76,7 +77,7 @@ export default function ListNFT(props) {
           } else {
             toast({
               title: 'Sell NFT error',
-              description: `${err.data.message}`,
+              description: `${err.data !== undefined ? err.data.message : err.message}`,
               status: 'error',
               duration: 4000,
               isClosable: true,
@@ -132,8 +133,8 @@ export default function ListNFT(props) {
                 <form onSubmit={listNFT}>
                     <FormControl id="token" isRequired>
                         <FormLabel>Token Name</FormLabel>
-                        <Select isReadOnly onChange={handleTokenChange} placeholder={TOKEN_SYMBOL} value={TOKEN_ADDRESS}>
-                          <option value={TOKEN_ADDRESS}>{TOKEN_SYMBOL}</option>
+                        <Select isReadOnly onChange={handleTokenChange} placeholder={networkConfig.tokenName} value={networkConfig.tokenAddress}>
+                          <option value={networkConfig.tokenAddress}>{networkConfig.tokenName}</option>
                         </Select>
                     </FormControl>
                     <FormControl id="price" isRequired my="2">

@@ -8,7 +8,7 @@ import { useAuth } from "contexts/AuthContext";
 import { ethers } from "ethers";
 import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
 import BuyDialog from "./BuyDialog";
-import { MARKETPLACE_ADDRESS, ETHERSCAN_BASE_URL, TOKEN_SYMBOL } from "constants";
+import { TOKEN_SYMBOL, getNetworkConfig } from "constants";
 import { parseMetadata } from "avatar";
 import mergeImages from 'merge-images';
 import BoxImageSrc from "assets/mysteryBox.jpg"
@@ -20,14 +20,15 @@ const ListedCard = (props) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { tokenId, owner, orderId, price, unboxed, metadata, callback, updatePriceCallback } = props;
-  const { currentAccount } = useAuth();
-  const NFT_marketplace_contract_address = MARKETPLACE_ADDRESS;
+  const { currentAccount, currentNetwork } = useAuth();
   const [ isLoading, setIsLoading ] = useState(false);
   const [ isUpdatingPrice, setIsUpdatingPrice ] = useState(false);
   const [ imageBase64, setImageBase64 ] = useState('');
   const [ hiddenConfirmationProgress, setHiddenConfirmationProgress] = useState(true);
   const [ confirmationProgressData, setConfirmationProgressData ] = useState({value: 5, message: 'Start', step: 1});
 
+  const _networkConfig = getNetworkConfig(currentNetwork);
+  const [ networkConfig, setNetworkConfig ] = useState(_networkConfig);
 
   const toast = useToast()
   const priceRef = useRef();
@@ -36,11 +37,12 @@ const ListedCard = (props) => {
   const strExperience = "EXPERIENCE: <br/>Sum of each trait's experience, <br/>higher means more value.";
   const strRarity = "RARITY: <br/>Probability of same NFT<br/> in 1,000,000 NFTs, <br/>lower means more value.";
   const strOwner = "OWNER: <br/>Seller of NFT";
-  // const strOrder = "Order ID";
 
   const unlistNFT = async() => {
     setIsLoading(true)
-    if(!currentAccount) return;
+    if(!currentAccount || !currentNetwork) return;
+    const NFT_marketplace_contract_address = _networkConfig.marketplaceAddress;// MARKETPLACE_ADDRESS;
+  
     try {
       const { ethereum } = window; //injected by metamask
       //connect to an ethereum node
@@ -90,7 +92,9 @@ const ListedCard = (props) => {
   const updatePrice = async(e) => {
     e.preventDefault()
     setIsUpdatingPrice(true)
-    if(!currentAccount) return;
+    if(!currentAccount || !currentNetwork) return;
+    const NFT_marketplace_contract_address = _networkConfig.marketplaceAddress;// MARKETPLACE_ADDRESS;
+
     try {
       const { ethereum } = window; //injected by metamask
       //connect to an ethereum node
@@ -149,7 +153,7 @@ const ListedCard = (props) => {
     }
   }
 
-  const showUrl = (addr) => <a href={ETHERSCAN_BASE_URL + addr} target='_blank' rel="noreferrer">Owner: {addr.substr(0, 8) + "..." + addr.substr(addr.length - 6, 6)}</a>
+  const showUrl = (baseUrl, addr) => <a href={baseUrl + addr} target='_blank' rel="noreferrer">Owner: {addr.substr(0, 8) + "..." + addr.substr(addr.length - 6, 6)}</a>
 
   return (
   <Flex
@@ -239,7 +243,7 @@ const ListedCard = (props) => {
            {currentAccount.toLowerCase() !== owner.toLowerCase() ? 
            <Flex>
              <BiHelpCircle fontSize="xs" data-tip={strOwner} data-for="owner"/>
-             &nbsp; {showUrl(owner)}
+             &nbsp; {showUrl(networkConfig.etherscanBaseUrl, owner)}
            </Flex>: ''}
           </chakra.h1>
         <Divider h={2} mb={1}/>

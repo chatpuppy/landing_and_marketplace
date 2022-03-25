@@ -1,4 +1,3 @@
-// ######
 import donateABI from "abi/TokensVesting_abi";
 import { TOKEN_VESTING_ADDRESS } from "constants";
 

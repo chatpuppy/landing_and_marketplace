@@ -12,26 +12,29 @@ import nft_core_abi from "abi/nft_core_abi.json";
 import { useAuth } from 'contexts/AuthContext';
 // import PageName from 'components/PageName';
 import EmptyList from 'components/EmptyList';
-import { MARKETPLACE_ADDRESS, NFT_TOKEN_ADDRESS } from 'constants';
+import { getNetworkConfig } from 'constants';
 import {skeleton} from '../components/common/LoadingSkeleton'
 import AddressFooter from 'components/AddressFooter';
 
 export default function Marketplace() {
 
   const color = useColorModeValue("black", "white")
-  const NFT_marketplace_contract_address = MARKETPLACE_ADDRESS;
-  const NFT_core_contract_address = NFT_TOKEN_ADDRESS
 
   const [ isLoading, setIsLoading ] = useState(false);
   const _tabIndex = localStorage.getItem('marketplace_tab_index') === null ? 0 : localStorage.getItem('marketplace_tab_index') * 1;
   const [ tabIndex, setTabIndex ] = useState(_tabIndex);
-  const { currentAccount, setListedNFTs } = useAuth()
+  const { currentAccount, setListedNFTs, currentNetwork } = useAuth()
   const toast = useToast()
   const id = 'toast'
   
   const getListedNFTs = useCallback(async() => {
     setIsLoading(true);
-    if(!currentAccount) return;
+    if(!currentAccount || !currentNetwork) return;
+
+    const networkConfig = getNetworkConfig(currentNetwork);
+    const NFT_marketplace_contract_address = networkConfig.marketplaceAddress;
+    const NFT_core_contract_address = networkConfig.nftTokenAddress;
+  
     try {
         const { ethereum } = window; //injected by metamask
         //connect to an ethereum node
@@ -56,14 +59,13 @@ export default function Marketplace() {
                 ...{unboxed: _metadata._artifacts > 0},
             });
         }
-        // console.log('===', listedOrdersArr);
         setListedNFTs(listedOrdersArr);
     } catch(err) {
         console.log(err)
     } finally {
         setIsLoading(false)
     }
-  }, [currentAccount, NFT_core_contract_address, NFT_marketplace_contract_address, setListedNFTs])
+  }, [currentAccount, currentNetwork, setListedNFTs])
 
   useEffect(() => {
     let isConnected = false;
@@ -121,12 +123,12 @@ export default function Marketplace() {
             </TabList>
             <TabPanels>
                 <TabPanel m='auto' w={['90%', null, '78%']}>
-                    <SimpleGrid columns={[1, null, 4]} >
+                    <SimpleGrid columns={[1, 2, 4]} >
                         {isLoading ? skeletons(8) : <OnSaleNFTs/>}
                     </SimpleGrid>
                 </TabPanel>
                 <TabPanel m='auto' w={['90%', null, '78%']}>
-                    <SimpleGrid columns={[1, null, 4]}>
+                    <SimpleGrid columns={[1, 2, 4]}>
                         {isLoading ? skeletons(8) : <MyListedNFT/>}
                     </SimpleGrid>
                 </TabPanel>
@@ -147,19 +149,21 @@ export default function Marketplace() {
             </TabList>
             <TabPanels>
                 <TabPanel m='auto' w={['90%', null, '78%']}>
-                    <SimpleGrid columns={[1, null, 4]} >
+                    <SimpleGrid columns={[1, 2, 4]} >
                         {isLoading ? skeletons(8) : <EmptyList />}
                     </SimpleGrid>
                 </TabPanel>
                 <TabPanel m='auto' w={['90%', null, '78%']}>
-                    <SimpleGrid columns={[1, null, 4]} >
+                    <SimpleGrid columns={[1, 2, 4]} >
                         {isLoading ? skeletons(8) : <EmptyList />}
                     </SimpleGrid>
                 </TabPanel>
             </TabPanels>
         </Tabs>
       }
-      <AddressFooter/>
+      <AddressFooter
+        chainId={currentNetwork}
+      />
       <Footer />
       </>
   );

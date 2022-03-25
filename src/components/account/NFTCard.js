@@ -8,7 +8,7 @@ import nft_core_abi from "abi/nft_core_abi.json"
 import { useAuth } from "contexts/AuthContext";
 import { ethers } from "ethers";
 import ListNFT from "./ListNFT";
-import {NFT_TOKEN_ADDRESS, NFT_MANAGER_V2_ADDRESS} from 'constants';
+import { getNetworkConfig} from 'constants';
 import { parseMetadata } from "avatar";
 import mergeImages from 'merge-images';
 import {BiHelpCircle} from 'react-icons/bi';
@@ -17,9 +17,6 @@ import ConfirmationProgress from '../ConfirmationProgress';
 import UnboxModal from './UnboxModal';
 
 const NFTCard = (props) => {
-  const NFT_manager_contract_address = NFT_MANAGER_V2_ADDRESS;
-  const NFT_core_contract_address = NFT_TOKEN_ADDRESS;
-
   const [ isLoading, setIsLoading ] = useState(false);
   const [ imageBase64, setImageBase64 ] = useState('');
   const [ unboxModalParams, setUnboxModalParams] = useState({tokenId: 0, artifacts: 0, dna: ''})
@@ -27,7 +24,7 @@ const NFTCard = (props) => {
   const [ confirmationProgressData, setConfirmationProgressData ] = useState({value: 5, message: 'Start', step: 1});
 
   const toast = useToast();
-  const { currentAccount } = useAuth();
+  const { currentAccount, currentNetwork } = useAuth();
   const { src, number, unboxed, metadata, dna, uri, callback } = props;
   const [tokenUri, setTokenUri] = useState(uri);
   const bg = useColorModeValue("white", "gray.200")
@@ -40,6 +37,13 @@ const NFTCard = (props) => {
   const onClose1 = () => {setIsOpen1(false); handleUnboxDone(number, unboxModalType)};
   const cancelRef = useRef();
   const cancelRef1 = useRef();
+
+  const networkConfig = getNetworkConfig(currentNetwork);
+
+  const NFT_manager_contract_address = networkConfig.supportChainlinkVRFV2 ? networkConfig.nftManagerV2Address : networkConfig.nftManagerAddress;
+  const NFT_core_contract_address = networkConfig.nftTokenAddress;
+  const unboxMaxWaitingSeconds = networkConfig.unboxMaxWaitingSeconds;
+  const [ needSeconds, setNeedSeconds ] = useState(unboxMaxWaitingSeconds);
 
   const strLevel = "LEVEL: <br/>Sum of levels of each traits, <br/>higher means more value.";
   const strExperience = "EXPERIENCE: <br/>Sum of each trait's experience, <br/>higher means more value.";
@@ -84,14 +88,20 @@ const NFTCard = (props) => {
             const tx = await NFTManagerConnectedContract.unbox(number);
             setConfirmationProgressData({step: '2/4', value: 50, message: 'Unboxing...'});
             await tx.wait(2);
-            setConfirmationProgressData({step: '3/4', value: 75, message: 'Generating random NFT metadata by ChainLink VRF Oracle, it will take around 10 seconds...'});
+            setConfirmationProgressData({step: '3/4', value: 75, message: `Generating random NFT metadata by ChainLink VRF Oracle, it will take around ${needSeconds} seconds...`});
 
             // Get NFT metadata every 1.5 second, to make sure the unboxed is fullfil
             let count = 0;
             const t = setInterval(async()=>{
+              setNeedSeconds(unboxMaxWaitingSeconds - count);
+              if(count % 2 === 1) {
+                count++;
+                return;
+              }
+              // Fetch data from chain every 2 seconds
               const _metadata = await NFTCoreConnectedContract.tokenMetaData(number);
-              // console.log("_artifacts", _metadata._artifacts);
-              if(_metadata._artifacts > 0 || count > 20) {
+              console.log("#" + count + "_artifacts", _metadata._artifacts);
+              if(_metadata._artifacts > 0 || count > unboxMaxWaitingSeconds) {
                 // Popup unbox modal dialog box to upload to ipfs network, and show the picture and artifacts, level, experience, ipfs
                 setUnboxModalParams({
                   artifacts: _metadata._artifacts, 
@@ -108,7 +118,7 @@ const NFTCard = (props) => {
               } else {
                 count++;
               }
-            }, 1500)
+            }, 1000)
           } catch(err) {
             if(err.code === 4001) {
               toast({
@@ -198,7 +208,7 @@ const NFTCard = (props) => {
       <Box
         maxW="lg"
         mx="auto"
-        h="lg"
+        h={["lg", null, "lg"]}
         bg={useColorModeValue("white", "gray.200")}
         shadow="lg"
         rounded="lg"

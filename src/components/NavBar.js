@@ -10,7 +10,7 @@ import {
 import { HamburgerIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { useAuth } from "contexts/AuthContext";
 import LoginButton from "components/LoginButton";
-import { CHAIN_ID, CHAIN_NAME } from '../constants';
+import { supportedChainNames, supportedChainIds } from '../constants';
 
 export default function NavBar() {
   const bg = useColorModeValue("white", "gray.800");
@@ -41,16 +41,16 @@ export default function NavBar() {
       {path !== "/" ? 
       <Alert status='warning' justifyContent='center'>
         <AlertIcon />
-        <AlertTitle mr={2}>Only Available on {CHAIN_NAME} now!</AlertTitle> 
+        <AlertTitle mr={2}>Available on {supportedChainNames().join(', ')} now!</AlertTitle> 
         <AlertDescription>Please <Link isExternal style={{textDecoration: 'underline'}} href="https://discord.gg/QN658sJWkk">join our discord <ExternalLinkIcon /></Link> for more information.</AlertDescription>
         {/* <CloseButton position='absolute' right='8px' top='8px'/> */}
       </Alert> : <></>}
       {
-        currentNetwork !== CHAIN_ID && path !== "/" ?
+        !supportedChainIds.includes(currentNetwork) && path !== "/" ?
         <Alert status='error' justifyContent='center'>
           <AlertIcon />
           <AlertTitle mr={2}>Wrong network detected!</AlertTitle>
-          <AlertDescription>Please change network to {CHAIN_NAME}.</AlertDescription>
+          <AlertDescription>Please change network to {supportedChainNames().join(', ')}.</AlertDescription>
           {/* <CloseButton position='absolute' right='8px' top='8px'/> */}
         </Alert>
         : <></>
@@ -91,13 +91,15 @@ export default function NavBar() {
               color="brand.500"
               display={{ base: "none", md: "inline-flex" }}
             >
-              {/* ###### */}
-              {/* <RouterLink to="/" style={{textDecoration: 'none'}}>
+              {path === "/" ? <></> : 
+              <Box>
+              <RouterLink to="/" style={{textDecoration: 'none'}}>
                 <Button variant="ghost">Home</Button>         
               </RouterLink>
-              <RouterLink to="/donate" style={{textDecoration: 'none'}}>
+              {/* ###### */}
+              {/* <RouterLink to="/donate" style={{textDecoration: 'none'}}>
                 <Button variant={path==="/donate" ? "solid" : "ghost"}>Donate</Button>
-              </RouterLink>
+              </RouterLink> */}
               <RouterLink to="/mint" style={{textDecoration: 'none'}}>
                 <Button variant={path==="/mint" ? "solid" : "ghost"}>Mint</Button>
               </RouterLink>
@@ -109,7 +111,8 @@ export default function NavBar() {
               </RouterLink>
               <Button as="a" href="https://snapshot.org/#/chatpuppy.eth" target="_blank" variant="ghost"
                 rightIcon={<ExternalLinkIcon />}
-              >Governance</Button> */}
+              >Governance</Button>
+              </Box>}
               <ToggleTheme />
               {path==="/" ? <></> : <LoginButton />}
             </HStack>
@@ -160,8 +163,10 @@ export default function NavBar() {
                   aria-label="Close menu"
                   onClick={mobileNav.onClose}
                 />
-                {/* ###### */}
-                {/* <RouterLink to="/" style={{textDecoration: 'none'}}>
+
+                {path === "/" ? <></> : 
+                <Box>
+                <RouterLink to="/" style={{textDecoration: 'none'}}>
                   <Button w="full" variant="ghost">
                     Home
                   </Button>
@@ -176,17 +181,19 @@ export default function NavBar() {
                     Marketplace
                   </Button>
                 </RouterLink>
-                <RouterLink to="/donate" style={{textDecoration: 'none'}}>
+                {/* ###### */}
+                {/* <RouterLink to="/donate" style={{textDecoration: 'none'}}>
                   <Button w="full" variant={path==="/donate" ? "solid" : "ghost"}>
                     Donate
                   </Button>
-                </RouterLink>
+                </RouterLink> */}
                 <RouterLink to="/account" style={{textDecoration: 'none'}}>
                   <Button w="full" variant={path==="/account" ? "solid" : "ghost"}>
                     My NFTs
                   </Button>
                 </RouterLink>
-                {path==="/" ? <></> : <LoginButton />} */}
+                <LoginButton />
+                </Box>}
                 <ToggleTheme />
               </VStack>
             </Box>

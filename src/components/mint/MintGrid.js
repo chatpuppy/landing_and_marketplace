@@ -9,13 +9,10 @@ import MintModal from './MintModal';
 import { ethers } from 'ethers';
 // import nft_manager_abi from "abi/nft_manager_abi";
 import nft_manager_v2_abi from "abi/nft_manager_v2_abi";
-import { NFT_MANAGER_V2_ADDRESS} from 'constants';
+import { getNetworkConfig} from 'constants';
 
-export default function MintGrid() {
-
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const NFT_manager_contract_address = NFT_MANAGER_V2_ADDRESS;
-
+export default function MintGrid(props) {
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const [ boxPrice, setBoxPrice ] = useState()
 
     /*
@@ -30,12 +27,15 @@ export default function MintGrid() {
       precision: 0
     })
 
-    const inc = getIncrementButtonProps()
-    const dec = getDecrementButtonProps()
-    console.log(inc, dec) 
+    // const inc = getIncrementButtonProps()
+    // const dec = getDecrementButtonProps()
     const input = getInputProps({ isReadOnly: false })
 
     const getBoxPrice = async() => {
+        if(!props.chainId) return;
+        const networkConfig = getNetworkConfig(props.chainId);
+        const NFT_manager_contract_address = networkConfig.supportChainlinkVRFV2 ? networkConfig.nftManagerV2Address : networkConfig.nftManagerAddress;
+
         try {
             const { ethereum } = window; //injected by metamask
             //connect to an ethereum node
@@ -61,8 +61,7 @@ export default function MintGrid() {
         return () => {
             isConnected = true;
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [props.chainId])
     
 
 return (

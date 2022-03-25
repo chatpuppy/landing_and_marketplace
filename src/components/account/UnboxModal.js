@@ -3,14 +3,13 @@ import { Box, Text, Image, useColorModeValue, Button, useToast, SkeletonCircle, 
 import { useAuth } from "contexts/AuthContext";
 import { parseMetadata } from "avatar";
 import mergeImages from 'merge-images';
-import { NFT_STORAGE_TOKEN, NFT_DESCRIPTION, NFT_NAME, NFT_TOKEN_ADDRESS } from '../../constants';
+import { NFT_STORAGE_TOKEN, NFT_DESCRIPTION, NFT_NAME, getNetworkConfig } from '../../constants';
 import { NFTStorage, File } from 'nft.storage'
 import { ethers } from "ethers";
 import nft_core_abi from "abi/nft_core_abi.json"
 import ConfirmationProgress from '../ConfirmationProgress';
 
 const UnboxModal = (props) => {
-    const NFT_core_contract_address = NFT_TOKEN_ADDRESS;
 
     const [ isLoading, setIsLoading ] = useState(false);
     const [ nftMetadata, setNftMetadata ] = useState({ipnft: '', url: ''});
@@ -22,7 +21,10 @@ const UnboxModal = (props) => {
     const [ message1, setMessage1 ] = useState("Congrat! you have got a special NFT. If you want to trade it on OpenSea, please sign and Save metadata URI.");
 
     const client = new NFTStorage({ token: NFT_STORAGE_TOKEN });
-    const { currentAccount } = useAuth();
+    const { currentAccount, currentNetwork} = useAuth();
+
+    const networkConfig = getNetworkConfig(currentNetwork);
+    const NFT_core_contract_address = networkConfig.nftTokenAddress;
 
     const toast = useToast()
     const { artifacts, tokenId, dna, callback } = props;

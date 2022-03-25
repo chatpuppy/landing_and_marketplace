@@ -11,28 +11,29 @@ import BoxImageSrc from "assets/mysteryBox.jpg"
 import { AiOutlineStar } from "react-icons/ai"
 import { BsBoxSeam } from "react-icons/bs"
 import EmptyList from 'components/EmptyList';
-import {NFT_TOKEN_ADDRESS, MARKETPLACE_ADDRESS} from 'constants';
+import {getNetworkConfig} from 'constants';
 import {skeleton} from '../components/common/LoadingSkeleton'
 import AddressFooter from 'components/AddressFooter';
 
 export default function Account() {
-    const NFT_core_contract_address = NFT_TOKEN_ADDRESS
 
     const [ isLoading, setIsLoading ] = useState(false);
-    const { currentAccount, setOwnedNFTs, setApproved } = useAuth();
+    const { currentAccount, setOwnedNFTs, setApproved, currentNetwork } = useAuth();
     const [ boxedItems, setBoxedItems ] = useState([]);
     const [ unboxedItems, setUnboxedItems ] = useState([]);
     const _tabIndex = localStorage.getItem('account_tab_index') === null ? 0 : localStorage.getItem('account_tab_index') * 1;
     const [ tabIndex, setTabIndex ] = useState(_tabIndex);
     const toast = useToast();
     const id = 'toast'
+
     let _boxedItems = [];
     let _unboxedItems = [];
 
     const getOwnedTokens = useCallback(async() => {
-        console.log("getOwnedToken");
         setIsLoading(true);
-        if(!currentAccount) return;
+        if(!currentAccount || !currentNetwork) return;
+        const networkConfig = getNetworkConfig(currentNetwork);
+        const NFT_core_contract_address = networkConfig.nftTokenAddress;
         // eslint-disable-next-line react-hooks/exhaustive-deps
         _boxedItems = [];
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,7 +48,7 @@ export default function Account() {
             const NFTCoreConnectedContract = new ethers.Contract(NFT_core_contract_address, nft_core_abi, signer);
             // const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_v2_abi, signer);
             let count = await NFTCoreConnectedContract.balanceOf(currentAccount);
-            let _approved = await NFTCoreConnectedContract.isApprovedForAll(currentAccount, MARKETPLACE_ADDRESS);
+            let _approved = await NFTCoreConnectedContract.isApprovedForAll(currentAccount, networkConfig.marketplaceAddress);
             setApproved(_approved);
             count = parseInt(count["_hex"], 16);
             let _ownedNFTs = []
@@ -78,10 +79,9 @@ export default function Account() {
                 setIsLoading(false)
             }, 400);
         }
-    }, [currentAccount, setApproved, setOwnedNFTs])
+    }, [currentAccount, setApproved, setOwnedNFTs, currentNetwork])
     
     const parseBoxes = (_boxedItems, _unboxedItems) => {
-        console.log("parseBoxes");
         if(_boxedItems.length !== 0 && boxedItems.length === 0) {
             let arr = [];
             try{
@@ -133,7 +133,6 @@ export default function Account() {
     }
 
     useEffect(() => {
-        console.log('useEffect');
         let isConnected = false;
         if(!isConnected) {
             if(!window.ethereum) {
@@ -149,13 +148,14 @@ export default function Account() {
                 }
                 return;
             }
+            if(!currentNetwork) return;
             getOwnedTokens();
         }
 
         return () => {
             isConnected = true;
         };
-    }, [getOwnedTokens, toast]);
+    }, [getOwnedTokens, currentNetwork, toast]);
     
     const color = useColorModeValue("black", "white");
 
@@ -230,12 +230,12 @@ export default function Account() {
             </TabList>
             <TabPanels>
                 <TabPanel m='auto' w={['90%', null, '78%']}>
-                    <SimpleGrid columns={[1, null, 4]}>
+                    <SimpleGrid columns={[1, 2, 4]}>
                         {isLoading ? skeletons(8) : boxedItems.length===0 ? <EmptyList /> : boxedItems}
                     </SimpleGrid>
                 </TabPanel>
                 <TabPanel m='auto' w={['90%', null, '78%']}>
-                    <SimpleGrid columns={[1, null, 4]}>
+                    <SimpleGrid columns={[1, 2, 4]}>
                         {isLoading ? skeletons(8) : unboxedItems.length===0 ? <EmptyList /> : unboxedItems}
                     </SimpleGrid>
                 </TabPanel>
@@ -256,19 +256,21 @@ export default function Account() {
             </TabList>
             <TabPanels>
                 <TabPanel m='auto' w={['90%', null, '78%']}>
-                    <SimpleGrid columns={[1, null, 4]} >
+                    <SimpleGrid columns={[1, 2, 4]} >
                         {isLoading ? skeletons(8) : <EmptyList />}
                     </SimpleGrid>
                 </TabPanel>
                 <TabPanel m='auto' w={['90%', null, '78%']}>
-                    <SimpleGrid columns={[1, null, 4]} >
+                    <SimpleGrid columns={[1, 2, 4]} >
                         {isLoading ? skeletons(8) : <EmptyList />}
                     </SimpleGrid>
                 </TabPanel>
             </TabPanels>
         </Tabs>
         }
-        <AddressFooter/>
+        <AddressFooter
+            chainId={currentNetwork}
+        />
         <Footer />
         </>
     );

@@ -1,3 +1,4 @@
+import {useState, useEffect} from 'react';
 import {
     Box,
     Container,
@@ -8,22 +9,25 @@ import {
 } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
-    NFT_TOKEN_ADDRESS, 
-    ETHERSCAN_BASE_URL, 
-    TOKEN_ADDRESS, 
-    NFT_MANAGER_V2_ADDRESS,
-    MARKETPLACE_ADDRESS
+    getNetworkConfig,
 } from 'constants';
   
 function shortenAddress(address) {
-    return address.substr(0, 8) + "..." + address.substr(address.length - 6, 6)
+    return address !== undefined ? address.substr(0, 8) + "..." + address.substr(address.length - 6, 6) : '';
 }
 
-export default function AddressFooter() {
+export default function AddressFooter(props) {
+    const [networkConfig, setNetworkConfig] = useState(null);
+
+    useEffect(() => {
+        setNetworkConfig(getNetworkConfig(props.chainId));
+    }, [networkConfig, props.chainId])
+
     return (
         <Box 
         bg={useColorModeValue('gray.50', 'gray.900')}
         color={useColorModeValue('gray.700', 'gray.200')}>
+        {networkConfig !== null && networkConfig !== undefined? 
         <Container
             as={Stack}
             maxW={'6xl'}
@@ -34,22 +38,23 @@ export default function AddressFooter() {
             align={{ base: 'center', md: 'center' }}>
             <Text>Contract Addresses: </Text>
             <Text>Token Address: {""}
-                <Link href={ETHERSCAN_BASE_URL + TOKEN_ADDRESS}
-                isExternal mr="1">{shortenAddress(TOKEN_ADDRESS)}  {""}<ExternalLinkIcon /></Link>
+                <Link href={networkConfig.etherscanBaseUrl + networkConfig.tokenAddress}
+                isExternal mr="1">{shortenAddress(networkConfig.tokenAddress)}  {""}<ExternalLinkIcon /></Link>
             </Text>
             <Text>NFT Address: {""}
-                <Link href={ETHERSCAN_BASE_URL + NFT_TOKEN_ADDRESS}
-                isExternal mr="1">{shortenAddress(NFT_TOKEN_ADDRESS)}  {""}<ExternalLinkIcon /></Link>
+                <Link href={networkConfig.etherscanBaseUrl + networkConfig.nftTokenAddress}
+                isExternal mr="1">{shortenAddress(networkConfig.nftTokenAddress)}  {""}<ExternalLinkIcon /></Link>
             </Text>
             <Text>NFT Manager Address: {""}
-                <Link href={ETHERSCAN_BASE_URL + NFT_MANAGER_V2_ADDRESS}
-                isExternal mr="1">{shortenAddress(NFT_MANAGER_V2_ADDRESS)}  {""}<ExternalLinkIcon /></Link>
+                <Link href={networkConfig.etherscanBaseUrl + (networkConfig.supportChainlinkVRFV2 ? networkConfig.nftManagerV2Address : networkConfig.nftManagerAddress)}
+                isExternal mr="1">{shortenAddress(networkConfig.supportChainlinkVRFV2 ? networkConfig.nftManagerV2Address : networkConfig.nftManagerAddress)}  {""}<ExternalLinkIcon /></Link>
             </Text>
             <Text>Marketplace Address: {""}
-                <Link href={ETHERSCAN_BASE_URL + MARKETPLACE_ADDRESS}
-                isExternal mr="1">{shortenAddress(MARKETPLACE_ADDRESS)}  {""}<ExternalLinkIcon /></Link>
+                <Link href={networkConfig.etherscanBaseUrl + networkConfig.marketplaceAddress}
+                isExternal mr="1">{shortenAddress(networkConfig.marketplaceAddress)}  {""}<ExternalLinkIcon /></Link>
             </Text>
         </Container>
+        : <></>}
         </Box>
     );
 }
