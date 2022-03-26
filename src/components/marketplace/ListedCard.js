@@ -8,7 +8,7 @@ import { useAuth } from "contexts/AuthContext";
 import { ethers } from "ethers";
 import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
 import BuyDialog from "./BuyDialog";
-import { TOKEN_SYMBOL, getNetworkConfig } from "constants";
+import { getNetworkConfig } from "constants";
 import { parseMetadata } from "avatar";
 import mergeImages from 'merge-images';
 import BoxImageSrc from "assets/mysteryBox.jpg"
@@ -19,7 +19,7 @@ import ConfirmationProgress from "../ConfirmationProgress";
 const ListedCard = (props) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { tokenId, owner, orderId, price, unboxed, metadata, callback, updatePriceCallback } = props;
+  const { tokenId, owner, orderId, price, unboxed, metadata, callback, updatePriceCallback, paymentToken } = props;
   const { currentAccount, currentNetwork } = useAuth();
   const [ isLoading, setIsLoading ] = useState(false);
   const [ isUpdatingPrice, setIsUpdatingPrice ] = useState(false);
@@ -154,6 +154,7 @@ const ListedCard = (props) => {
   }
 
   const showUrl = (baseUrl, addr) => <a href={baseUrl + addr} target='_blank' rel="noreferrer">Owner: {addr.substr(0, 8) + "..." + addr.substr(addr.length - 6, 6)}</a>
+  const paymentTokenSymbol = () => !networkConfig ? '' : networkConfig.paymentTokens.filter((item) => item.address === paymentToken)[0].symbol;
 
   return (
   <Flex
@@ -252,7 +253,7 @@ const ListedCard = (props) => {
           fontSize="md"
           fontWeight="bold"
         >
-          Price: {parseInt(price["_hex"], 16)/Math.pow(10, 18)} {TOKEN_SYMBOL}
+          Price: {parseInt(price["_hex"], 16)/Math.pow(10, 18)} {paymentTokenSymbol()}
         </chakra.h1>
       </Box>
       <Flex
@@ -309,6 +310,8 @@ const ListedCard = (props) => {
             price={price} 
             tokenId={tokenId} 
             orderId={orderId}
+            paymentToken={paymentToken}
+            symbol={paymentTokenSymbol()}
             callback={(orderId) => callback(orderId)}
           />
           }
@@ -333,7 +336,7 @@ const ListedCard = (props) => {
             <form onSubmit={updatePrice}>
                 <FormControl id="price" isRequired mb="2">
                     <FormLabel>Price</FormLabel>
-                    <Input type="number" ref={priceRef} min="0" step="1"/>
+                    <Input type="number" ref={priceRef} min="0" step="0.0001"/>
                 </FormControl>
                 <Box h={5}></Box>
                 <ConfirmationProgress 

@@ -52,7 +52,7 @@ export default function Account() {
             setApproved(_approved);
             count = parseInt(count["_hex"], 16);
             let _ownedNFTs = []
-            for(let i=0; i<count; i++) {
+            for(let i = 0; i < count; i++) {
                 let _id = await NFTCoreConnectedContract.tokenOfOwnerByIndex(currentAccount, i);
                 _id = parseInt(_id["_hex"], 16);
                 // const _type = await NFTManagerConnectedContract.boxStatus(_id); // 需要用另外方法判断是否unboxed，否则在NFTManager升级后，数据会丢失

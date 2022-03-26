@@ -9,7 +9,7 @@ import { ethers } from "ethers";
 import nft_core_abi from "abi/nft_core_abi.json"
 import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
 import { useAuth } from 'contexts/AuthContext';
-import { getNetworkConfig } from 'constants';
+import { getNetworkConfig, TOKEN_SYMBOL } from 'constants';
 import ConfirmationProgress from '../ConfirmationProgress';
 
 export default function ListNFT(props) {
@@ -24,7 +24,7 @@ export default function ListNFT(props) {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const networkConfig = getNetworkConfig(currentNetwork);
-    const [ token, setToken ] = useState(networkConfig.tokenAddress);
+    const [ token, setToken ] = useState(networkConfig.paymentTokens[0].address);
 
     const NFT_core_contract_address = networkConfig.nftTokenAddress;
     const NFT_marketplace_contract_address = networkConfig.marketplaceAddress;
@@ -133,13 +133,15 @@ export default function ListNFT(props) {
                 <form onSubmit={listNFT}>
                     <FormControl id="token" isRequired>
                         <FormLabel>Token Name</FormLabel>
-                        <Select isReadOnly onChange={handleTokenChange} placeholder={networkConfig.tokenName} value={networkConfig.tokenAddress}>
-                          <option value={networkConfig.tokenAddress}>{networkConfig.tokenName}</option>
+                        <Select isReadOnly onChange={handleTokenChange} placeholder='Select payment token'>
+                          {networkConfig.paymentTokens.map((item, index) => 
+                            <option key={index} value={item.address}>{item.symbol}</option>
+                          )}
                         </Select>
                     </FormControl>
                     <FormControl id="price" isRequired my="2">
                         <FormLabel>Set Price</FormLabel>
-                        <Input type="number" ref={priceRef} min="0" step="1"/>
+                        <Input type="number" ref={priceRef} min="0" step="0.0001"/>
                     </FormControl>
                     <Box h={5}></Box>
                     <ConfirmationProgress 

@@ -8,13 +8,13 @@ import cpt_abi from "abi/cpt_abi.json"
 import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
 import { ethers } from "ethers";
 import { useAuth } from 'contexts/AuthContext';
-import {getNetworkConfig} from 'constants';
+import {getNetworkConfig, NFT_NAME} from 'constants';
 import ConfirmationProgress from '../ConfirmationProgress';
 
 export default function BuyDialog(props) {
     const { currentAccount, currentNetwork } = useAuth()
     const toast = useToast();
-    const { tokenId, price, orderId, callback } = props;
+    const { tokenId, price, orderId, callback, paymentToken, symbol } = props;
     const [ isLoading, setIsLoading ] = useState(false);
     const [isOpen, setIsOpen] = useState(false)
     const [ hiddenConfirmationProgress, setHiddenConfirmationProgress] = useState(true);
@@ -24,7 +24,7 @@ export default function BuyDialog(props) {
     const cancelRef = useRef()
 
     const networkConfig = getNetworkConfig(currentNetwork);
-    const cpt_contract_address = networkConfig.tokenAddress;
+    const cpt_contract_address = paymentToken;
     const NFT_marketplace_contract_address = networkConfig.marketplaceAddress;
 
     const [ approved, setApproved ] = useState(false)
@@ -149,7 +149,7 @@ export default function BuyDialog(props) {
                 </AlertDialogHeader>
                 <ModalCloseButton/>
                 <AlertDialogBody>
-                    {approved ? 'Buy' : 'Approve'} ChatPuppy NFT Token ID #{tokenId} with {parseInt(price["_hex"], 16)/ Math.pow(10, 18)} {networkConfig.tokenName}?
+                    {approved ? 'Buy' : 'Approve'} {NFT_NAME} Token ID #{tokenId} with {parseInt(price["_hex"], 16)/ Math.pow(10, 18)} {symbol}?
                     <Box h={5}></Box>
                     <ConfirmationProgress 
                         hidden={hiddenConfirmationProgress}

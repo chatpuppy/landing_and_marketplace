@@ -59,6 +59,7 @@ export default function Marketplace() {
                 ...{unboxed: _metadata._artifacts > 0},
             });
         }
+        console.log("orders", listedOrdersArr);
         setListedNFTs(listedOrdersArr);
     } catch(err) {
         console.log(err)
