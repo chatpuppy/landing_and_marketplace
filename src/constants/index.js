@@ -11,6 +11,7 @@ export const netWorkConfig = [{
 		supportChainlinkVRFV2: true,
 		tokenVestingAddress: '0xF886e6336f752F7c4aA496c33A5F77079fcc7a0E',
 		paymentTokens: [{
+			// The main token CPT must be the first
 			address: '0x6adb30205dd2D2902f32E40e0f2CE15c728F9492',
 			symbol: 'CPT',
 		}],
@@ -27,6 +28,7 @@ export const netWorkConfig = [{
 		supportChainlinkVRFV2: false,
 		tokenVestingAddress: '',
 		paymentTokens: [{
+			// The main token CPT must be the first
 			address: '0x5F9d7Dc9e56f7d182f3eFb1b48874C0512b4c40d',
 			symbol: 'CPT',
 		}, {

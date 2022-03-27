@@ -38,8 +38,8 @@ export default function AddressFooter(props) {
             align={{ base: 'center', md: 'center' }}>
             <Text>Contract Addresses: </Text>
             <Text>Token Address: {""}
-                <Link href={networkConfig.etherscanBaseUrl + networkConfig.tokenAddress}
-                isExternal mr="1">{shortenAddress(networkConfig.tokenAddress)}  {""}<ExternalLinkIcon /></Link>
+                <Link href={networkConfig.etherscanBaseUrl + networkConfig.paymentTokens[0].address}
+                isExternal mr="1">{shortenAddress(networkConfig.paymentTokens[0].address)}  {""}<ExternalLinkIcon /></Link>
             </Text>
             <Text>NFT Address: {""}
                 <Link href={networkConfig.etherscanBaseUrl + networkConfig.nftTokenAddress}

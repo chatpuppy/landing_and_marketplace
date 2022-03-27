@@ -91,6 +91,7 @@ export default function ListNFT(props) {
     }
 
     const handleTokenChange = (e) => {
+      console.log('payment token', e.target.value);
       setToken(e.target.value)
     }
 
@@ -133,7 +134,7 @@ export default function ListNFT(props) {
                 <form onSubmit={listNFT}>
                     <FormControl id="token" isRequired>
                         <FormLabel>Token Name</FormLabel>
-                        <Select isReadOnly onChange={handleTokenChange} placeholder='Select payment token'>
+                        <Select isReadOnly onChange={handleTokenChange} placeholder={`Select payment token, Default ${networkConfig.paymentTokens[0].symbol}`}>
                           {networkConfig.paymentTokens.map((item, index) => 
                             <option key={index} value={item.address}>{item.symbol}</option>
                           )}
