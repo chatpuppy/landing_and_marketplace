@@ -52,6 +52,7 @@ export default function Marketplace() {
     setIsLoading(true);
     if(!currentAccount || !currentNetwork) return;
 		console.log('Load data from chain...');
+		
 		setIsLoadFromDB(false);
     const networkConfig = getNetworkConfig(currentNetwork);
     const NFT_marketplace_contract_address = networkConfig.marketplaceAddress;
@@ -108,6 +109,10 @@ export default function Marketplace() {
 				getListedNFTs();
 			}	
 			// console.log('from db', response.data.data);
+			if(!response.data.success && response.data.message === "no data") {
+				console.log('No data');
+				return;
+			}
 			let listedOrdersArr = [];
 			for(let i = 0; i < response.data.data.length; i++) {
 				const data = response.data.data[i];

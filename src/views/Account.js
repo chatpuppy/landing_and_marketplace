@@ -110,11 +110,16 @@ export default function Account() {
 					order: sortBy[0],
 					desc: parseInt(sortBy[1]),
 				});
-				if(response.status !== 200) {
+
+				if(response.status !== 200) { 
 					console.log("ERROR while loading data from database, try to load from blockchain...")
 					getOwnedTokens();
 				}
 				// console.log('my nfts', response.data.data);
+				if(!response.data.success && response.data.message === "no data") {
+					console.log('No data');
+					return;
+				}
 				let _ownedNFTs = [];
 				for(let i = 0; i < response.data.data.length; i++) {
 					const d = response.data.data[i];
