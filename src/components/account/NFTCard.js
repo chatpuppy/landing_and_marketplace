@@ -53,7 +53,7 @@ const NFTCard = (props) => {
 
   const unboxNFT = async() => {
     setIsLoading(true);
-    if(!currentAccount) return;
+    if(!currentAccount || !networkConfig) return;
     try {
       const { ethereum } = window; //injected by metamask
       //connect to an ethereum node
@@ -87,7 +87,7 @@ const NFTCard = (props) => {
           try {
             const tx = await NFTManagerConnectedContract.unbox(number);
             setConfirmationProgressData({step: '2/4', value: 50, message: 'Unboxing...'});
-            await tx.wait(2);
+            await tx.wait(networkConfig.confirmationNumbers);
             setConfirmationProgressData({step: '3/4', value: 75, message: `Generating random NFT metadata by ChainLink VRF Oracle, it will take around ${needSeconds} seconds...`});
 
             // Get NFT metadata every 1.5 second, to make sure the unboxed is fullfil

@@ -30,7 +30,7 @@ export default function BuyDialog(props) {
     const [ approved, setApproved ] = useState(false)
     const buyNFT = async() => {
         setIsLoading(true)
-        if(!currentAccount) return;
+        if(!currentAccount || !networkConfig) return;
         try {
             const { ethereum } = window; //injected by metamask
             //connect to an ethereum node
@@ -58,13 +58,13 @@ export default function BuyDialog(props) {
                 if(!approved) {
                     const tx = await CPTConnectedContract.approve(NFT_marketplace_contract_address, price);
                     setConfirmationProgressData({step: '2/5', value: 40, message: 'Approving...'});
-                    await tx.wait(2);
+                    await tx.wait(networkConfig.confirmationNumbers);
                     setConfirmationProgressData({step: '3/5', value: 60, message: 'Approved, start purchase...'});
                     setApproved(true);
                 }
                 const tx = await NFTMarketplaceConnectedContract.matchOrder(orderId, price);
                 setConfirmationProgressData({step: '4/5', value: 80, message: 'Purchase NFT and wait confirmation...'});
-                await tx.wait(2);
+                await tx.wait(networkConfig.confirmationNumbers);
                 setConfirmationProgressData({step: '5/5', value: 100, message: 'You have got 2 confirmations, done!'});
 
                 callback(orderId);

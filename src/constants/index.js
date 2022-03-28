@@ -22,6 +22,7 @@ export const netWorkConfig = [{
 		etherscanBaseUrl: 'https://testnet.bscscan.com/address/',
 		tokenName: 'tBNB',
 		unboxMaxWaitingSeconds: 20,
+		confirmationNumbers: 2,
 	}, {
 		chainId: 80001,
 		chainName: 'Mumbai',
@@ -48,6 +49,7 @@ export const netWorkConfig = [{
 		etherscanBaseUrl: 'https://mumbai.polygonscan.com/address/',
 		tokenName: 'MATIC',
 		unboxMaxWaitingSeconds: 120,
+		confirmationNumbers: 1,
 	}
 ];
 
@@ -64,4 +66,4 @@ export const NFT_STORAGE_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiO
 export const NFT_DESCRIPTION = 'ChatPuppy, a group of NFTs of official chatpuppy peer-to-peer and wallet-to-wallet messeging Dapp. The owners of ChatPuppies can show the NFT as avatar in the messenger and get super functions.';
 export const NFT_NAME = 'ChatPuppy NFT';
 export const TOKEN_SYMBOL = 'CPT';
-
+export const API_BASE_URI = 'https://api.chatpuppy.com:8444/api/v1/';

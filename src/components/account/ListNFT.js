@@ -32,7 +32,7 @@ export default function ListNFT(props) {
     const listNFT = async(e) => {
       e.preventDefault();
       setIsLoading(true);
-      if(!currentAccount) return;
+      if(!currentAccount || !networkConfig) return;
       try {
         const { ethereum } = window; //injected by metamask
         //connect to an ethereum node
@@ -48,7 +48,7 @@ export default function ListNFT(props) {
           if(!approved) {
             const tx = await NFTCoreConnectedContract.setApprovalForAll(NFT_marketplace_contract_address, true)
             setConfirmationProgressData({step: '2/5', value: 40, message: 'Approving NFT...'});
-            await tx.wait(2);
+            await tx.wait(networkConfig.confirmationNumbers);
             setConfirmationProgressData({step: '3/5', value: 60, message: 'Approved, start listing...'});
           } else {
             setTimeout(() => {
@@ -57,7 +57,7 @@ export default function ListNFT(props) {
           }
           const tx = await NFTMarketplaceConnectedContract.addOrder(number, token, ethers.utils.parseEther(''+priceRef.current.value))
           setConfirmationProgressData({step: '4/5', value: 80, message: 'List NFT and wait confirmation...'});
-          await tx.wait(2);
+          await tx.wait(networkConfig.confirmationNumbers);
           setConfirmationProgressData({step: '5/5', value: 100, message: 'You have got 2 confirmations, done!'})
 
           setTimeout(() => {

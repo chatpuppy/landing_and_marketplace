@@ -53,7 +53,7 @@ const ListedCard = (props) => {
       const NFTMarketplaceConnectedContract = new ethers.Contract(NFT_marketplace_contract_address, nft_marketplace_abi, signer);
       try {
         const tx = await NFTMarketplaceConnectedContract.cancelOrder(orderId);
-        await tx.wait(2);
+        await tx.wait(networkConfig.confirmationNumbers);
         setIsLoading(false);
         toast({
           title: 'Unlisted!',
@@ -108,7 +108,7 @@ const ListedCard = (props) => {
       try {
         const tx = await NFTMarketplaceConnectedContract.updatePrice(orderId, ethers.utils.parseEther(''+priceRef.current.value))
         setConfirmationProgressData({step: '2/3', value: 66, message: 'Update price and wait confirmations...'});
-        await tx.wait(2);
+        await tx.wait(networkConfig.confirmationNumbers);
         setConfirmationProgressData({step: '3/3', value: 100, message: 'You have got 2 confirmations, done!'});
 
         updatePriceCallback(orderId, ethers.utils.parseEther(''+priceRef.current.value));

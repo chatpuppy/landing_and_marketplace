@@ -72,7 +72,7 @@ const UnboxModal = (props) => {
     }, [artifacts])
 
     const updateMetadata = async() => {
-      if(!currentAccount) return;
+      if(!currentAccount || !networkConfig) return;
       if(nftMetadata.ipnft === '') return;
       setIsLoading(true);
       try {
@@ -91,7 +91,7 @@ const UnboxModal = (props) => {
 
           const tx = await NFTCoreConnectedContract.updateTokenURI(tokenId, nftMetadata.url);
           setConfirmationProgressData({step: '2/3', value: 66, message: 'Updating, waiting for confirmation...'});
-          await tx.wait(2);
+          await tx.wait(networkConfig.confirmationNumbers);
           setConfirmationProgressData({step: '3/3', value: 100, message: 'You have got 2 confirmations, update success...'});
           
           setIsLoading(false);
