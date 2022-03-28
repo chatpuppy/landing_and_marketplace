@@ -37,7 +37,7 @@ export default function Account() {
 		}
 
 		const orderSelect = 
-		<Select isReadOnly onChange={onOrderSelectChange} placeholder={"Order by"} w="sm" float="right" mt="5" mb="5">
+		<Select isReadOnly onChange={onOrderSelectChange} placeholder={"Order by"} w={["100%", null, "30%"]} mt="5" mb="5">
 			<option value={'tokenId_1'}>Sort by token id 9-0</option>
 			<option value={'tokenId_0'}>Sort by token id 0-9</option>			
 		</Select>

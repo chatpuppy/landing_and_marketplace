@@ -35,7 +35,7 @@ export default function Marketplace() {
 	}
 
 	const orderSelect = 
-	<Select isReadOnly onChange={onOrderSelectChange} placeholder={"Order by"} w="sm" float="right" mt="5" mb="5">
+	<Select isReadOnly onChange={onOrderSelectChange} placeholder={"Order by"} w={["100%", null, "30%"]} mt="5" mb="5">
 		<option value={'tokenId_1'}>Sort by token id 9-0</option>
 		<option value={'tokenId_0'}>Sort by token id 0-9</option>
 		<option value={'startDate_1'}>Sort by create time 9-0</option>
@@ -52,7 +52,7 @@ export default function Marketplace() {
     setIsLoading(true);
     if(!currentAccount || !currentNetwork) return;
 		console.log('Load data from chain...');
-		
+
 		setIsLoadFromDB(false);
     const networkConfig = getNetworkConfig(currentNetwork);
     const NFT_marketplace_contract_address = networkConfig.marketplaceAddress;
