@@ -115,7 +115,7 @@ const MintModal = (props) => {
             } else {
               toast({
                 title: 'Buy and mint NFT error',
-                description: `${err.data.message}`,
+                description: `${err.data === undefined ? err.message : err.data.message}`,
                 status: 'error',
                 duration: 4000,
                 isClosable: true,
