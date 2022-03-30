@@ -8,9 +8,9 @@ import { NFTStorage, File } from 'nft.storage'
 import { ethers } from "ethers";
 import nft_core_abi from "abi/nft_core_abi.json"
 import ConfirmationProgress from '../ConfirmationProgress';
+import Resizer from "react-image-file-resizer";
 
 const UnboxModal = (props) => {
-
     const [ isLoading, setIsLoading ] = useState(false);
     const [ nftMetadata, setNftMetadata ] = useState({ipnft: '', url: ''});
     const [ imageBase64, setImageBase64 ] = useState('');
@@ -29,12 +29,17 @@ const UnboxModal = (props) => {
     const toast = useToast()
     const { artifacts, tokenId, dna, callback } = props;
 
-    const uploadNFT = async(imageFile, pmd) => {
+    const uploadNFT = async(
+			imageFile, 
+			thumbnail, 
+			pmd
+		) => {
       const metadata = await client.store({
         name: NFT_NAME + ' #' + tokenId,
         description: NFT_DESCRIPTION,
         image: imageFile,
         image_url: imageFile,
+				thumbnail,
         external_url: "https://chatpuppy.com",
         dna,
         artifacts: artifacts.toHexString(),
@@ -58,13 +63,32 @@ const UnboxModal = (props) => {
       return new File([u8arr], filename, {type: mime});
     }
 
+		const resizeFile = (file) => new Promise((resolve) => {
+			Resizer.imageFileResizer(
+				file,
+				250,
+				250,
+				"JPEG",
+				100,
+				0,
+				(uri) => {
+					// console.log('base64', uri);
+					resolve(uri);
+				},
+				"base64"
+			);
+		});
+		
     useEffect(() => {
       const parsedMetadata = parseMetadata(artifacts);
       if(parsedMetadata !== null) {
         setParsedMd(parsedMetadata);
         mergeImages(parsedMetadata.images).then(async(b64) => {
           const file = dataURLtoFile(b64, 'nft.png');
-          await uploadNFT(file, parsedMetadata);
+
+					// Get thumbnail for Dapp avatar
+					const thumbnail = dataURLtoFile(await resizeFile(file), 'thumbnail.jpg');
+					await uploadNFT(file, thumbnail, parsedMetadata);
           setImageBase64(b64);
         });
       }
