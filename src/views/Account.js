@@ -25,7 +25,7 @@ export default function Account() {
     const [ unboxedItems, setUnboxedItems ] = useState([]);
     const _tabIndex = localStorage.getItem('account_tab_index') === null ? 0 : localStorage.getItem('account_tab_index') * 1;
     const [ tabIndex, setTabIndex ] = useState(_tabIndex);
-		const [ sortParams, setSortParams ] = useState("tokenId_1");
+		const [ sortParams, setSortParams ] = useState("--n.tokenId_1");
 		const [ isLoadFromDB, setIsLoadFromDB ] = useState(true);
 		const [ totalNFTs, setTotalNFTs ] = useState({count: 0, boxedCount: 0, unboxedCount: 0});
 		const [ currentPage, setCurrentPage ] = useState(0);
@@ -37,13 +37,17 @@ export default function Account() {
     let _unboxedItems = [];
 
 		const onOrderSelectChange = (e) => {
-			setSortParams(e.target.value);
+			if(e.target.value !== "") setSortParams(e.target.value);
 		}
 
 		const orderSelect = 
-		<Select isReadOnly onChange={onOrderSelectChange} placeholder={"Order by"} w={["100%", null, "30%"]} mt="5" mb="5">
-			<option value={'tokenId_1'}>Sort by token id 9-0</option>
-			<option value={'tokenId_0'}>Sort by token id 0-9</option>			
+		<Select isReadOnly onChange={onOrderSelectChange} placeholder={"Sort by"} w={["100%", null, "30%"]} mt="5" mb="5">
+			<option value={'--n.tokenId_1'}>Sort by token id 9-0</option>
+			<option value={'--n.tokenId_0'}>Sort by token id 0-9</option>
+			<option value={'--n.exp_1'}>Sort by experience 9-0</option> 		
+			<option value={'--n.exp_0'}>Sort by experience 0-9</option>	
+			<option value={'--n.level_1'}>Sort by level 9-0</option>
+			<option value={'--n.level_0'}>Sort by level 0-9</option>
 		</Select>
 
     const getOwnedTokens = useCallback(async() => {
