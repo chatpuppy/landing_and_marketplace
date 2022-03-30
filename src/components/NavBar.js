@@ -94,20 +94,20 @@ export default function NavBar() {
               {path === "/" ? <></> : 
               <Box>
               <RouterLink to="/" style={{textDecoration: 'none'}}>
-                <Button variant="ghost">Home</Button>         
+                <Button variant="ghost" mr='3'>Home</Button>         
               </RouterLink>
               {/* ###### */}
               {/* <RouterLink to="/donate" style={{textDecoration: 'none'}}>
-                <Button variant={path==="/donate" ? "solid" : "ghost"}>Donate</Button>
+                <Button variant={path==="/donate" ? "solid" : "ghost"} mr="3">Donate</Button>
               </RouterLink> */}
               <RouterLink to="/mint" style={{textDecoration: 'none'}}>
-                <Button variant={path==="/mint" ? "solid" : "ghost"}>Mint</Button>
+                <Button variant={path==="/mint" ? "solid" : "ghost"} mr="3">Mint</Button>
               </RouterLink>
               <RouterLink to="/marketplace" style={{textDecoration: 'none'}}>
-                <Button variant={path==="/marketplace" ? "solid" : "ghost"}>Marketplace</Button>
+                <Button variant={path==="/marketplace" ? "solid" : "ghost"} mr="3">Marketplace</Button>
               </RouterLink>
               <RouterLink to="/account" style={{textDecoration: 'none'}}>
-                <Button variant={path==="/account" ? "solid" : "ghost"}>My NFTs</Button>
+                <Button variant={path==="/account" ? "solid" : "ghost"} mr="3">My NFTs</Button>
               </RouterLink>
               <Button as="a" href="https://snapshot.org/#/chatpuppy.eth" target="_blank" variant="ghost"
                 rightIcon={<ExternalLinkIcon />}
@@ -192,7 +192,9 @@ export default function NavBar() {
                     My NFTs
                   </Button>
                 </RouterLink>
-                <LoginButton />
+                <Box mt="3">
+									<LoginButton />
+								</Box>
                 </Box>}
                 <ToggleTheme />
               </VStack>

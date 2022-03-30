@@ -25,8 +25,8 @@ export default function Marketplace() {
   const [ isLoading, setIsLoading ] = useState(false);
   const _tabIndex = localStorage.getItem('marketplace_tab_index') === null ? 0 : localStorage.getItem('marketplace_tab_index') * 1;
   const [ tabIndex, setTabIndex ] = useState(_tabIndex);
-  const { currentAccount, listedNFTs, setListedNFTs, currentNetwork } = useAuth();
-	const [ sortParams, setSortParams ] = useState("tokenId_1");
+  const { currentAccount, setListedNFTs, currentNetwork } = useAuth();
+	const [ sortParams, setSortParams ] = useState("--o.tokenId_1");
 	const [ isLoadFromDB, setIsLoadFromDB ] = useState(true);
 	const [ totalOnsale, setTotalOnsale ] = useState({total: 0, onsaleCount: 0, myListedCount: 0});
 	const [ currentPage, setCurrentPage ] = useState(0);
@@ -40,16 +40,20 @@ export default function Marketplace() {
 
 	const orderSelect = 
 	<Select isReadOnly onChange={onOrderSelectChange} placeholder={"Order by"} w={["100%", null, "30%"]} mt="5" mb="5">
-		<option value={'tokenId_1'}>Sort by token id 9-0</option>
-		<option value={'tokenId_0'}>Sort by token id 0-9</option>
-		<option value={'startDate_1'}>Sort by create time 9-0</option>
-		<option value={'startDate_0'}>Sort by create time 0-9</option>
+		<option value={'--o.tokenId_1'}>Sort by token id 9-0</option>
+		<option value={'--o.tokenId_0'}>Sort by token id 0-9</option>
+		<option value={'--o.startDate_1'}>Sort by create time 9-0</option>
+		<option value={'--o.startDate_0'}>Sort by create time 0-9</option>
 		{/* <option value={'auctionId_1'}>Sort by order id 9-0</option>
 		<option value={'auctionId_0'}>Sort by order id 0-9</option> */}
-		<option value={'amount_1'}>Sort by price id 9-0</option>
-		<option value={'amount_0'}>Sort by price id 0-9</option>
-		<option value={'sellerAddress_1'}>Sort by seller address id 9-0</option>
-		<option value={'sellerAddress_0'}>Sort by seller address id 0-9</option>
+		<option value={'--o.amount_1'}>Sort by price id 9-0</option>
+		<option value={'--o.amount_0'}>Sort by price id 0-9</option>
+		{/* <option value={'--o.sellerAddress_1'}>Sort by seller address id 9-0</option>
+		<option value={'--o.sellerAddress_0'}>Sort by seller address id 0-9</option> */}
+		<option value={'--n.exp_1'}>Sort by experience 9-0</option>
+		<option value={'--n.exp_0'}>Sort by experience 0-9</option>
+		<option value={'--n.level_1'}>Sort by level 9-0</option>
+		<option value={'--n.level_0'}>Sort by level 0-9</option>
 		{/* <option value={'unboxed'}>Only Unboxed NFTs</option>
 		<option value={'boxed'}>Only Mystery box NFTs</option> */}
 	</Select>
@@ -108,7 +112,6 @@ export default function Marketplace() {
     if(!currentNetwork) return;
     const networkConfig = getNetworkConfig(currentNetwork);
 		const sortBy = sortParams.split('_');
-		// console.log('currentPage', currentPage)
 		try {
 			const _totalOnsale = await getOnsaleCount(networkConfig.nftTokenAddress);
 			if(!_totalOnsale || _totalOnsale === 0) {console.log('No data'); return;}
