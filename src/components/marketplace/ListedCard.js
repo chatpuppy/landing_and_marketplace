@@ -9,7 +9,7 @@ import { ethers } from "ethers";
 import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
 import BuyDialog from "./BuyDialog";
 import { getNetworkConfig } from "constants";
-import { parseMetadata } from "avatar";
+import { parseMetadata, getBackgroundId } from "avatar";
 import mergeImages from 'merge-images';
 import BoxImageSrc from "assets/mysteryBox.jpg"
 import {BiHelpCircle} from 'react-icons/bi';
@@ -176,7 +176,7 @@ const ListedCard = (props) => {
         w="full"
         roundedTop="lg"
         fit="cover"
-        src={unboxed && parsedMetadata !== null ? (imageBase64 === '' ? './images/loading.jpg' : imageBase64) : BoxImageSrc}
+        src={unboxed && parsedMetadata !== null ? (imageBase64 === '' ? `./images/loading${getBackgroundId(metadata)}.jpg` : imageBase64) : BoxImageSrc}
         alt="NFT Avatar"
       />
       <Box px={4} py={2}>

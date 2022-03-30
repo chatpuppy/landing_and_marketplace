@@ -9,7 +9,7 @@ import { useAuth } from "contexts/AuthContext";
 import { ethers } from "ethers";
 import ListNFT from "./ListNFT";
 import { getNetworkConfig} from 'constants';
-import { parseMetadata } from "avatar";
+import { parseMetadata, getBackgroundId } from "avatar";
 import mergeImages from 'merge-images';
 import {BiHelpCircle} from 'react-icons/bi';
 import ReactTooltip from 'react-tooltip';
@@ -51,7 +51,7 @@ const NFTCard = (props) => {
   const strRarity = "RARITY: <br/>Probability of same NFT<br/> in 1,000,000 NFTs, <br/>lower means more value.";
   const strArtifacts = "ARTIFACTS: <br/>Artifacts of NFT on chain";
   const strMeta = "Metadata on IPFS <br/>If you did't upload while unboxing, <br/>you can upload to IPFS now";
-
+	
   const unboxNFT = async() => {
     setIsLoading(true);
     if(!currentAccount || !networkConfig) return;
@@ -223,7 +223,7 @@ const NFTCard = (props) => {
           w="full"
           fit="cover"
           roundedTop="lg"
-          src={unboxed && parsedMetadata !== null ? (imageBase64 === '' ? './images/loading.jpg' : imageBase64) : src}
+          src={unboxed && parsedMetadata !== null ? (imageBase64 === '' ? `./images/loading${getBackgroundId(metadata)}.jpg` : imageBase64) : src}
           alt="NFT Avatar"
         />
         <Box px={4} py={2}>

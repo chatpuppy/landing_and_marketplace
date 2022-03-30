@@ -84,6 +84,10 @@ export const parseMetadata = (md) => {
 	}
 }
 
+export const getBackgroundId = (md) => {
+	const mdStr = md.toHexString();
+	return mdStr.substr(-2);
+}
 
 // Following function is for testing only
 // const probability = () => {
