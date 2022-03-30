@@ -19,7 +19,7 @@ export default function OnSaleNFTs() {
             if(_onSaleNFTs.length !== 0 && onSaleItems.length === 0) {
 							let arr = [];
 							// eslint-disable-next-line array-callback-return
-							_onSaleNFTs.map((number, index) => {
+							_onSaleNFTs.map((item, index) => {
 								if(_onSaleNFTs[index].deleted) arr.push(skeleton(index));
 								else arr.push(
 									<ListedCard 

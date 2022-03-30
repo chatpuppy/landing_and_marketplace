@@ -38,6 +38,7 @@ const ListedCard = (props) => {
   const strRarity = "RARITY: <br/>Probability of same NFT<br/> in 1,000,000 NFTs, <br/>lower means more value.";
   const strOwner = "OWNER: <br/>Seller of NFT";
 
+	console.log(paymentToken);
   const unlistNFT = async() => {
     setIsLoading(true)
     if(!currentAccount || !currentNetwork) return;
@@ -154,7 +155,7 @@ const ListedCard = (props) => {
   }
 
   const showUrl = (baseUrl, addr) => <a href={baseUrl + addr} target='_blank' rel="noreferrer">Owner: {addr.substr(0, 8) + "..." + addr.substr(addr.length - 6, 6)}</a>
-  const paymentTokenSymbol = () => !networkConfig ? '' : networkConfig.paymentTokens.filter((item) => item.address === paymentToken)[0].symbol;
+  const paymentTokenSymbol = () => !networkConfig ? '' : networkConfig.paymentTokens.filter((item) => item.address.toLowerCase() === paymentToken.toLowerCase())[0].symbol;
 
   return (
   <Flex
