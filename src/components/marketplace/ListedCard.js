@@ -15,6 +15,7 @@ import BoxImageSrc from "assets/mysteryBox.jpg"
 import {BiHelpCircle} from 'react-icons/bi';
 import ReactTooltip from 'react-tooltip';
 import ConfirmationProgress from "../ConfirmationProgress";
+const formatThousands = require('format-thousands');
 
 const ListedCard = (props) => {
 
@@ -38,7 +39,9 @@ const ListedCard = (props) => {
   const strRarity = "RARITY: <br/>Probability of same NFT<br/> in 1,000,000 NFTs, <br/>lower means more value.";
   const strOwner = "OWNER: <br/>Seller of NFT";
 
-	console.log(paymentToken);
+	// Format price to readable, price must be BitNumber and wei
+	const formatPrice = (num) => formatThousands(ethers.utils.formatEther(num.toString()), {separator: ','});
+	
   const unlistNFT = async() => {
     setIsLoading(true)
     if(!currentAccount || !currentNetwork) return;
@@ -254,8 +257,9 @@ const ListedCard = (props) => {
           fontSize="md"
           fontWeight="bold"
         >
-          Price: {parseInt(price["_hex"], 16)/Math.pow(10, 18)} {paymentTokenSymbol()}
-        </chakra.h1>
+          {/* Price: {parseInt(price["_hex"], 16)/Math.pow(10, 18)} {paymentTokenSymbol()} */}
+          Price: {formatPrice(price)} {paymentTokenSymbol()}
+					</chakra.h1>
       </Box>
       <Flex
         alignItems="center"

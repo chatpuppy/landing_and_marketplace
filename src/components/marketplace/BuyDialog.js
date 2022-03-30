@@ -10,24 +10,29 @@ import { ethers } from "ethers";
 import { useAuth } from 'contexts/AuthContext';
 import {getNetworkConfig, NFT_NAME} from 'constants';
 import ConfirmationProgress from '../ConfirmationProgress';
+const formatThousands = require('format-thousands');
 
 export default function BuyDialog(props) {
-    const { currentAccount, currentNetwork } = useAuth()
-    const toast = useToast();
-    const { tokenId, price, orderId, callback, paymentToken, symbol } = props;
-    const [ isLoading, setIsLoading ] = useState(false);
-    const [isOpen, setIsOpen] = useState(false)
-    const [ hiddenConfirmationProgress, setHiddenConfirmationProgress] = useState(true);
-    const [ confirmationProgressData, setConfirmationProgressData ] = useState({value: 5, message: 'Start', step: 1});
+	const { currentAccount, currentNetwork } = useAuth()
+	const toast = useToast();
+	const { tokenId, price, orderId, callback, paymentToken, symbol } = props;
+	const [ isLoading, setIsLoading ] = useState(false);
+	const [isOpen, setIsOpen] = useState(false)
+	const [ hiddenConfirmationProgress, setHiddenConfirmationProgress] = useState(true);
+	const [ confirmationProgressData, setConfirmationProgressData ] = useState({value: 5, message: 'Start', step: 1});
 
-    const onClose = () => setIsOpen(false)
-    const cancelRef = useRef()
+	const onClose = () => setIsOpen(false)
+	const cancelRef = useRef()
 
-    const networkConfig = getNetworkConfig(currentNetwork);
-    const cpt_contract_address = paymentToken;
-    const NFT_marketplace_contract_address = networkConfig.marketplaceAddress;
+	const networkConfig = getNetworkConfig(currentNetwork);
+	const cpt_contract_address = paymentToken;
+	const NFT_marketplace_contract_address = networkConfig.marketplaceAddress;
 
-    const [ approved, setApproved ] = useState(false)
+	const [ approved, setApproved ] = useState(false)
+
+	// Format price to readable, price must be BitNumber and wei
+	const formatPrice = (num) => formatThousands(ethers.utils.formatEther(num.toString()), {separator: ','});
+
     const buyNFT = async() => {
         setIsLoading(true)
         if(!currentAccount || !networkConfig) return;
@@ -149,7 +154,7 @@ export default function BuyDialog(props) {
                 </AlertDialogHeader>
                 <ModalCloseButton/>
                 <AlertDialogBody>
-                    {approved ? 'Buy' : 'Approve'} {NFT_NAME} Token ID #{tokenId} with {parseInt(price["_hex"], 16)/ Math.pow(10, 18)} {symbol}?
+                    {approved ? 'Buy' : 'Approve'} {NFT_NAME} Token ID #{tokenId} with {formatPrice(price)} {symbol}?
                     <Box h={5}></Box>
                     <ConfirmationProgress 
                         hidden={hiddenConfirmationProgress}

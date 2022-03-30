@@ -90,7 +90,16 @@ const MintModal = (props) => {
             setConfirmationProgressData({step: '2/3', value: 66, message: 'Mint and wait confirmation...'});
             await tx.wait(networkConfig.confirmationNumbers);
             setConfirmationProgressData({step: '3/3', value: 100, message: 'You have got 2 confirmations, done!'})
-            setIsLoadingMint(false);
+
+						toast({
+							title: 'Buy and mint NFT',
+							description: `You have mint a Mystery box NFT, you can click Mint button to get more.`,
+							status: 'success',
+							duration: 4000,
+							isClosable: true,
+						});
+
+						setIsLoadingMint(false);
           } catch(err) {
             if(err.code === 4001) {
               // Cancel transaction

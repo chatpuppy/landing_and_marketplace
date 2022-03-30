@@ -6646,6 +6646,11 @@ form-data@~2.3.2:
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
 
+format-thousands@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmjs.org/format-thousands/-/format-thousands-2.0.0.tgz#d67abcc974e9a2ad26196ac05b7fc037ba9df752"
+  integrity sha512-fIEYG0M21GSf/WcCkIv/Y/5ofyuCHFjgypIwd2YaZqBQG6GgOe+4RvMaqJepNJieAfC45aDZmjDUoMtbjkropQ==
+
 forwarded@0.2.0:
   version "0.2.0"
   resolved "https://registry.npmjs.org/forwarded/-/forwarded-0.2.0.tgz"

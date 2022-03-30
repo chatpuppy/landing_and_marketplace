@@ -97,9 +97,9 @@ const NFTCard = (props) => {
               }
               // Fetch data from chain every 2 seconds
               const _metadata = await NFTCoreConnectedContract.tokenMetaData(number);
-              if(_metadata._artifacts > 0 || count > unboxMaxWaitingSeconds) {
+              if(_metadata._artifacts > 0) {
                 // Popup unbox modal dialog box to upload to ipfs network, and show the picture and artifacts, level, experience, ipfs
-                setUnboxModalParams({
+								setUnboxModalParams({
                   artifacts: _metadata._artifacts, 
                   tokenId: number, 
                   dna: _metadata._dna
@@ -201,7 +201,20 @@ const NFTCard = (props) => {
 			}, 1000);
 			return () => clearInterval(interval);
 		}
-	}, [startCountback, needSeconds])
+		if(needSeconds === 0) {
+			const desc = "Unboxing is out of time, don't worry, you can open your list a few minutes later.";
+			toast({
+				title: 'Unbox NFT',
+				description: desc,
+				status: 'warning',
+				duration: 4000,
+				isClosable: true,
+			})
+			setConfirmationProgressData({step: '4/4', value: 100, message: "Unboxing is out of time, don't worry, you can open your list a few minutes later."});
+			setIsLoading(false);
+			setTimeout(() => onClose(), 3000);
+		}
+	}, [startCountback, needSeconds, toast])
 
   return (
     <Flex

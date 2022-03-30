@@ -21,6 +21,7 @@
     "axios": "^0.26.1",
     "ether-swr": "^2.0.1",
     "ethers": "^5.5.4",
+    "format-thousands": "^2.0.0",
     "framer-motion": "^5.6.0",
     "luxon": "^2.3.1",
     "merge-images": "^2.0.0",
