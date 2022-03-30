@@ -226,12 +226,12 @@ export default function Marketplace() {
 							<TabPanels>
 									<TabPanel m='auto' w={['90%', null, '78%']}>
 											<SimpleGrid columns={[1, 2, 4]} >
-													{isLoading ? skeletons(8) : itemList(0)}
+													{isLoading ? skeletons(pageSize) : itemList(0)}
 											</SimpleGrid>
 									</TabPanel>
 									<TabPanel m='auto' w={['90%', null, '78%']}>
 											<SimpleGrid columns={[1, 2, 4]}>
-													{isLoading ? skeletons(8) : itemList(1)}
+													{isLoading ? skeletons(pageSize) : itemList(1)}
 											</SimpleGrid>
 									</TabPanel>
 							</TabPanels>
@@ -255,12 +255,12 @@ export default function Marketplace() {
 							<TabPanels>
 									<TabPanel m='auto' w={['90%', null, '78%']}>
 											<SimpleGrid columns={[1, 2, 4]} >
-													{isLoading ? skeletons(8) : <EmptyList />}
+													{isLoading ? skeletons(pageSize) : <EmptyList />}
 											</SimpleGrid>
 									</TabPanel>
 									<TabPanel m='auto' w={['90%', null, '78%']}>
 											<SimpleGrid columns={[1, 2, 4]} >
-													{isLoading ? skeletons(8) : <EmptyList />}
+													{isLoading ? skeletons(pageSize) : <EmptyList />}
 											</SimpleGrid>
 									</TabPanel>
 							</TabPanels>

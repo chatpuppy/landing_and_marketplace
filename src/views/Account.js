@@ -320,12 +320,12 @@ export default function Account() {
 							<TabPanels>
 									<TabPanel m='auto' w={['90%', null, '78%']}>
 											<SimpleGrid columns={[1, 2, 4]}>
-													{isLoading ? skeletons(8) : boxedItems.length===0 ? <EmptyList /> : boxedItems}
+													{isLoading ? skeletons(pageSize) : boxedItems.length===0 ? <EmptyList /> : boxedItems}
 											</SimpleGrid>
 									</TabPanel>
 									<TabPanel m='auto' w={['90%', null, '78%']}>
 											<SimpleGrid columns={[1, 2, 4]}>
-													{isLoading ? skeletons(8) : unboxedItems.length===0 ? <EmptyList /> : unboxedItems}
+													{isLoading ? skeletons(pageSize) : unboxedItems.length===0 ? <EmptyList /> : unboxedItems}
 											</SimpleGrid>
 									</TabPanel>
 							</TabPanels>
@@ -349,12 +349,12 @@ export default function Account() {
 							<TabPanels>
 									<TabPanel m='auto' w={['90%', null, '78%']}>
 											<SimpleGrid columns={[1, 2, 4]} >
-													{isLoading ? skeletons(8) : <EmptyList />}
+													{isLoading ? skeletons(pageSize) : <EmptyList />}
 											</SimpleGrid>
 									</TabPanel>
 									<TabPanel m='auto' w={['90%', null, '78%']}>
 											<SimpleGrid columns={[1, 2, 4]} >
-													{isLoading ? skeletons(8) : <EmptyList />}
+													{isLoading ? skeletons(pageSize) : <EmptyList />}
 											</SimpleGrid>
 									</TabPanel>
 							</TabPanels>
