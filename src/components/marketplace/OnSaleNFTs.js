@@ -17,26 +17,26 @@ export default function OnSaleNFTs() {
         if(!currentAccount) return;
         try {
             if(_onSaleNFTs.length !== 0 && onSaleItems.length === 0) {
-                let arr = [];
-                // eslint-disable-next-line array-callback-return
-                _onSaleNFTs.map((number, index) => {
-                    if(_onSaleNFTs[index].deleted) arr.push(skeleton(index));
-                    else arr.push(
-                        <ListedCard 
-                            key={parseInt(_onSaleNFTs[index]['orderId'])} 
-                            tokenId={parseInt(_onSaleNFTs[index]['tokenId']["_hex"], 16)} 
-                            owner={_onSaleNFTs[index]['seller']}
-                            orderId={_onSaleNFTs[index]['orderId']}
-                            price={_onSaleNFTs[index]['price']}
-                            unboxed={_onSaleNFTs[index]['unboxed']}
-                            metadata={_onSaleNFTs[index]['_artifacts']}
-                            dna={_onSaleNFTs[index]['_dna']}
-                            paymentToken={_onSaleNFTs[index]['paymentToken']}
-                            callback={(orderId) => deleteFromOnSaleItems(orderId)}
-                        />
-                    )
-                });
-                setOnSaleItems(arr);
+							let arr = [];
+							// eslint-disable-next-line array-callback-return
+							_onSaleNFTs.map((number, index) => {
+								if(_onSaleNFTs[index].deleted) arr.push(skeleton(index));
+								else arr.push(
+									<ListedCard 
+											key={parseInt(_onSaleNFTs[index]['orderId'])} 
+											tokenId={parseInt(_onSaleNFTs[index]['tokenId']["_hex"], 16)} 
+											owner={_onSaleNFTs[index]['seller']}
+											orderId={_onSaleNFTs[index]['orderId']}
+											price={_onSaleNFTs[index]['price']}
+											unboxed={_onSaleNFTs[index]['unboxed']}
+											metadata={_onSaleNFTs[index]['_artifacts']}
+											dna={_onSaleNFTs[index]['_dna']}
+											paymentToken={_onSaleNFTs[index]['paymentToken']}
+											callback={(orderId) => deleteFromOnSaleItems(orderId)}
+									/>
+								)
+							});
+							setOnSaleItems(arr);
             } else {
                 setOnSaleItems(<EmptyList />);
             }

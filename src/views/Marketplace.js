@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Footer from 'components/Footer';
 import NavBar from 'components/NavBar';
-import { Tabs, TabList, Tab, TabPanels, TabPanel, SimpleGrid, useColorModeValue, useToast, Box, Select} from '@chakra-ui/react';
+import { Tabs, TabList, Tab, TabPanels, TabPanel, SimpleGrid, useColorModeValue, Button, useToast, Box, Select} from '@chakra-ui/react';
 import { AiOutlineStar } from "react-icons/ai"
 import { BsBoxSeam } from "react-icons/bs"
 import OnSaleNFTs from 'components/marketplace/OnSaleNFTs';
@@ -16,6 +16,7 @@ import { getNetworkConfig, API_BASE_URI } from 'constants';
 import {skeleton} from '../components/common/LoadingSkeleton'
 import AddressFooter from 'components/AddressFooter';
 import {call} from '../services/db';
+import {Pagination} from '../utils/Pagination';
 
 export default function Marketplace() {
 
@@ -24,12 +25,15 @@ export default function Marketplace() {
   const [ isLoading, setIsLoading ] = useState(false);
   const _tabIndex = localStorage.getItem('marketplace_tab_index') === null ? 0 : localStorage.getItem('marketplace_tab_index') * 1;
   const [ tabIndex, setTabIndex ] = useState(_tabIndex);
-  const { currentAccount, setListedNFTs, currentNetwork } = useAuth();
+  const { currentAccount, listedNFTs, setListedNFTs, currentNetwork } = useAuth();
 	const [ sortParams, setSortParams ] = useState("tokenId_1");
 	const [ isLoadFromDB, setIsLoadFromDB ] = useState(true);
+	const [ totalOnsale, setTotalOnsale ] = useState({total: 0, onsaleCount: 0, myListedCount: 0});
+	const [ currentPage, setCurrentPage ] = useState(0);
+	const [ pageSize, setPageSize ] = useState(12);
   const toast = useToast()
   const id = 'toast'
-  
+
 	const onOrderSelectChange = (e) => {
 		setSortParams(e.target.value);
 	}
@@ -46,6 +50,8 @@ export default function Marketplace() {
 		<option value={'amount_0'}>Sort by price id 0-9</option>
 		<option value={'sellerAddress_1'}>Sort by seller address id 9-0</option>
 		<option value={'sellerAddress_0'}>Sort by seller address id 0-9</option>
+		{/* <option value={'unboxed'}>Only Unboxed NFTs</option>
+		<option value={'boxed'}>Only Mystery box NFTs</option> */}
 	</Select>
 
   const getListedNFTs = useCallback(async() => {
@@ -69,8 +75,8 @@ export default function Marketplace() {
         const NFTMarketplaceConnectedContract = new ethers.Contract(NFT_marketplace_contract_address, nft_marketplace_abi, signer);
         let ordersArr = await NFTMarketplaceConnectedContract.onSaleOrders();
         ordersArr = ordersArr.map(x=>parseInt(x["_hex"], 16))
-        let listedOrdersArr = [];
 
+				let listedOrdersArr = [];
         for(let i=0; i<ordersArr.length; i++) {
             let _order = Object.assign([], await NFTMarketplaceConnectedContract.orders(ordersArr[i]));
             const _metadata = await NFTCoreConnectedContract.tokenMetaData(_order.tokenId);
@@ -91,16 +97,28 @@ export default function Marketplace() {
     }
   }, [currentAccount, currentNetwork, setListedNFTs])
 
-  const getListedNFTsFromDB = useCallback(async(page) => {
+	const getOnsaleCount = async (nftAddress) => {
+		const _totalOnsale = await call(API_BASE_URI + 'onsaleCount', {nftAddress, address: currentAccount});
+		if(_totalOnsale.status !== 200 || !_totalOnsale.data.success) return false;
+		return _totalOnsale.data.data;
+	}
+
+  const getListedNFTsFromDB = useCallback(async() => {
     setIsLoading(true);
     if(!currentNetwork) return;
     const networkConfig = getNetworkConfig(currentNetwork);
 		const sortBy = sortParams.split('_');
+		// console.log('currentPage', currentPage)
 		try {
+			const _totalOnsale = await getOnsaleCount(networkConfig.nftTokenAddress);
+			if(!_totalOnsale || _totalOnsale === 0) {console.log('No data'); return;}
+			setTotalOnsale(_totalOnsale);
+
 			const response = await call(API_BASE_URI + 'getOnsaleOrders', {
 				nftAddress: networkConfig.nftTokenAddress,
-				limit: 12,
-				offset: page * 12,
+				address: currentAccount,
+				limit: pageSize,
+				offset: currentPage * pageSize,
 				order: sortBy[0],
 				desc: parseInt(sortBy[1])
 			});
@@ -114,6 +132,7 @@ export default function Marketplace() {
 				return;
 			}
 			let listedOrdersArr = [];
+			// console.log('=1=', listedOrdersArr);
 			for(let i = 0; i < response.data.data.length; i++) {
 				const data = response.data.data[i];
 				listedOrdersArr.push({
@@ -131,14 +150,14 @@ export default function Marketplace() {
 					_hexArtifacts: data.artifacts === null ? null : ethers.BigNumber.from(data.artifacts).toHexString(),
 				})
 			}
-			// console.log('listedOrdersArr', listedOrdersArr);
+			// console.log('=2=', listedOrdersArr);
 			setListedNFTs(listedOrdersArr);
 			setIsLoading(false);
 		} catch(err) {
 			console.log("#101 ERROR while loading data from database, try to load from blockchain...")
 			getListedNFTs();
 		}
-  }, [currentAccount, currentNetwork, setListedNFTs, sortParams]);
+  }, [currentAccount, currentNetwork, setListedNFTs, sortParams, currentPage, pageSize]);
 
   useEffect(() => {
     let isConnected = false;
@@ -157,7 +176,7 @@ export default function Marketplace() {
           return;
       }
 			// get from db is first choice, if fail, get from chain
-			getListedNFTsFromDB(0);
+			getListedNFTsFromDB();
     }
   
     return () => {
@@ -177,6 +196,13 @@ export default function Marketplace() {
     localStorage.setItem('marketplace_tab_index', index);
     setTabIndex(index);
   }
+
+	const itemList = (type) => {
+		return type === 0 ? 
+		<OnSaleNFTs/>
+		: 
+		<MyListedNFT/>
+	}
 
   return (
       <>
@@ -200,12 +226,12 @@ export default function Marketplace() {
 							<TabPanels>
 									<TabPanel m='auto' w={['90%', null, '78%']}>
 											<SimpleGrid columns={[1, 2, 4]} >
-													{isLoading ? skeletons(8) : <OnSaleNFTs/>}
+													{isLoading ? skeletons(8) : itemList(0)}
 											</SimpleGrid>
 									</TabPanel>
 									<TabPanel m='auto' w={['90%', null, '78%']}>
 											<SimpleGrid columns={[1, 2, 4]}>
-													{isLoading ? skeletons(8) : <MyListedNFT/>}
+													{isLoading ? skeletons(8) : itemList(1)}
 											</SimpleGrid>
 									</TabPanel>
 							</TabPanels>
@@ -241,6 +267,16 @@ export default function Marketplace() {
 					</Tabs>
 				</Box>
       }
+			<Box m="auto" w={['40%', null, '60%']} mb="10">
+				<Pagination
+					canPreviousPage={true}
+					canNextPage={true}
+					pageCount={parseInt(((tabIndex === 0 ? totalOnsale.onsaleCount : totalOnsale.myListedCount) - 1) / pageSize) + 1}
+					totalRecords={tabIndex === 0 ? totalOnsale.onsaleCount : totalOnsale.myListedCount}
+					changePageTo={(page) => setCurrentPage(page)}
+					changePageSize={(size) => {setCurrentPage(0); setPageSize(size)}}
+				/>
+			</Box>
       <AddressFooter
         chainId={currentNetwork}
       />

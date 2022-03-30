@@ -64,7 +64,8 @@ const NFTCard = (props) => {
       const NFTCoreConnectedContract = new ethers.Contract(NFT_core_contract_address, nft_core_abi, signer);
       const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_v2_abi, signer);
       const _type = await NFTManagerConnectedContract.boxStatus(number);
-      if(_type===2) {
+			// console.log("box type", number, _type);
+      if(_type === 2) {
         toast({
           title: 'Unbox NFT',
           description: "Unboxing in progress, refresh page after a few minutes",

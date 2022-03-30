@@ -15,6 +15,7 @@ import {getNetworkConfig, API_BASE_URI} from 'constants';
 import {skeleton} from '../components/common/LoadingSkeleton'
 import AddressFooter from 'components/AddressFooter';
 import {call} from '../services/db';
+import {Pagination} from '../utils/Pagination';
 
 export default function Account() {
 
@@ -26,7 +27,10 @@ export default function Account() {
     const [ tabIndex, setTabIndex ] = useState(_tabIndex);
 		const [ sortParams, setSortParams ] = useState("tokenId_1");
 		const [ isLoadFromDB, setIsLoadFromDB ] = useState(true);
-    const toast = useToast();
+		const [ totalNFTs, setTotalNFTs ] = useState({count: 0, boxedCount: 0, unboxedCount: 0});
+		const [ currentPage, setCurrentPage ] = useState(0);
+		const [ pageSize, setPageSize ] = useState(12);
+			const toast = useToast();
     const id = 'toast'
 
     let _boxedItems = [];
@@ -96,17 +100,31 @@ export default function Account() {
         }
     }, [currentAccount, setApproved, setOwnedNFTs, currentNetwork])
     
-		const getOwnedTokenFromDB = useCallback(async (page) => {
+		const getTotalNFTs = async (nftAddress, address) => {
+			const _total = await call(API_BASE_URI + 'userNFTCount', {
+				nftAddress,
+				address
+			});
+			if(_total.status !== 200 || !_total.data.success) return false;
+			return _total.data.data;
+		}
+	
+		const getOwnedTokenFromDB = useCallback(async () => {
 			setIsLoading(true);
 			if(!currentAccount || !currentNetwork) return;
 			const networkConfig = getNetworkConfig(currentNetwork);
 			const sortBy = sortParams.split('_');
 			try {
+				const _total = await getTotalNFTs(networkConfig.nftTokenAddress, currentAccount);
+				if(!_total || _total === 0) {console.log('No data'); return;}
+				// console.log('total nfts', _total);
+				setTotalNFTs(_total);
+
 				const response = await call(API_BASE_URI + 'getUserNFTs', {
 					nftAddress: networkConfig.nftTokenAddress,
 					address: currentAccount,
-					limit: 12,
-					offset: page * 12,
+					limit: pageSize,
+					offset: currentPage * pageSize,
 					order: sortBy[0],
 					desc: parseInt(sortBy[1]),
 				});
@@ -147,7 +165,7 @@ export default function Account() {
 					setIsLoading(false);
 				}, 400);
 			}
-		}, [currentAccount, setApproved, setOwnedNFTs, currentNetwork, sortParams]);
+		}, [currentAccount, setApproved, setOwnedNFTs, currentNetwork, currentPage, pageSize, sortParams]);
 
     const parseBoxes = (_boxedItems, _unboxedItems) => {
         if(_boxedItems.length > 0) {
@@ -218,7 +236,7 @@ export default function Account() {
             }
             if(!currentNetwork) return;
 						// get from db is first choice, if fail, get from chain
-            getOwnedTokenFromDB(0); 
+            getOwnedTokenFromDB(); 
         }
 
         return () => {
@@ -343,6 +361,16 @@ export default function Account() {
 					</Tabs>
 				</Box>
         }
+				<Box m="auto" w={['40%', null, '60%']} mb="10">
+					<Pagination
+						canPreviousPage={true}
+						canNextPage={true}
+						pageCount={parseInt(((tabIndex === 0 ? totalNFTs.boxedCount : totalNFTs.unboxedCount) - 1) / pageSize) + 1}
+						totalRecords={tabIndex === 0 ? totalNFTs.boxedCount : totalNFTs.unboxedCount}
+						changePageTo={(page) => setCurrentPage(page)}
+						changePageSize={(size) => {setCurrentPage(0); setPageSize(size)}}
+					/>
+				</Box>
         <AddressFooter
             chainId={currentNetwork}
         />
