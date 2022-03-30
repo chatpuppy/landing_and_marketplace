@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { chakra, Box, Image, Flex, useColorModeValue, Button,
   AlertDialog, AlertDialogBody, AlertDialogFooter, ModalCloseButton,
   AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, useToast, Center, Text
@@ -43,6 +43,7 @@ const NFTCard = (props) => {
   const NFT_manager_contract_address = networkConfig.supportChainlinkVRFV2 ? networkConfig.nftManagerV2Address : networkConfig.nftManagerAddress;
   const NFT_core_contract_address = networkConfig.nftTokenAddress;
   const unboxMaxWaitingSeconds = networkConfig.unboxMaxWaitingSeconds;
+	const [ startCountback, setStartCountback ] = useState(false);
   const [ needSeconds, setNeedSeconds ] = useState(unboxMaxWaitingSeconds);
 
   const strLevel = "LEVEL: <br/>Sum of levels of each traits, <br/>higher means more value.";
@@ -79,29 +80,23 @@ const NFTCard = (props) => {
           setHiddenConfirmationProgress(false);
           setConfirmationProgressData({step: '1/4', value: 25, message: 'Start...'});
 
-          // Testing
-          // setIsOpen1(true);
-          // const _metadata = await NFTCoreConnectedContract.tokenMetaData(50);
-          // console.log(_metadata);
-          // setUnboxModalParams({artifacts: _metadata._artifacts, tokenId: 50, dna: '0xaaa0000'}); 
-
           try {
             const tx = await NFTManagerConnectedContract.unbox(number);
             setConfirmationProgressData({step: '2/4', value: 50, message: 'Unboxing...'});
             await tx.wait(networkConfig.confirmationNumbers);
-            setConfirmationProgressData({step: '3/4', value: 75, message: `Generating random NFT metadata by ChainLink VRF Oracle, it will take around ${needSeconds} seconds...`});
+            setConfirmationProgressData({step: '3/4', value: 75, message: `Generating random NFT metadata by ChainLink, it will take around ${needSeconds}"`});
 
-            // Get NFT metadata every 1.5 second, to make sure the unboxed is fullfil
+            // Get NFT metadata every 2 second, to make sure the unboxed is fullfil
             let count = 0;
+						setStartCountback(true);
+						setNeedSeconds(unboxMaxWaitingSeconds);
             const t = setInterval(async()=>{
-              setNeedSeconds(unboxMaxWaitingSeconds - count);
               if(count % 2 === 1) {
                 count++;
                 return;
               }
               // Fetch data from chain every 2 seconds
               const _metadata = await NFTCoreConnectedContract.tokenMetaData(number);
-              console.log("#" + count + "_artifacts", _metadata._artifacts);
               if(_metadata._artifacts > 0 || count > unboxMaxWaitingSeconds) {
                 // Popup unbox modal dialog box to upload to ipfs network, and show the picture and artifacts, level, experience, ipfs
                 setUnboxModalParams({
@@ -197,6 +192,16 @@ const NFTCard = (props) => {
     }
     callback(_tokenId, _type);
   }
+
+	useEffect(() => {
+		if(startCountback) {
+			const interval = setInterval(() => {
+				setNeedSeconds(needSeconds - 1);
+				setConfirmationProgressData({step: '3/4', value: 75, message: `Generating random NFT metadata by ChainLink, it will take around ${needSeconds}"`});
+			}, 1000);
+			return () => clearInterval(interval);
+		}
+	}, [startCountback, needSeconds])
 
   return (
     <Flex
