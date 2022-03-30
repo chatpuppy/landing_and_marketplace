@@ -194,7 +194,7 @@ const NFTCard = (props) => {
   }
 
 	useEffect(() => {
-		if(startCountback) {
+		if(startCountback && needSeconds > 0) {
 			const interval = setInterval(() => {
 				setNeedSeconds(needSeconds - 1);
 				setConfirmationProgressData({step: '3/4', value: 75, message: `Generating random NFT metadata by ChainLink, it will take around ${needSeconds}"`});
