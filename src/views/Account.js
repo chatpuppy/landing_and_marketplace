@@ -104,8 +104,9 @@ export default function Account() {
         }
     }, [currentAccount, setApproved, setOwnedNFTs, currentNetwork])
     
-		const getTotalNFTs = async (nftAddress, address) => {
+		const getTotalNFTs = async (chainId, nftAddress, address) => {
 			const _total = await call(API_BASE_URI + 'userNFTCount', {
+				chainId,
 				nftAddress,
 				address
 			});
@@ -119,12 +120,14 @@ export default function Account() {
 			const networkConfig = getNetworkConfig(currentNetwork);
 			const sortBy = sortParams.split('_');
 			try {
-				const _total = await getTotalNFTs(networkConfig.nftTokenAddress, currentAccount);
+				const _total = await getTotalNFTs(networkConfig.chainId, networkConfig.nftTokenAddress, currentAccount);
 				if(!_total || _total === 0) {console.log('No data'); return;}
 				// console.log('total nfts', _total);
 				setTotalNFTs(_total);
 
+				console.log(networkConfig.nftTokenAddress, currentAccount);
 				const response = await call(API_BASE_URI + 'getUserNFTs', {
+					chainId: networkConfig.chainId,
 					nftAddress: networkConfig.nftTokenAddress,
 					address: currentAccount,
 					limit: pageSize,

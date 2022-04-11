@@ -37,22 +37,30 @@ export default function AddressFooter(props) {
             justify={{ base: 'center', md: 'space-between' }}
             align={{ base: 'center', md: 'center' }}>
             <Text>Contract Addresses: </Text>
+
+						{networkConfig.paymentTokens[0].address !== undefined && networkConfig.paymentTokens[0].address !== "" ?
             <Text>Token Address: {""}
                 <Link href={networkConfig.etherscanBaseUrl + networkConfig.paymentTokens[0].address}
                 isExternal mr="1">{shortenAddress(networkConfig.paymentTokens[0].address)}  {""}<ExternalLinkIcon /></Link>
-            </Text>
+            </Text> : <></>}
+
+						{networkConfig.nftTokenAddress !== "" ? 
             <Text>NFT Address: {""}
                 <Link href={networkConfig.etherscanBaseUrl + networkConfig.nftTokenAddress}
                 isExternal mr="1">{shortenAddress(networkConfig.nftTokenAddress)}  {""}<ExternalLinkIcon /></Link>
-            </Text>
+            </Text> : <></>}
+
+						{(networkConfig.supportChainlinkVRFV2 && networkConfig.nftManagerV2Address !== "") || (!networkConfig.supportChainlinkVRFV2 && networkConfig.nftManagerAddress ) ?
             <Text>NFT Manager Address: {""}
                 <Link href={networkConfig.etherscanBaseUrl + (networkConfig.supportChainlinkVRFV2 ? networkConfig.nftManagerV2Address : networkConfig.nftManagerAddress)}
                 isExternal mr="1">{shortenAddress(networkConfig.supportChainlinkVRFV2 ? networkConfig.nftManagerV2Address : networkConfig.nftManagerAddress)}  {""}<ExternalLinkIcon /></Link>
-            </Text>
+            </Text> : <></>}
+
+						{networkConfig.marketplaceAddress !== "" ? 
             <Text>Marketplace Address: {""}
                 <Link href={networkConfig.etherscanBaseUrl + networkConfig.marketplaceAddress}
                 isExternal mr="1">{shortenAddress(networkConfig.marketplaceAddress)}  {""}<ExternalLinkIcon /></Link>
-            </Text>
+            </Text> : <></>}
         </Container>
         : <></>}
         </Box>

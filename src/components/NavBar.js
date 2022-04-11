@@ -10,7 +10,7 @@ import {
 import { HamburgerIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { useAuth } from "contexts/AuthContext";
 import LoginButton from "components/LoginButton";
-import { supportedChainNames, supportedChainIds } from '../constants';
+import { supportedChainNames, supportedChainIds, getNetworkConfig } from '../constants';
 
 export default function NavBar() {
   const bg = useColorModeValue("white", "gray.800");
@@ -19,6 +19,7 @@ export default function NavBar() {
   const [ path, setPath ] = useState("");
   const { currentNetwork } = useAuth();
   const [ shadow, setShadow ] = useState("");
+	const networkConfig = getNetworkConfig(currentNetwork);
 
   const handleScroll = () => {
       if(window.pageYOffset>50) {
@@ -97,21 +98,60 @@ export default function NavBar() {
                 <Button variant="ghost" mr='3'>Home</Button>         
               </RouterLink>
               {/* ###### */}
-              {/* <RouterLink to="/donate" style={{textDecoration: 'none'}}>
-                <Button variant={path==="/donate" ? "solid" : "ghost"} mr="3">Donate</Button>
-              </RouterLink> */}
-              <RouterLink to="/mint" style={{textDecoration: 'none'}}>
-                <Button variant={path==="/mint" ? "solid" : "ghost"} mr="3">Mint</Button>
-              </RouterLink>
-              <RouterLink to="/marketplace" style={{textDecoration: 'none'}}>
-                <Button variant={path==="/marketplace" ? "solid" : "ghost"} mr="3">Marketplace</Button>
-              </RouterLink>
-              <RouterLink to="/account" style={{textDecoration: 'none'}}>
-                <Button variant={path==="/account" ? "solid" : "ghost"} mr="3">My NFTs</Button>
-              </RouterLink>
-              <Button as="a" href="https://snapshot.org/#/chatpuppy.eth" target="_blank" variant="ghost"
-                rightIcon={<ExternalLinkIcon />}
-              >Governance</Button>
+							{networkConfig === undefined || !networkConfig.buttons.donateMenu.visible ? <></> :
+              <RouterLink to={networkConfig.buttons.donateMenu.url} style={{textDecoration: 'none'}}>
+                <Button variant={path===networkConfig.buttons.donateMenu.url ? "solid" : "ghost"} mr="3">
+									{networkConfig.buttons.donateMenu.label}
+								</Button>
+              </RouterLink>}
+
+							{networkConfig === undefined || !networkConfig.buttons.mintMenu.visible ? <></> : 
+							networkConfig.buttons.mintMenu.url.substr(0, 1) === '/' ?
+              <RouterLink to={networkConfig.buttons.mintMenu.url} style={{textDecoration: 'none'}}>
+                <Button variant={path===networkConfig.buttons.mintMenu.url ? "solid" : "ghost"} mr="3">
+									{networkConfig.buttons.mintMenu.label}
+								</Button>
+              </RouterLink>: 
+							<Button as="a" href={networkConfig.buttons.mintMenu.url} target="_blank" variant="ghost">
+								{networkConfig.buttons.mintMenu.label}
+							</Button>
+							}
+
+							{networkConfig === undefined || !networkConfig.buttons.accountMenu.visible ? <></> :
+              <RouterLink to={networkConfig.buttons.accountMenu.url} style={{textDecoration: 'none'}}>
+                <Button variant={path===networkConfig.buttons.accountMenu.url ? "solid" : "ghost"} mr="3">
+									{networkConfig.buttons.accountMenu.label}
+								</Button>
+              </RouterLink>}
+
+							{networkConfig === undefined || !networkConfig.buttons.marketplaceMenu.visible ? <></> :
+							networkConfig.buttons.marketplaceMenu.url.substr(0, 1) === '/' ?
+              <RouterLink to={networkConfig.buttons.marketplaceMenu.url} style={{textDecoration: 'none'}}>
+                <Button variant={path===networkConfig.buttons.marketplaceMenu.url ? "solid" : "ghost"} mr="3">
+									{networkConfig.buttons.marketplaceMenu.label}
+								</Button>
+              </RouterLink>: 
+              <Button as="a" href={networkConfig.buttons.marketplaceMenu.url} target="_blank" variant="ghost" rightIcon={<ExternalLinkIcon />}>
+								{networkConfig.buttons.marketplaceMenu.label}
+							</Button>
+							}
+
+							{networkConfig === undefined || !networkConfig.buttons.governanceMenu.visible ? <></> :
+							networkConfig.buttons.governanceMenu.url.substr(0, 1) === '/' ?
+              <RouterLink to={networkConfig.buttons.governanceMenu.url} style={{textDecoration: 'none'}}>
+                <Button variant={path===networkConfig.buttons.governanceMenu.url ? "solid" : "ghost"} mr="3">
+									{networkConfig.buttons.governanceMenu.label}
+								</Button>
+              </RouterLink>: 
+              <Button as="a" href={networkConfig.buttons.governanceMenu.url} target="_blank" variant="ghost" rightIcon={<ExternalLinkIcon />}>
+								{networkConfig.buttons.governanceMenu.label}
+							</Button>}
+
+							{networkConfig === undefined || !networkConfig.buttons.bridgeMenu ? <></> : 
+              <Button as="a" href={networkConfig.buttons.bridgeMenu.url} target="_blank" variant="ghost" rightIcon={<ExternalLinkIcon />}>
+								{networkConfig.buttons.bridgeMenu.label}
+							</Button>}
+
               </Box>}
               <ToggleTheme />
               {path==="/" ? <></> : <LoginButton />}
@@ -171,27 +211,58 @@ export default function NavBar() {
                     Home
                   </Button>
                 </RouterLink>
-                <RouterLink to="/mint" style={{textDecoration: 'none'}}>
-                  <Button w="full" variant={path==="/mint" ? "solid" : "ghost"}>
-                    Mint
+								{networkConfig === undefined || !networkConfig.buttons.mintMenu.visible ? <></> : 
+								networkConfig.buttons.mintMenu.url.substr(0, 1) === '/' ?
+                <RouterLink to={networkConfig.buttons.mintMenu.url} style={{textDecoration: 'none'}}>
+                  <Button w="full" variant={path===networkConfig.buttons.mintMenu.url ? "solid" : "ghost"}>
+                    {networkConfig.buttons.mintMenu.label}
                   </Button>                
-                </RouterLink>
-                <RouterLink to="/marketplace" style={{textDecoration: 'none'}}>
-                  <Button w="full" variant={path==="/marketplace" ? "solid" : "ghost"}>
-                    Marketplace
+                </RouterLink> :
+								<Button w="full" as="a" href={networkConfig.buttons.mintMenu.url} target="_blank" variant="ghost">
+									{networkConfig.buttons.mintMenu.label}
+								</Button>}
+							
+								{networkConfig === undefined || !networkConfig.buttons.donateMenu.visible ? <></> :
+                <RouterLink to={networkConfig.buttons.donateMenu.url} style={{textDecoration: 'none'}}>
+                  <Button w="full" variant={path===networkConfig.buttons.donateMenu.url ? "solid" : "ghost"}>
+                    {networkConfig.buttons.donateMenu.label}
                   </Button>
-                </RouterLink>
-                {/* ###### */}
-                {/* <RouterLink to="/donate" style={{textDecoration: 'none'}}>
-                  <Button w="full" variant={path==="/donate" ? "solid" : "ghost"}>
-                    Donate
+                </RouterLink>}
+
+								{networkConfig === undefined || !networkConfig.buttons.accountMenu ? <></> :
+                <RouterLink to={networkConfig.buttons.accountMenu.url} style={{textDecoration: 'none'}}>
+                  <Button w="full" variant={path===networkConfig.buttons.accountMenu.url ? "solid" : "ghost"}>
+                    {networkConfig.buttons.accountMenu.label}
                   </Button>
-                </RouterLink> */}
-                <RouterLink to="/account" style={{textDecoration: 'none'}}>
-                  <Button w="full" variant={path==="/account" ? "solid" : "ghost"}>
-                    My NFTs
+                </RouterLink>}
+
+								{networkConfig === undefined || !networkConfig.buttons.marketplaceMenu.visible ? <></> :
+								networkConfig.buttons.marketplaceMenu.url.substr(0, 1) === '/' ?
+                <RouterLink to={networkConfig.buttons.marketplaceMenu.url} style={{textDecoration: 'none'}}>
+                  <Button w="full" variant={path===networkConfig.buttons.marketplaceMenu.url ? "solid" : "ghost"}>
+                    {networkConfig.buttons.marketplaceMenu.label}
                   </Button>
-                </RouterLink>
+                </RouterLink> : 
+								<Button w="full" as="a" href={networkConfig.buttons.marketplaceMenu.url} target="_blank" variant="ghost" rightIcon={<ExternalLinkIcon />}>
+									{networkConfig.buttons.marketplaceMenu.label}
+								</Button>}
+
+								{networkConfig === undefined || !networkConfig.buttons.governanceMenu.visible ? <></> :
+								networkConfig.buttons.governanceMenu.url.substr(0, 1) === '/' ?
+								<RouterLink to={networkConfig.buttons.governanceMenu.url} style={{textDecoration: 'none'}}>
+									<Button variant={path===networkConfig.buttons.governanceMenu.url ? "solid" : "ghost"}>
+										{networkConfig.buttons.governanceMenu.label}
+									</Button>
+								</RouterLink>: 
+								<Button w="full" as ="a" href={networkConfig.buttons.governanceMenu.url} target="_blank" variant="ghost" rightIcon={<ExternalLinkIcon />}>
+									{networkConfig.buttons.governanceMenu.label}
+								</Button>}
+
+								{networkConfig === undefined || !networkConfig.buttons.bridgeMenu ? <></> : 
+								<Button w="full" as="a" href={networkConfig.buttons.bridgeMenu.url} target="_blank" variant="ghost" rightIcon={<ExternalLinkIcon />}>
+									{networkConfig.buttons.bridgeMenu.label}
+								</Button>}
+
                 <Box mt="3">
 									<LoginButton />
 								</Box>

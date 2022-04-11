@@ -91,12 +91,22 @@ export default function ListNFT(props) {
     }
 
     const handleTokenChange = (e) => {
-      console.log('payment token', e.target.value);
+      // console.log('payment token', e.target.value);
       setToken(e.target.value)
     }
 
+		const onClickSell = () => {
+			// console.log(networkConfig);
+			if(networkConfig.buttons.sell.url !== null && networkConfig.buttons.sell.url.substr(0, 4) === 'http') {
+				window.open(`${networkConfig.buttons.sell.url}${networkConfig.nftTokenAddress}/${number}/sell`);
+			} else {
+				onOpen();
+			}
+		}
+
     return (
       <>
+				{networkConfig === undefined || !networkConfig.buttons.sell.visible ? <></> : 
         <Button 
           size="md" 
           mb={3} 
@@ -114,12 +124,12 @@ export default function ListNFT(props) {
             // bgGradient: 'linear(to-r, brand.200, brand.200)',
             boxShadow: 'xl',
           }}
-          onClick={onOpen}
+          onClick={onClickSell}
           isLoading={isLoading}
         >
-            Sell
+            {networkConfig.buttons.sell.label}
         </Button>
-  
+				}
         <Modal 
           isCentered
           isOpen={isOpen} 

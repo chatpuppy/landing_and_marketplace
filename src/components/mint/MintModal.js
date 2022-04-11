@@ -86,7 +86,6 @@ const MintModal = (props) => {
           setConfirmationProgressData({step: '1/3', value: 33, message: 'Start...'})
           try {
             const tx = await NFTManagerConnectedContract.buyAndMint(options);
-            console.log(tx);
             setConfirmationProgressData({step: '2/3', value: 66, message: 'Mint and wait confirmation...'});
             await tx.wait(networkConfig.confirmationNumbers);
             setConfirmationProgressData({step: '3/3', value: 100, message: 'You have got 2 confirmations, done!'})

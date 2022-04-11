@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import {
-    Box, Stack, Heading, Text, Container, Button, 
-    useBreakpointValue, Icon, useNumberInput, useColorModeValue,
-    Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody,
-    ModalCloseButton, useDisclosure
+	Box, Stack, Heading, Text, Container, Button, 
+	useBreakpointValue, Icon, useNumberInput, useColorModeValue,
+	Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody,
+	ModalCloseButton, useDisclosure, useToast
 } from '@chakra-ui/react';
 import MintModal from './MintModal';
 import { ethers } from 'ethers';
@@ -12,58 +12,74 @@ import nft_manager_v2_abi from "abi/nft_manager_v2_abi";
 import { getNetworkConfig} from 'constants';
 
 export default function MintGrid(props) {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const [ boxPrice, setBoxPrice ] = useState()
+	const { isOpen, onOpen, onClose } = useDisclosure();
+	const [ boxPrice, setBoxPrice ] = useState()
+	const [ mintButtonEnable, setMintButtonEnable ] = useState(false);
+	const toast = useToast();
 
-    /*
-    in case we need to do buyAndMintBatch(amount)
-    */
-    const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
-    useNumberInput({
-      step: 1,
-      defaultValue: 1,
-      min: 1,
-      max: 3,
-      precision: 0
-    })
+	let NFT_manager_contract_address;
 
-    // const inc = getIncrementButtonProps()
-    // const dec = getDecrementButtonProps()
-    const input = getInputProps({ isReadOnly: false })
+	/*
+	in case we need to do buyAndMintBatch(amount)
+	*/
+	const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
+	useNumberInput({
+		step: 1,
+		defaultValue: 1,
+		min: 1,
+		max: 3,
+		precision: 0
+	})
 
-    const getBoxPrice = async() => {
-        if(!props.chainId) return;
-        const networkConfig = getNetworkConfig(props.chainId);
-        const NFT_manager_contract_address = networkConfig.supportChainlinkVRFV2 ? networkConfig.nftManagerV2Address : networkConfig.nftManagerAddress;
+	// const inc = getIncrementButtonProps()
+	// const dec = getDecrementButtonProps()
+	const input = getInputProps({ isReadOnly: false })
 
-        try {
-            const { ethereum } = window; //injected by metamask
-            //connect to an ethereum node
-            const provider = new ethers.providers.Web3Provider(ethereum); 
-            //gets the account
-            const signer = provider.getSigner(); 
-            //connects with the contract
-            const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_v2_abi, signer);
-            const _boxPrice = await NFTManagerConnectedContract.boxPrice();
-            setBoxPrice(parseInt(_boxPrice["_hex"], 16)/ Math.pow(10, 18))
-        } catch(err) {
-            console.log(err)
-        }  
-    }
+	const getBoxPrice = async() => {
+		if(!props.chainId) return;
+		const networkConfig = getNetworkConfig(props.chainId);
+		NFT_manager_contract_address = networkConfig.supportChainlinkVRFV2 ? networkConfig.nftManagerV2Address : networkConfig.nftManagerAddress;
 
-    useEffect(() => {
-        let isConnected = false;
+		setMintButtonEnable(NFT_manager_contract_address !== undefined && NFT_manager_contract_address !== "");
 
-        if(!isConnected) {
-            getBoxPrice()
-        }
+		if(NFT_manager_contract_address === "" || NFT_manager_contract_address === undefined) {
+			toast({
+				title: 'Mint',
+				description: "Mint is only available on Ethereum blockchain",
+				status: 'error',
+				duration: 4000,
+				isClosable: true,
+			})		
+			return;
+		}
 
-        return () => {
-            isConnected = true;
-        }
-    }, [props.chainId])
+		try {
+			const { ethereum } = window; //injected by metamask
+			//connect to an ethereum node
+			const provider = new ethers.providers.Web3Provider(ethereum); 
+			//gets the account
+			const signer = provider.getSigner(); 
+			//connects with the contract
+			const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_v2_abi, signer);
+			const _boxPrice = await NFTManagerConnectedContract.boxPrice();
+			setBoxPrice(parseInt(_boxPrice["_hex"], 16)/ Math.pow(10, 18))
+		} catch(err) {
+			console.log(err)
+		}  
+	}
+
+	useEffect(() => {
+			let isConnected = false;
+
+			if(!isConnected) {
+					getBoxPrice()
+			}
+
+			return () => {
+					isConnected = true;
+			}
+	}, [props.chainId])
     
-
 return (
     <Box position={'relative'}>
     <Container
@@ -103,6 +119,7 @@ return (
                 fontFamily={'heading'}
                 w={'full'}
                 h={12}
+								isDisabled={!mintButtonEnable}
                 bgGradient="linear(to-r, brand.200,brand.200)"
                 color={'white'}
                 _hover={{

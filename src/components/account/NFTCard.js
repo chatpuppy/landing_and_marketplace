@@ -55,6 +55,27 @@ const NFTCard = (props) => {
   const unboxNFT = async() => {
     setIsLoading(true);
     if(!currentAccount || !networkConfig) return;
+		if(NFT_core_contract_address === "" || NFT_core_contract_address === undefined) {
+			toast({
+				title: 'Unbox NFT',
+				description: "NFT address is not set",
+				status: 'error',
+				duration: 4000,
+				isClosable: true,
+			})
+			return;
+		}
+		if(NFT_manager_contract_address === "" || NFT_manager_contract_address === undefined) {
+			toast({
+				title: 'Unbox NFT',
+				description: "NFT manager address is not set",
+				status: 'error',
+				duration: 4000,
+				inClosable: true,
+			})
+			return;
+		}
+
     try {
       const { ethereum } = window; //injected by metamask
       //connect to an ethereum node
@@ -81,7 +102,7 @@ const NFTCard = (props) => {
           setConfirmationProgressData({step: '1/4', value: 25, message: 'Start...'});
 
           try {
-            const tx = await NFTManagerConnectedContract.unbox(number);
+            const tx = await NFTManagerConnectedContract.unboxV2(number);
             setConfirmationProgressData({step: '2/4', value: 50, message: 'Unboxing...'});
             await tx.wait(networkConfig.confirmationNumbers);
             setConfirmationProgressData({step: '3/4', value: 75, message: `Generating random NFT metadata by ChainLink, it will take around ${needSeconds}"`});
@@ -333,6 +354,7 @@ const NFTCard = (props) => {
             bg={bg}
             roundedBottom="lg"
         >
+					{networkConfig !== undefined && networkConfig.buttons.unbox.visible ? 
           <Button 
             size="md" 
             bg={buttonbg} 
@@ -348,7 +370,8 @@ const NFTCard = (props) => {
             onClick={() => setIsOpen(true)}
           >
             Unbox
-          </Button>
+          </Button> : <></>}
+
           <ListNFT 
             number={number}
             callback={(tokenId) => callback(tokenId, unboxModalType)}

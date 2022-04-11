@@ -101,8 +101,12 @@ export default function Marketplace() {
     }
   }, [currentAccount, currentNetwork, setListedNFTs])
 
-	const getOnsaleCount = async (nftAddress) => {
-		const _totalOnsale = await call(API_BASE_URI + 'onsaleCount', {nftAddress, address: currentAccount});
+	const getOnsaleCount = async (chainId, nftAddress) => {
+		const _totalOnsale = await call(API_BASE_URI + 'onsaleCount', {
+			chainId,
+			nftAddress, 
+			address: currentAccount
+		});
 		if(_totalOnsale.status !== 200 || !_totalOnsale.data.success) return false;
 		return _totalOnsale.data.data;
 	}
@@ -113,11 +117,15 @@ export default function Marketplace() {
     const networkConfig = getNetworkConfig(currentNetwork);
 		const sortBy = sortParams.split('_');
 		try {
-			const _totalOnsale = await getOnsaleCount(networkConfig.nftTokenAddress);
-			if(!_totalOnsale || _totalOnsale === 0) {console.log('No data'); return;}
+			const _totalOnsale = await getOnsaleCount(networkConfig.chainId, networkConfig.nftTokenAddress);
+			if(!_totalOnsale || _totalOnsale === 0) {
+				console.log('No data'); 
+				return;
+			}
 			setTotalOnsale(_totalOnsale);
 
 			const response = await call(API_BASE_URI + 'getOnsaleOrders', {
+				chainId: networkConfig.chainId,
 				nftAddress: networkConfig.nftTokenAddress,
 				address: currentAccount,
 				limit: pageSize,
@@ -129,13 +137,12 @@ export default function Marketplace() {
 				console.log("#102 ERROR while loading data from database, try to load from blockchain...")
 				getListedNFTs();
 			}	
-			// console.log('from db', response.data.data);
 			if(!response.data.success && response.data.message === "no data") {
 				console.log('No data');
 				return;
 			}
 			let listedOrdersArr = [];
-			// console.log('=1=', listedOrdersArr);
+
 			for(let i = 0; i < response.data.data.length; i++) {
 				const data = response.data.data[i];
 				listedOrdersArr.push({
@@ -153,7 +160,6 @@ export default function Marketplace() {
 					_hexArtifacts: data.artifacts === null ? null : ethers.BigNumber.from(data.artifacts).toHexString(),
 				})
 			}
-			// console.log('=2=', listedOrdersArr);
 			setListedNFTs(listedOrdersArr);
 			setIsLoading(false);
 		} catch(err) {
