@@ -11,7 +11,7 @@ import {
     StatNumber 
 } from "@chakra-ui/react";
 import donateABI from "abi/TokensVesting_abi";
-import { TOKEN_VESTING_ADDRESS, CHAIN_ID, CHAIN_NAME } from "constants";
+import { TOKEN_VESTING_ADDRESS, CHAIN_ID, getNetworkConfig } from "constants";
 
 
 import { ethers } from "ethers";
@@ -27,7 +27,10 @@ const DonateModal = (props) => {
     const { amount } = props;
 
     const sendDonate = async() => {
-        if (!currentAccount && !currentNetwork === CHAIN_ID) return 0
+        if (!currentAccount || !currentNetwork) return;
+				const networkConfig = getNetworkConfig(currentNetwork);
+				console.log('network config 3: ' + networkConfig);
+	
         setIsLoading(true);
         try {
             const { ethereum } = window; //injected by metamask

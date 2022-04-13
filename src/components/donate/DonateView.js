@@ -227,11 +227,11 @@ export const DonateView = () => {
   
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
       useNumberInput({
-        step: 0.001, 
-        defaultValue: 0.05,
-        min: 0.04,
-        max: 0.06,
-        precision: 3,
+        step: 0.01, 
+        defaultValue: 0.5,
+        min: 0.3,
+        max: 0.5,
+        precision: 2,
       });
   
     const inc = getIncrementButtonProps();

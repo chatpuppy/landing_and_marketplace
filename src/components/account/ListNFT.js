@@ -9,7 +9,7 @@ import { ethers } from "ethers";
 import nft_core_abi from "abi/nft_core_abi.json"
 import nft_marketplace_abi from "abi/nft_marketplace_abi.json"
 import { useAuth } from 'contexts/AuthContext';
-import { getNetworkConfig, TOKEN_SYMBOL } from 'constants';
+import { getNetworkConfig } from 'constants';
 import ConfirmationProgress from '../ConfirmationProgress';
 
 export default function ListNFT(props) {

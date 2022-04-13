@@ -1,9 +1,9 @@
 /**
  * BSC testnet
  */
-export const TOKEN_VESTING_ADDRESS = "0xF886e6336f752F7c4aA496c33A5F77079fcc7a0E";
+export const TOKEN_VESTING_ADDRESS = "0xeF6eDD351a233B347abDc8d272222ae09EFdc491";
 
-export const supportedChainIds = [1, 56];
+export const supportedChainIds = [1, 56, 97];
 
 export const netWorkConfig = [{
 	chainId: 1,

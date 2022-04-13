@@ -1,7 +1,7 @@
 import { useDonate } from "contexts/DonateContext";
 import { DateTime } from "luxon";
 import { ethers } from "ethers";
-import { TOKEN_ADDRESS, TOKEN_VESTING_ADDRESS } from "constants";
+import { TOKEN_VESTING_ADDRESS } from "constants";
 
 import { 
     Box,
@@ -73,10 +73,10 @@ export const InfoTableComponent = () => {
           <Td>{"Over cap allowed".toUpperCase()}</Td>
           <Td>{data.acceptOverCap ? "true" : "false"}</Td>
         </Tr>
-        <Tr>
+        {/* <Tr>
           <Td>{"CPT address".toUpperCase()}</Td>
           <Td>{TOKEN_ADDRESS}</Td>
-        </Tr>
+        </Tr> */}
         <Tr>
           <Td>{"Vesting contract".toUpperCase()}</Td>
           <Td>{TOKEN_VESTING_ADDRESS}</Td>

@@ -7,7 +7,6 @@ import {
 } from '@chakra-ui/react';
 import MintModal from './MintModal';
 import { ethers } from 'ethers';
-// import nft_manager_abi from "abi/nft_manager_abi";
 import nft_manager_v2_abi from "abi/nft_manager_v2_abi";
 import { getNetworkConfig} from 'constants';
 

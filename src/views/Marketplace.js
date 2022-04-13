@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Footer from 'components/Footer';
 import NavBar from 'components/NavBar';
-import { Tabs, TabList, Tab, TabPanels, TabPanel, SimpleGrid, useColorModeValue, Button, useToast, Box, Select} from '@chakra-ui/react';
+import { Tabs, TabList, Tab, TabPanels, TabPanel, SimpleGrid, useColorModeValue, useToast, Box, Select} from '@chakra-ui/react';
 import { AiOutlineStar } from "react-icons/ai"
 import { BsBoxSeam } from "react-icons/bs"
 import OnSaleNFTs from 'components/marketplace/OnSaleNFTs';
@@ -10,7 +10,6 @@ import { ethers } from "ethers";
 import nft_marketplace_abi from "abi/nft_marketplace_abi.json";
 import nft_core_abi from "abi/nft_core_abi.json";
 import { useAuth } from 'contexts/AuthContext';
-// import PageName from 'components/PageName';
 import EmptyList from 'components/EmptyList';
 import { getNetworkConfig, API_BASE_URI } from 'constants';
 import {skeleton} from '../components/common/LoadingSkeleton'

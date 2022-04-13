@@ -5,7 +5,7 @@ import { useAuth } from "contexts/AuthContext";
 import { useDonate } from "contexts/DonateContext";
 import { getNameSaleById } from "utils/getNameSaleById";
 import PriceRangeComponent  from "./PriceRangeComponent";
-import {CHAIN_ID, CHAIN_NAME} from '../../constants';
+import {getNetworkConfig} from '../../constants';
 
 import { ethers } from "ethers";
 
@@ -20,9 +20,13 @@ export const BeneficiaryView = () => {
     uint8[0] = participantID;
     let participant = uint8[0];
 
+		
     const actionRedeem = async() => {
-      if (!currentAccount && !currentNetwork === CHAIN_ID) return 0
-      setIsLoading(true);
+			if (!currentAccount || !currentNetwork) return;
+			const networkConfig = getNetworkConfig(currentNetwork);
+			console.log('network config 1: ' + networkConfig);
+
+			setIsLoading(true);
       try {
         await tokenVestingContract.redeem(participant)
         toast({
@@ -42,7 +46,11 @@ export const BeneficiaryView = () => {
     }
 
     const actionRelease = async() => {
-      if (!currentAccount && !currentNetwork === CHAIN_ID) return 0
+
+      if (!currentAccount || !currentNetwork) return;
+			const networkConfig = getNetworkConfig(currentNetwork);
+			console.log('network config 2: ' + networkConfig);
+
       setIsLoading(true);
       try {
         await tokenVestingContract.release(participant)
