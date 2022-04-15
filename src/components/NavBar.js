@@ -41,7 +41,7 @@ export default function NavBar() {
     <React.Fragment >
       {path !== "/" ? 
       <Alert status='warning' justifyContent='center'>
-        <AlertIcon />
+        {/* <AlertIcon /> */}
         <AlertTitle mr={2}>Available on {supportedChainNames().join(', ')} now!</AlertTitle> 
         <AlertDescription>Please <Link isExternal style={{textDecoration: 'underline'}} href="https://discord.gg/QN658sJWkk">join our discord <ExternalLinkIcon /></Link> for more information.</AlertDescription>
         {/* <CloseButton position='absolute' right='8px' top='8px'/> */}
