@@ -40,6 +40,7 @@ import { InfoTableComponent } from "./infoTableComponet";
 import donateABI from "abi/TokensVesting_abi";
 import { TOKEN_VESTING_ADDRESS } from "constants";
 import { AiTwotoneCheckCircle } from "react-icons/ai";
+const formatThousands = require('format-thousands');
 
 export const DonateView = () => {
     const { participantID, beneficiaryData, releasable, donateData, participantTotal } = useDonate();
@@ -124,8 +125,8 @@ export const DonateView = () => {
     }
 
     const format = (num) => {
-      return parseFloat(num).toFixed(3).toString();
-    }
+			return formatThousands(parseFloat(num).toFixed(0).toString(), {separator: ','});
+		}
 
     return (
       <Stack
@@ -171,7 +172,7 @@ export const DonateView = () => {
             <Card textAlign={'center'} justifyContent={'center'}>
               <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Your benefit</Heading>
               <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.totalAmount))}</Text>
-              <Text fontSize={'2xl'} color={useColorModeValue("gray.400", "#3d444f")} mt={5} mb={5}>{'sold ' + format(ethers.utils.formatEther(participantTotal))}</Text>
+              <Text fontSize={'2xl'} color={useColorModeValue("gray.400", "#3d444f")} mt={5} mb={5}>{'Sold ' + format(ethers.utils.formatEther(participantTotal))}</Text>
             </Card>
     
             <Card textAlign={'center'} justifyContent={'center'}>
@@ -323,9 +324,9 @@ export const DonateView = () => {
               ? priceRange.map((range, idx) => (
                 <Tr key={idx}>
                     <Td>{idx+1}</Td>
-                    <Td>{ethers.utils.formatEther(range.fromAmount)} CPT</Td>
+                    <Td>{formatThousands(ethers.utils.formatEther(range.fromAmount), {separator: ','})} CPT</Td>
                     {/* <Td>{ethers.utils.formatEther(range.toAmount)} CPT</Td> */}
-                    <Td>{range.price.toString()} CPT/BNB</Td>
+                    <Td>{formatThousands(range.price.toString(), {separator: ','})} CPT/BNB</Td>
                     {/* <Td>{dataCap ? dataCap  : '...'} CPT/BNB</Td> */}
                   </Tr>
                 ))
