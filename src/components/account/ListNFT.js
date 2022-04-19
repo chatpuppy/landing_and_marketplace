@@ -48,7 +48,7 @@ export default function ListNFT(props) {
           if(!approved) {
             const tx = await NFTCoreConnectedContract.setApprovalForAll(NFT_marketplace_contract_address, true)
             setConfirmationProgressData({step: '2/5', value: 40, message: 'Approving NFT...'});
-            await tx.wait(networkConfig.confirmationNumbers);
+            await tx.wait(networkConfig.confirmationNumbers); 
             setConfirmationProgressData({step: '3/5', value: 60, message: 'Approved, start listing...'});
           } else {
             setTimeout(() => {

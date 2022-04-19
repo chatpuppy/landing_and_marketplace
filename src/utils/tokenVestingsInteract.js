@@ -92,7 +92,7 @@ export const loadBeneficiaryCountAll = async () => await tokenVestingContract.ge
  * Get estimated rate for the given amount
  */
 export const loadPriceForAmount = async (participant, amount) => {
-    if(participant !== 1 || participant !== 2) return false;
+    if(participant !== 1 && participant !== 2) return false;
     return await tokenVestingContract.getPriceForAmount(participant, amount);
 }
 

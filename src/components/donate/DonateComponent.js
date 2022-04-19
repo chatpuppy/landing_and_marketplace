@@ -1,37 +1,18 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 
 import {
   useColorModeValue,
   Box,
-  Button,
-  Heading,
   Stack,
-  Text,
-  useToast,
-  HStack,
   Spinner,
-  List,
-  ListItem,
-  Table,
-  Tbody,
-  Tr,
-  Td,
   Container,
   
 } from "@chakra-ui/react";
 
-import DonateModal from "./donateModal";
 import { CardParticipantType } from "./CardParticipantType";
 
-import { DateTime } from "luxon";
-
-import { ethers } from "ethers";
 import { useAuth } from "contexts/AuthContext";
 import { useDonate } from "contexts/DonateContext";
-import { getNameSaleById } from "utils/getNameSaleById";
-
-import { Card } from "../common/Card";
-import { Blur } from "../common/Blur";
 import { DonateView } from "./DonateView";
 import { BeneficiaryView } from "./BeneficiaryView";
 
@@ -39,7 +20,7 @@ import {
   loadBeneficiaryCount,
   loadBeneficiary,
   loadReleasable,
-  loadCap,
+	loadPriceForAmount,
   loadCrowdFundingParams,
   loadIndex,
   loadParticipantPriceRange,
@@ -50,30 +31,28 @@ import {
 } from "utils/tokenVestingsInteract";
 
 export default function DonateComponent() {
-  const {  currentAccount } = useAuth();
+  const { currentAccount } = useAuth();
 
   const {
-    setBeneficiaryReleasable,
     setTotal,
     setDataDonate,
-    priceRange,
-    setParticipantReleasable,
     setParticipantReleased,
     setTotalParticipant,
-    setBeneficiaryRedeem,
+		setPriceForAmount,
     setParticipantPriceRange,
     setBeneficiaryCount,
-    setCap,
-    setParticipantID,
-    setBeneficiaryReleased,
-    participantID,
-    donateData,
-    setUserIndexHash,
     setBeneficiaryData,
     setReleasable,
     setUserIndex,
     userIndex,
+    participantID,
+		setParticipantID,
   } = useDonate();
+
+	// ###### To enter into public sale directly, if cancel, it'll show a menu
+	useEffect(() => {
+		setParticipantID(2); // Default is public sale #2
+	}, [])
 
   useEffect(() => {
     async function fetchCrowd() {
@@ -113,12 +92,18 @@ export default function DonateComponent() {
     }
     async function fetchTotalParticipants() {
       const totalParticipants = await loadTotalParticipant(participantID);
+			console.log("+++", totalParticipants.toString());
       setTotalParticipant(totalParticipants);
-      
     }
+		async function getPriceForAmount() {
+      const totalParticipants = await loadTotalParticipant(participantID);
+			const price = await loadPriceForAmount(participantID, totalParticipants);
+			setPriceForAmount(price);
+		}
     fetchTotalDonate();
     fetchTotalParticipants();
-  }, [ participantID, setTotal, setTotalParticipant]);
+		getPriceForAmount();
+  }, [ participantID, setTotal, setTotalParticipant, setPriceForAmount]);
 
   
   useEffect(() => {
@@ -140,7 +125,6 @@ export default function DonateComponent() {
     getReleasable();
   }, [participantID, setReleasable, currentAccount])
 
-
   return (
     <Box as="section" height="100vh" overflowY="auto">
       <Container 
@@ -153,10 +137,10 @@ export default function DonateComponent() {
         // justify={'center'}
         // align={'center'}
         >
-        {participantID === 0 ? (<CardParticipantType />
-        ) : participantID > 0 ? (
+        {participantID === 0 ? <CardParticipantType />
+         : participantID > 0 ? 
           <DonateView />
-        ) : userIndex ? <BeneficiaryView /> : (
+         : userIndex ? <BeneficiaryView /> : (
           <Stack
             bg={{dark: "gray.900", light: "gray.50"}}
             color={{dark: "white", light: "dark"}}

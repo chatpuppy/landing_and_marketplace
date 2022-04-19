@@ -1,3 +1,4 @@
+import {useEffect, useState} from "react";
 import { useDonate } from "contexts/DonateContext";
 import { DateTime } from "luxon";
 import { ethers } from "ethers";
@@ -15,63 +16,96 @@ import {
 
 export const InfoTableComponent = () => { 
   const { donateData } = useDonate()
-  let data = donateData;
+	// if(donateData === undefined) return (<></>);	
+	const [donateDataObj, setDonateDataObj] = useState(null);
 
-  const genesisTimestamp = DateTime.fromSeconds(parseInt(data.genesisTimestamp)).toFormat("F");
-  const cliffTimeStamp = DateTime.fromSeconds(parseInt(data.genesisTimestamp) + parseInt(data.cliff)).toFormat("F");
-  const startTime = DateTime.fromSeconds(parseInt(data.startTimestamp)).toFormat("F");
-  const endTime = DateTime.fromSeconds(parseInt(data.endTimestamp)).toFormat("F");
-  const endDuration = DateTime.fromSeconds(parseInt(data.genesisTimestamp) + parseInt(data.cliff) + parseInt(data.duration)).toFormat("F");
+	useEffect(() => {
+		if(donateData === undefined) return;
+		const genesisTimestamp = DateTime.fromSeconds(parseInt(donateData.genesisTimestamp)).toFormat("F");
+		const cliffTimeStamp = DateTime.fromSeconds(parseInt(donateData.genesisTimestamp) + parseInt(donateData.cliff)).toFormat("F");
+		const startTime = DateTime.fromSeconds(parseInt(donateData.startTimestamp)).toFormat("F");
+		const endTime = DateTime.fromSeconds(parseInt(donateData.endTimestamp)).toFormat("F");
+		const endDuration = DateTime.fromSeconds(parseInt(donateData.genesisTimestamp) + parseInt(donateData.cliff) + parseInt(donateData.duration)).toFormat("F");
+		const tgeAmount = donateData.tgeAmountRatio.div(100) + "%";	
+		const eraBasis = donateData.eraBasis.div(3600).toString();
+		const higest = ethers.utils.formatEther(donateData.highest);
+		const lowest = ethers.utils.formatEther(donateData.lowest);	
 
-  const tgeAmount = data.tgeAmountRatio.div(100) + "%";
-
-  const eraBasis = data.eraBasis.div(3600).toString();
-  const higest = ethers.utils.formatEther(data.highest);
-  const lowest = ethers.utils.formatEther(data.lowest);
+		setDonateDataObj({
+			genesisTimestamp,
+			cliffTimeStamp,
+			startTime,
+			endTime,
+			endDuration,
+			tgeAmount,
+			eraBasis,
+			higest,
+			lowest,
+		})
+	}, [donateData]);
 
   return (
-    <Box>
-    <Heading fontSize="2xl" align="left" ml={12} mb={5} mt={5} color={useColorModeValue('black.700', '#dcdcdc')}>
-      Donation rules
+    <Box
+			pb={8}
+			mb={5} 
+		>
+    <Heading 
+			fontSize="2xl" 
+			align="left" 
+			ml={10} 
+			mt={5}
+			p={5} 
+			color={useColorModeValue('black.700', '#dcdcdc')}
+		>
+			DONATION RULES
     </Heading>
 
-    <Table ml={"5%"} mr={"5%"} width={"90%"} mb={8} variant="simple" color={useColorModeValue('black.700', '#dcdcdc')}>
+    <Table 
+			ml={"5%"} 
+			mr={"5%"} 
+			width={"90%"} 
+			variant="simple" 
+			color={useColorModeValue('black.700', '#dcdcdc')}
+			wordBreak={"break-word"}
+			fontSize={"sm"}
+		>
+		{donateDataObj === null ? <></> :
       <Tbody>
         <Tr>
           <Td>{"Donate duration".toUpperCase()}</Td>
-          <Td>{startTime} - {endTime}</Td>
+          <Td>{donateDataObj.startTime} - {donateDataObj.endTime}</Td>
         </Tr>
         <Tr>
           <Td>{"Genesis time".toUpperCase()}</Td>
-          <Td>{genesisTimestamp}</Td>
+          <Td>{donateDataObj.genesisTimestamp}</Td>
         </Tr>
         <Tr>
           <Td>{"Cliff".toUpperCase()}</Td>
-          <Td>{data.cliff === 0 ? `NO` : `${genesisTimestamp} to ${cliffTimeStamp}`}</Td>
+          <Td>{donateData === undefined ? "" : donateData.cliff === 0 ? `NO` : `${donateDataObj.genesisTimestamp} - ${donateDataObj.cliffTimeStamp}`}</Td>
         </Tr>
         <Tr>
           <Td>{"Release duration".toUpperCase()}</Td>
-          <Td>{`${cliffTimeStamp} - ${endDuration}`}</Td>
+          <Td>{`${donateDataObj.cliffTimeStamp} - ${donateDataObj.endDuration}`}</Td>
         </Tr>
         <Tr>
           <Td>{"TGE radio".toUpperCase()}</Td>
-          <Td>{tgeAmount}</Td>
+          <Td>{donateDataObj.tgeAmount}</Td>
         </Tr>
         <Tr>
           <Td>{"Era period".toUpperCase()}</Td>
-          <Td> {eraBasis + " " + (eraBasis > 1 ? 'hours' : 'hour')} </Td>
+          <Td> {donateDataObj.eraBasis + " " + (donateDataObj.eraBasis > 1 ? 'hours' : 'hour')} </Td>
         </Tr>
         <Tr>
           <Td>{"Donation amount".toUpperCase()}</Td>
-          <Td>{lowest} - {higest} BNB</Td>
+          <Td>{donateDataObj.lowest} - {donateDataObj.higest} BNB</Td>
         </Tr>
         <Tr>
           <Td>{"Redeem allowd".toUpperCase()}</Td>
-          <Td>{data.allowRedeem ? "true" : "false"}</Td>
+          <Td>{donateData === undefined ? "" : donateData.allowRedeem ? "true" : "false"}</Td>
         </Tr>
         <Tr>
           <Td>{"Over cap allowed".toUpperCase()}</Td>
-          <Td>{data.acceptOverCap ? "true" : "false"}</Td>
+          <Td>{donateData === undefined ? "" : donateData.acceptOverCap ? "true" : "false"}</Td>
         </Tr>
         {/* <Tr>
           <Td>{"CPT address".toUpperCase()}</Td>
@@ -81,7 +115,7 @@ export const InfoTableComponent = () => {
           <Td>{"Vesting contract".toUpperCase()}</Td>
           <Td>{TOKEN_VESTING_ADDRESS}</Td>
         </Tr>
-      </Tbody>
+      </Tbody>}
     </Table>
     </Box>
   );

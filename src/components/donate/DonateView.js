@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import React, { useState} from "react";
+import React, { useState, useEffect} from "react";
 
 import {
     Stack,
@@ -27,6 +27,7 @@ import {
     useDisclosure,
     Thead,
     Th,
+		Progress
   } from '@chakra-ui/react'
 
 import DonateModal from './donateModal';
@@ -39,23 +40,50 @@ import { getNameSaleById } from "utils/getNameSaleById";
 import { InfoTableComponent } from "./infoTableComponet";
 import donateABI from "abi/TokensVesting_abi";
 import { TOKEN_VESTING_ADDRESS } from "constants";
+import Countdown from '../common/Countdown';
 import { AiTwotoneCheckCircle } from "react-icons/ai";
+import { getGlobalTime } from "../common/Worldtime";
+
 const formatThousands = require('format-thousands');
 
 export const DonateView = () => {
-    const { participantID, beneficiaryData, releasable, donateData, participantTotal } = useDonate();
-    const [ isReleasing, setIsReleasing ] = useState(false);
-    const [ isRedeeming, setIsRedeeming ] = useState(false);
-    const [ showRedeemButton, setShowRedeemButton ] = useState(true);
+    const { 
+			participantID, 
+			priceRange, 
+			beneficiaryData, 
+			setBeneficiaryData, 
+			releasable, 
+			setReleasable, 
+			donateData, 
+			participantTotal,
+			priceForAmount
+		} = useDonate();
+		const [ isLoading, setIsLoading ] = useState(false);
+		const [ isDisabled, setIsDisabled ] = useState(false);
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [ showRedeemButton, setShowRedeemButton ] = useState(false);
+		const [ modalOptions, setModalOptions ] = useState({
+			message: '', 
+			buttonName: 'Release', 
+			fun: "release",
+		});
+		const [ countdownOptions, setCountdownOptions ] = useState({
+			circleColor: "",
+			title: "",
+			timeTillDate: 0,
+		});
+		const [progressRate, setProgressRate] = useState({sold: 0, total: 100, rate: 0});
+		const [donationPrice, setDonationPrice] = useState({index: 0, price: 0});
+
     const toast = useToast()
-    const { ethereum } = window; //injected by metamask
+		
+		const { ethereum } = window; //injected by metamask
     const provider = new ethers.providers.Web3Provider(ethereum); 
     const signer = provider.getSigner(); 
-    // const options = {value: ethers.utils.parseEther((amount).toString())}
     const TokenVestingContract = new ethers.Contract(TOKEN_VESTING_ADDRESS, donateABI, signer);
-
+		
     const release = async () => {
-      setIsReleasing(true);
+			setIsLoading(true);
       try {
         let uint8 = new Uint8Array(2);
         uint8[0] = participantID;
@@ -71,8 +99,21 @@ export const DonateView = () => {
           })
 
           await tx.wait(2);
-          setIsReleasing(false);
-          window.location.reload();
+					toast({
+						title: 'Release tokens',
+						description: `Release successfully, you can release every one minute.`,
+						status: 'success',
+						duration: 4000,
+						isClosable: true,
+					})
+					setReleasable(0);
+					setBeneficiaryData({
+						...beneficiaryData,
+						releasedAmount: beneficiaryData.releasedAmount.add(releasable),
+					})
+          setIsLoading(false);
+					setIsDisabled(true);
+					onClose();
         } catch(err) {
             console.log(err)
             toast({
@@ -82,7 +123,7 @@ export const DonateView = () => {
               duration: 4000,
               isClosable: true,
             })
-            setIsReleasing(false);
+            setIsLoading(false);
         }
       } catch(err) {
           console.log('Error Release', err)
@@ -90,7 +131,7 @@ export const DonateView = () => {
     }
 
     const redeem = async () => {
-      setIsRedeeming(true);
+      setIsLoading(true);
       try {        
         let uint8 = new Uint8Array(2);
         uint8[0] = participantID;
@@ -105,9 +146,18 @@ export const DonateView = () => {
               isClosable: true,
             });
             await tx.wait(2);
-            setIsRedeeming(false);
-            setShowRedeemButton(false);
-        } catch(err) {
+						toast({
+							title: 'Redeem',
+							description: `Redeem successfully.`,
+							status: 'success',
+							duration: 4000,
+							isClosable: true,
+						})
+						setShowRedeemButton(false);
+						setIsLoading(false);
+						setIsDisabled(true);
+						onClose();
+					} catch(err) {
             console.log(err)
             toast({
               title: 'Redeem error',
@@ -116,19 +166,101 @@ export const DonateView = () => {
               duration: 4000,
               isClosable: true,
             })
-            setIsRedeeming(false);
+            setIsLoading(false);
         }
       } catch(err) {
           console.log('Error redeem', err)
-          setIsRedeeming(false);
+          setIsLoading(false);
       }
     }
 
     const format = (num) => {
 			return formatThousands(parseFloat(num).toFixed(0).toString(), {separator: ','});
 		}
+		
+		useEffect(() => {
+			const initCountdownOptions = async () => {
+				await countdownData();
+			};
+			initCountdownOptions();
+		}, [donateData, priceRange])
 
-    return (
+		useEffect(() => {
+			const initButtons = async () => {
+				const current = await getGlobalTime();
+				const endDuration = parseInt(donateData.genesisTimestamp) + parseInt(donateData.cliff) + parseInt(donateData.duration);
+				setShowRedeemButton(current < endDuration && current > parseInt(donateData.endTimestamp));	
+			};
+			if(donateData !== undefined) initButtons();
+		}, [donateData])
+
+		useEffect(() => {
+			const initPriceForAmount = () => {
+				setDonationPrice({index: priceForAmount[1], price: priceForAmount[0]});
+			}
+			if(priceForAmount !== undefined) initPriceForAmount();
+		}, [priceForAmount])
+		
+		useEffect(() => {
+			if(participantTotal === undefined	
+				|| priceRange === undefined 
+				|| priceRange.length === 0 
+				|| priceRange[priceRange.length - 1] === undefined
+			) return;
+			console.log('===', participantTotal.toString())
+			setProgressRate({
+				sold: participantTotal, 
+				total: priceRange[priceRange.length - 1].fromAmount,
+				rate: participantTotal / priceRange[priceRange.length - 1].fromAmount * 100
+			});
+		}, [participantTotal, priceRange])
+
+		const countdownData = async() => {
+			// Get phrase no, phrase name and timeTillDate
+			if(donateData === undefined) return;
+			const current = await getGlobalTime();
+			const donateStart = parseInt(donateData.startTimestamp);
+			const donateEnd = parseInt(donateData.endTimestamp);
+			const genesisStart = parseInt(donateData.genesisTimestamp);
+			const cliffEnd = parseInt(donateData.genesisTimestamp) + parseInt(donateData.cliff);
+			const releaseEnd = parseInt(donateData.genesisTimestamp) + parseInt(donateData.cliff) + parseInt(donateData.duration);
+
+
+			if(current < donateStart) setCountdownOptions({
+				circleColor: "#E53E3E",
+				title: "Time to start donating",
+				timeTillDate: donateStart
+			});
+			else if(current < donateEnd) setCountdownOptions({
+				circleColor: "#48BB78",
+				title: "Time to donation end",
+				timeTillDate: donateEnd,
+			});
+			else if(current < genesisStart) setCountdownOptions({
+				circleColor: "#E53E3E",
+				title: "Time to genesis start",
+				timeTillDate: genesisStart,
+			});
+			else if(current < cliffEnd) setCountdownOptions({
+				circleColor: "#E53E3E",
+				title: "Time to cliff end and start to release",
+				timeTillDate: cliffEnd,
+			});
+			else if(current < releaseEnd) setCountdownOptions({
+				circleColor: "#48BB78",
+				title: "Time to releasing end",
+				timeTillDate: releaseEnd,
+			});
+			else setCountdownOptions({
+				circleColor: "",
+				title: "",
+				timeTillDate: 0
+			})
+		}
+
+		const col = useColorModeValue("black", "white");
+
+		return (
       <Stack
         spacing={{
           base: "8",
@@ -156,6 +288,53 @@ export const DonateView = () => {
         <Stack>
           <Heading>{participantID ? getNameSaleById(participantID) : ""}</Heading>
         </Stack>
+
+				{countdownOptions.timeTillDate === 0 ? <></> : 
+				<Card
+					textAlign={'center'} 
+					justifyContent={'center'}
+					w={"full"}
+					p={5}
+				>
+					<Countdown 
+						title={countdownOptions.title}
+						timeTillDate={countdownOptions.timeTillDate}
+						circleColor={countdownOptions.circleColor}
+						fontColor={col}
+						labelColor={col}
+					/>
+				</Card>}
+
+				<Card
+					textAlign={'center'}
+					justifyContent={'center'}
+					w={"full"}
+					p={5}
+				>
+					<Box
+						letterSpacing={'2px'}
+						fontSize={"md"}
+						fontWeight={600}
+						pb={3}
+					>Progress</Box>
+					<Progress
+						w={"80%"}
+						ml={"10%"}
+						value={progressRate.rate}
+						colorScheme='green'
+					/>
+					<Box
+						letterSpacing={'2px'}
+						fontSize={"md"}
+						mt={5}
+					>{format(ethers.utils.formatEther(progressRate.sold)) + " CPT / " + format(ethers.utils.formatEther(progressRate.total)) + " CPT = " + progressRate.rate.toFixed(4) + "%"}</Box>
+					<Box
+						letterSpacing={'2px'}
+						fontSize={"md"}
+						mt={5}
+					>{`Current rate: ${format(donationPrice.price)} CPT/BNB`}</Box>
+				</Card>
+
         <Stack
           spacing={{
             base: "5",
@@ -170,23 +349,43 @@ export const DonateView = () => {
             gap="6"
           >
             <Card textAlign={'center'} justifyContent={'center'}>
-              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Your benefit</Heading>
+              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px'>Your benefit(CPT)</Heading>
               <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.totalAmount))}</Text>
-              <Text fontSize={'2xl'} color={useColorModeValue("gray.400", "#3d444f")} mt={5} mb={5}>{'Sold ' + format(ethers.utils.formatEther(participantTotal))}</Text>
-            </Card>
-    
-            <Card textAlign={'center'} justifyContent={'center'}>
-              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Released</Heading>
-              <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.releasedAmount))}</Text>
-              {beneficiaryData === undefined || beneficiaryData.totalAmount.eq(beneficiaryData.releasedAmount) || !showRedeemButton ? "" : <Button mt={5} mb={5} onClick={redeem} isLoading={isRedeeming}>Redeem unreleased</Button>}
+              <Text fontSize={'md'} color={useColorModeValue("gray.400", "gray.600")} mt={5} mb={5}>{'Benefit amount includes released, releasable and vesting CPT'}</Text>
             </Card>
             
             <Card textAlign={'center'} justifyContent={'center'}>
-              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Releaseble</Heading>
-              <Text mt={-10} ml={10}>{beneficiaryData === undefined ? <AiTwotoneCheckCircle color={"gray"}/> : beneficiaryData.status === 1 ? <AiTwotoneCheckCircle color={"green"}/> : <AiTwotoneCheckCircle color={"red"}/>}</Text>
+              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px'>Releasable(CPT)</Heading>
+              <Text mt={-10} ml={10}>{beneficiaryData === undefined ? <AiTwotoneCheckCircle color={"gray"}/> : beneficiaryData.status === 1 ? <AiTwotoneCheckCircle color={"#48BB78"}/> : <AiTwotoneCheckCircle color={"#E53E3E"}/>}</Text>
               <Text mt={5} fontSize={'4xl'}>{format(ethers.utils.formatEther(releasable === undefined ? 0 : releasable))}</Text>
-              {releasable > 0 ? <Button mt={5} mb={5} onClick={release} isLoading={isReleasing}>Release</Button> : ''} 
+              {releasable > 0 ? 
+							<Button mt={5} mb={5} onClick={() => {
+								setModalOptions({
+									message:`Do you want to release ${format(ethers.utils.formatEther(releasable === undefined ? 0 : releasable))} CPT?`, 
+									buttonName: 'Release', 
+									fun: "release", 
+								}); 
+								onOpen();
+							}}>Release
+							</Button> : ''}
             </Card>
+
+            <Card textAlign={'center'} justifyContent={'center'}>
+              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px'>Released(CPT)</Heading>
+              <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.releasedAmount))}</Text>
+              {beneficiaryData === undefined || beneficiaryData.totalAmount.eq(beneficiaryData.releasedAmount) || !showRedeemButton ? <></> : 
+							<Button mt={5} mb={5} onClick={() => {
+								setModalOptions({
+									message: `Do you want to redeem the unreleased tokens? After redeemed, you will be refund the balance BNB, and only have the current released CPT.`,
+									buttonName: 'Redeem',
+									fun: "redeem",
+								})
+								onOpen();
+							}}>
+								Redeem
+							</Button>}
+            </Card>
+
           </SimpleGrid>
         </Stack>
         <Blur
@@ -204,24 +403,72 @@ export const DonateView = () => {
             </Card>
           </SimpleGrid>
         </Stack>
-        <Card minH="xs">
-          <SimpleGrid columns={1} spacing={10}>
-            <Card>
-              <InfoTableComponent />
-            </Card>
-            {beneficiaryData !== undefined || donateData.endTimestamp * 1000 < new Date().getTime() ? "" : 
-            <Card>
-              <InputDonate />
-            </Card>
-            }
-          </SimpleGrid>
-        </Card>
+
+				<Card>
+					<InfoTableComponent />
+				</Card>
+				{donateData === undefined ? <></> :
+				donateData.endTimestamp * 1000 < new Date().getTime() ? 
+				<Card>
+					<DonotedBox message={"Donation is end!"}/>					
+				</Card> : beneficiaryData !== undefined ? 
+				<Card>
+					<DonotedBox message={"This account has donated!"}/>
+				</Card> :
+				<Card>
+					<InputDonate />
+				</Card>
+				}
         </Box> : ""}
         <Box height={5}></Box>
+        <Modal 
+          isOpen={isOpen} 
+          onClose={onClose} 
+          closeOnOverlayClick={false}
+          isCentered
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>{modalOptions.buttonName}</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              {modalOptions.message}
+							<Button
+                fontFamily={'heading'}
+                mb={2}
+								mt={5}
+                w={'full'}
+                bgGradient="linear(to-r, red.400,pink.400)"
+                color={'white'}
+                onClick={modalOptions.fun === "release" ? release : redeem}
+                isLoading={isLoading}
+                isDisabled={isDisabled}
+                >
+                {modalOptions.buttonName}
+	            </Button>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
       </Stack>
     )
-}
+	}
     
+	const DonotedBox = (props) => {
+		return (
+			<Box
+				justifyContent={"center"}
+				textAlign={"center"}
+				as={"form"}
+				p={5}
+				mt={2}
+				ml={20}
+				mr={20}
+				mb={10}
+			>
+				<Box fontSize={"3xl"} fontWeight={"bold"} mb={10} color={"#E53E3E"}>{props.message}</Box>
+			</Box>
+		)
+	}
 
   const InputDonate = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -294,48 +541,57 @@ export const DonateView = () => {
 
   const PriceRangeComponent = () => {
     const { priceRange } = useDonate()
-
-    // if (priceRange) {
-      return (
-        <Box
-          margin={{
-            base: "20px",
-            lg: "10px",
-          }}
-          direction={{
-            base: "column",
-            lg: "row",
-          }}
-        >
-          <Heading fontSize="2xl" align="left" ml={12} mb={5} mt={5} color={useColorModeValue('black.700', '#dcdcdc')}>
-            Rate list
-          </Heading>
-          <Table ml={"5%"} mr={"5%"} width={"90%"} mb={8} variant="simple" color={useColorModeValue('black.700', '#dcdcdc')}>
-            <Thead>
-              <Tr>
-                <Th>#</Th>
-                <Th>From</Th>
-                {/* <Th> to</Th> */}
-                <Th> rate</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-            {priceRange
-              ? priceRange.map((range, idx) => (
-                <Tr key={idx}>
-                    <Td>{idx+1}</Td>
-                    <Td>{formatThousands(ethers.utils.formatEther(range.fromAmount), {separator: ','})} CPT</Td>
-                    {/* <Td>{ethers.utils.formatEther(range.toAmount)} CPT</Td> */}
-                    <Td>{formatThousands(range.price.toString(), {separator: ','})} CPT/BNB</Td>
-                    {/* <Td>{dataCap ? dataCap  : '...'} CPT/BNB</Td> */}
-                  </Tr>
-                ))
-              : "..."}
-            </Tbody>
-          </Table>
-        </Box>
-      );
-    // }
+		return (
+			<Box
+				margin={{
+					base: "20px",
+					lg: "10px",
+				}}
+				direction={{
+					base: "column",
+					lg: "row",
+				}}
+			>
+				<Heading 
+					fontSize="2xl" 
+					align="left" 
+					ml={10} 
+					mt={5}
+					p={5} 
+					color={useColorModeValue('black.700', '#dcdcdc')}
+				>
+					RATE PLAN
+				</Heading>
+				<Table 
+					ml={"5%"} 
+					mr={"5%"} 
+					width={"90%"} 
+					variant="simple" 
+					color={useColorModeValue('black.700', '#dcdcdc')}
+					wordBreak={"break-word"}
+					fontSize={"sm"}
+				>
+					<Thead>
+						<Tr>
+							<Th>#</Th>
+							<Th>From</Th>
+							{/* <Th> to</Th> */}
+							<Th> rate</Th>
+						</Tr>
+					</Thead>
+					<Tbody>
+					{priceRange.length > 0 && priceRange.map((range, idx) => (
+							<Tr key={idx}>
+								<Td>{idx+1}</Td>
+								<Td>{formatThousands(ethers.utils.formatEther(range.fromAmount), {separator: ','})} CPT</Td>
+								<Td>{idx === priceRange.length - 1 ? 'CAP' : formatThousands(range.price.toString(), {separator: ','}) + ' CPT/BNB'}</Td>
+							</Tr>
+						))
+					}
+					</Tbody>
+				</Table>
+			</Box>
+		);
   };
   
 

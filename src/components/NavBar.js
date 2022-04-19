@@ -97,7 +97,7 @@ export default function NavBar() {
               <RouterLink to="/" style={{textDecoration: 'none'}}>
                 <Button variant="ghost" mr='3'>Home</Button>         
               </RouterLink>
-              {/* ###### */}
+
 							{networkConfig === undefined || !networkConfig.buttons.donateMenu.visible ? <></> :
               <RouterLink to={networkConfig.buttons.donateMenu.url} style={{textDecoration: 'none'}}>
                 <Button variant={path===networkConfig.buttons.donateMenu.url ? "solid" : "ghost"} mr="3">

@@ -11,9 +11,8 @@ import {
     StatNumber 
 } from "@chakra-ui/react";
 import donateABI from "abi/TokensVesting_abi";
-import { TOKEN_VESTING_ADDRESS, CHAIN_ID, getNetworkConfig } from "constants";
-
-
+import { TOKEN_VESTING_ADDRESS, getNetworkConfig } from "constants";
+import ConfirmationProgress from '../ConfirmationProgress';
 import { ethers } from "ethers";
 import { useAuth } from "contexts/AuthContext";
 import { useDonate } from "contexts/DonateContext";
@@ -21,9 +20,11 @@ import { useDonate } from "contexts/DonateContext";
 const DonateModal = (props) => {
     const [ isLoading, setIsLoading ] = useState(false);
     const [ isDonated, setIsDonated ] = useState(false);
+    const [ hiddenConfirmationProgress, setHiddenConfirmationProgress] = useState(true);
+    const [ confirmationProgressData, setConfirmationProgressData ] = useState({value: 5, message: 'Start', step: 1});
     const { currentAccount, currentNetwork } = useAuth()
     const toast = useToast()
-    const {  participantID } = useDonate()
+    const { participantID } = useDonate()
     const { amount } = props;
 
     const sendDonate = async() => {
@@ -43,7 +44,9 @@ const DonateModal = (props) => {
             uint8[0] = participantID;
 
             try {
-                const tx = await TokenVestingContract.crowdFunding(uint8[0], options);
+							setHiddenConfirmationProgress(false);
+							setConfirmationProgressData({step: '1/3', value: 20, message: 'Start...'});
+							const tx = await TokenVestingContract.crowdFunding(uint8[0], options);
                 toast({
                     title: 'Donate',
                     description: `Waiting for confirmation, hash: ${tx.hash}`,
@@ -52,9 +55,21 @@ const DonateModal = (props) => {
                     isClosable: true,
                 });
 
-                await tx.wait(2);
-                setIsLoading(false);
-                setIsDonated(true);
+								setConfirmationProgressData({step: '2/3', value: 50, message: 'Waiting for confirmation...'});
+                await tx.wait(networkConfig.confirmationNumbers);
+								setConfirmationProgressData({step: '2/3', value: 50, message: 'Transaction is confirmed...'});
+								setTimeout(() => {
+									toast({
+                    title: 'Donate',
+                    description: `Congrat! you have donated successfully, refresh the page and check the result.`,
+                    status: 'success',
+                    duration: 4000,
+                    isClosable: true,
+	                })
+									setHiddenConfirmationProgress(true);
+									setIsLoading(false);
+									setIsDonated(true);	
+								}, 2000);
             } catch(err) {
                 toast({
                     title: 'Donate error',
@@ -74,7 +89,7 @@ const DonateModal = (props) => {
     }
 
     return (
-        <Flex
+        <Box
           bg={useColorModeValue("white", "gray.700")}
           w="full"
           alignItems="center"
@@ -91,7 +106,7 @@ const DonateModal = (props) => {
             <Stat>
                 <StatLabel>Vesting Donation</StatLabel>
                 <StatNumber>{amount}</StatNumber>
-                <StatHelpText>BNB/ETH</StatHelpText>
+                <StatHelpText>BNB</StatHelpText>
             </Stat>
             
             <Button
@@ -117,7 +132,13 @@ const DonateModal = (props) => {
             
             
           </Box>
-        </Flex>
+					<ConfirmationProgress 
+						hidden={hiddenConfirmationProgress}
+						step={confirmationProgressData.step}
+						value={confirmationProgressData.value}
+						message={confirmationProgressData.message}
+					/>
+        </Box>
     )
 }
 
