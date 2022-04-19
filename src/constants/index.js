@@ -246,13 +246,13 @@ export const netWorkConfig = [{
 	chainId: 97,
 	chainName: 'Bsc Testnet',
 	supportChainlinkVRFV2: true,
-	tokenVestingAddress: '0xF886e6336f752F7c4aA496c33A5F77079fcc7a0E',
+	tokenVestingAddress: '0xeF6eDD351a233B347abDc8d272222ae09EFdc491',
 	paymentTokens: [{
 		// The main token CPT must be the first
 		address: '0x6adb30205dd2D2902f32E40e0f2CE15c728F9492',
 		symbol: 'CPT',
 	}],
-	nftTokenAddress: '0x87Be7a62d608d29003ec1Ec292F65Df3913C8E34',
+	nftTokenAddress: '0x2c0AAB23e0fC64629623B48Bf9ab1C3a64860A41',
 	nftManagerAddress: '',
 	nftManagerV2Address: '0x598C8f63F3B15033b17e49f67621dee5C865417A',
 	marketplaceAddress: '0x22e42fea04f12de858Ce807FE863227486dCE9c3',
