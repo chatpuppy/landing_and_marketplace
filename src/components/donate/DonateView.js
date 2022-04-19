@@ -320,6 +320,7 @@ export const DonateView = () => {
 					<Progress
 						w={"80%"}
 						ml={"10%"}
+						backgroundColor={useColorModeValue("gray.200", "gray.800")}
 						value={progressRate.rate}
 						colorScheme='green'
 					/>
