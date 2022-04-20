@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Button, Image, useToast, Box, Menu, MenuButton, MenuList, MenuItem, ChevronDownIcon } from '@chakra-ui/react';
+import { Button, Image, useToast, Box } from '@chakra-ui/react';
 import { checkIfWalletIsConnected ,connectWallet } from 'services/walletConnections';
 import { useAuth } from 'contexts/AuthContext';
 

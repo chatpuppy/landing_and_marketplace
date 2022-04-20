@@ -63,7 +63,7 @@ export const DonateView = () => {
 		const [ isDisabled, setIsDisabled ] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [ showRedeemButton, setShowRedeemButton ] = useState(false);
-    const { currentAccount, currentNetwork } = useAuth()
+    const { currentAccount } = useAuth()
 		const [ modalOptions, setModalOptions ] = useState({
 			message: '', 
 			buttonName: 'Release', 
@@ -355,7 +355,7 @@ export const DonateView = () => {
             <Card textAlign={'center'} justifyContent={'center'}>
               <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px' textTransform='uppercase'>YOUR BENEFIT (CPT)</Heading>
               <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.totalAmount))}</Text>
-              <Text fontSize={'md'} color={useColorModeValue("gray.400", "gray.600")} mt={5} mb={5}>{'Benefit amount includes released, releasable and vesting CPT'}</Text>
+              <Text fontSize={'md'} color={useColorModeValue("gray.400", "gray.600")} mt={5} mb={5}>Benefit amount includes released, releasable and vesting CPT</Text>
             </Card>
             
             <Card textAlign={'center'} justifyContent={'center'}>

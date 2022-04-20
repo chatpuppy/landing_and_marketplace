@@ -53,7 +53,7 @@ export default function DonateComponent() {
 	const defaultParticipantID = 2;
 	useEffect(() => {
 		setParticipantID(defaultParticipantID); // Default is public sale #2
-	}, [])
+	}, [setParticipantID])
 
   useEffect(() => {
     async function fetchCrowd() {

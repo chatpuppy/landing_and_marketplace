@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Box, Heading, HStack, Text, Button } from "@chakra-ui/react";
+import React from "react";
+import { Box, Heading, Text, Button } from "@chakra-ui/react";
 import { useDonate } from "contexts/DonateContext";
 import { Blur } from '../common/Blur';
 
@@ -24,7 +24,7 @@ const Feature = ({ title, desc, onClick, status, ...rest }) => {
   };
 
   export const CardParticipantType = () => {
-    const { setParticipantID, participantID } = useDonate();
+    const { setParticipantID } = useDonate();
     return (
       <Box mx="auto">
         <Text fontSize={'2xl'} mb={2}>Select your participant</Text>

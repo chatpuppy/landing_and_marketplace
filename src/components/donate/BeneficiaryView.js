@@ -1,4 +1,3 @@
-import { useState }  from "react";
 import { Stack, Heading, SimpleGrid, Text, Button, Box , useBreakpointValue,  useToast} from '@chakra-ui/react'
 import { Card } from '../common/Card';
 import { useAuth } from "contexts/AuthContext";
@@ -11,10 +10,9 @@ import { ethers } from "ethers";
 
 export const BeneficiaryView = () => {
     const {participantID, totalAmount, beneficiaryCount, priceRange} = useDonate()
-    const [ isLoading, setIsLoading ] = useState(false);
+    // const [ isLoading, setIsLoading ] = useState(false);
     const { currentAccount, currentNetwork, tokenVestingContract } = useAuth()
     const toast = useToast()
-    const id = 'toast'
 
     let uint8 = new Uint8Array(2);
     uint8[0] = participantID;
@@ -26,7 +24,7 @@ export const BeneficiaryView = () => {
 			const networkConfig = getNetworkConfig(currentNetwork);
 			console.log('network config 1: ' + networkConfig);
 
-			setIsLoading(true);
+			// setIsLoading(true);
       try {
         await tokenVestingContract.redeem(participant)
         toast({
@@ -41,7 +39,7 @@ export const BeneficiaryView = () => {
       }, 5000)
       } catch(err) {
         console.log(err)
-        setIsLoading(false);
+        // setIsLoading(false);
       }
     }
 
@@ -51,7 +49,7 @@ export const BeneficiaryView = () => {
 			const networkConfig = getNetworkConfig(currentNetwork);
 			console.log('network config 2: ' + networkConfig);
 
-      setIsLoading(true);
+      // setIsLoading(true);
       try {
         await tokenVestingContract.release(participant)
         toast({
@@ -66,7 +64,7 @@ export const BeneficiaryView = () => {
       }, 5000)
       } catch(err) {
         console.log(err)
-        setIsLoading(false);
+        // setIsLoading(false);
       }
     }
 
