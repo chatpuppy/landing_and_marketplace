@@ -1,3 +1,6 @@
-html {
+/* html {
     scroll-behavior: smooth;
+} */
+body::-webkit-scrollbar {
+	display:none
 }
