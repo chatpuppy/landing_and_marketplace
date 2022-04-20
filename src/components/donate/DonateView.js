@@ -353,7 +353,7 @@ export const DonateView = () => {
 					<Card textAlign={'center'} justifyContent={'center'}>
 						<Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px' textTransform='uppercase'>YOUR BENEFIT (CPT)</Heading>
 						<Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.totalAmount))}</Text>
-						<Text fontSize={'md'} color={useColorModeValue("gray.400", "gray.600")} mt={5} mb={5}>Benefit amount includes claimed, claimable and vesting CPT</Text>
+						<Text fontSize={'md'} color={useColorModeValue("gray.400", "gray.600")} mt={5} mb={5} ml={"10%"} mr={"10%"}>Benefit amount includes claimed, claimable and vesting CPT</Text>
 					</Card>
 					
 					<Card textAlign={'center'} justifyContent={'center'}>
