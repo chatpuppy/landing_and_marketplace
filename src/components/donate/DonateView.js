@@ -317,7 +317,8 @@ export const DonateView = () => {
 						fontSize={"md"}
 						fontWeight={600}
 						pb={3}
-					>PROGRESS</Box>
+						textTransform={"uppercase"}
+					>progress</Box>
 					<Progress
 						w={"80%"}
 						ml={"10%"}
@@ -334,7 +335,8 @@ export const DonateView = () => {
 						letterSpacing={'2px'}
 						fontSize={"md"}
 						mt={5}
-					>{`CURRENT RATE: ${format(donationPrice.price)} CPT/BNB`}</Box>
+						textTransform={"uppercase"}
+					>{`Current Rate: ${format(donationPrice.price)} CPT/BNB`}</Box>
 				</Card>
 
         <Stack
@@ -351,13 +353,13 @@ export const DonateView = () => {
             gap="6"
           >
             <Card textAlign={'center'} justifyContent={'center'}>
-              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px'>YOUR BENEFIT (CPT)</Heading>
+              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px' textTransform='uppercase'>YOUR BENEFIT (CPT)</Heading>
               <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.totalAmount))}</Text>
               <Text fontSize={'md'} color={useColorModeValue("gray.400", "gray.600")} mt={5} mb={5}>{'Benefit amount includes released, releasable and vesting CPT'}</Text>
             </Card>
             
             <Card textAlign={'center'} justifyContent={'center'}>
-              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px'>RELEASABLE (CPT)</Heading>
+              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px' textTransform='uppercase'>RELEASABLE (CPT)</Heading>
               <Text mt={-10} ml={10}>{beneficiaryData === undefined ? <AiTwotoneCheckCircle color={"gray"}/> : beneficiaryData.status === 1 ? <AiTwotoneCheckCircle color={"#48BB78"}/> : <AiTwotoneCheckCircle color={"#E53E3E"}/>}</Text>
               <Text mt={5} fontSize={'4xl'}>{format(ethers.utils.formatEther(releasable === undefined ? 0 : releasable))}</Text>
               {releasable > 0 ? 
@@ -373,7 +375,7 @@ export const DonateView = () => {
             </Card>
 
             <Card textAlign={'center'} justifyContent={'center'}>
-              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px'>RELEASED (CPT)</Heading>
+              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px' textTransform='uppercase'>RELEASED (CPT)</Heading>
               <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.releasedAmount))}</Text>
               {beneficiaryData === undefined || beneficiaryData.totalAmount.eq(beneficiaryData.releasedAmount) || !showRedeemButton ? <></> : 
 							<Button mt={5} mb={5} onClick={() => {

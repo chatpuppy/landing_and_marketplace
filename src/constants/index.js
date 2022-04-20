@@ -2,6 +2,7 @@
  * BSC testnet
  */
 export const TOKEN_VESTING_ADDRESS = "0xeF6eDD351a233B347abDc8d272222ae09EFdc491";
+export const CPT_TOKEN_ADDRESS = "0x6adb30205dd2D2902f32E40e0f2CE15c728F9492";
 
 export const supportedChainIds = [1, 56, 97];
 

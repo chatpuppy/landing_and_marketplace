@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import { useDonate } from "contexts/DonateContext";
 import { DateTime } from "luxon";
 import { ethers } from "ethers";
-import { TOKEN_VESTING_ADDRESS } from "constants";
+import { TOKEN_VESTING_ADDRESS, CPT_TOKEN_ADDRESS } from "constants";
 
 import { 
     Box,
@@ -56,6 +56,7 @@ export const InfoTableComponent = () => {
 			mt={5}
 			p={5} 
 			color={useColorModeValue('black.700', '#dcdcdc')}
+			textTransform={"uppercase"}
 		>
 			DONATION RULES
     </Heading>
@@ -68,53 +69,58 @@ export const InfoTableComponent = () => {
 			color={useColorModeValue('black.700', '#dcdcdc')}
 			wordBreak={"break-word"}
 			fontSize={"sm"}
+			textTransform={"uppercase"}
 		>
 		{donateDataObj === null ? <></> :
       <Tbody>
         <Tr>
-          <Td>{"Donate duration".toUpperCase()}</Td>
+          <Td>{"Token address"}</Td>
+          <Td textTransform={"none"}>{CPT_TOKEN_ADDRESS}</Td>
+        </Tr>
+        <Tr>
+          <Td>{"Vesting contract"}</Td>
+          <Td textTransform={"none"}>{TOKEN_VESTING_ADDRESS}</Td>
+        </Tr>
+        <Tr>
+          <Td>{"Donate duration"}</Td>
           <Td>{donateDataObj.startTime} - {donateDataObj.endTime}</Td>
         </Tr>
         <Tr>
-          <Td>{"Genesis time".toUpperCase()}</Td>
+          <Td>{"Genesis time"}</Td>
           <Td>{donateDataObj.genesisTimestamp}</Td>
         </Tr>
         <Tr>
-          <Td>{"Cliff".toUpperCase()}</Td>
+          <Td>{"Cliff"}</Td>
           <Td>{donateData === undefined ? "" : donateData.cliff === 0 ? `NO` : `${donateDataObj.genesisTimestamp} - ${donateDataObj.cliffTimeStamp}`}</Td>
         </Tr>
         <Tr>
-          <Td>{"Release duration".toUpperCase()}</Td>
+          <Td>{"Release duration"}</Td>
           <Td>{`${donateDataObj.cliffTimeStamp} - ${donateDataObj.endDuration}`}</Td>
         </Tr>
         <Tr>
-          <Td>{"TGE radio".toUpperCase()}</Td>
+          <Td>{"TGE radio"}</Td>
           <Td>{donateDataObj.tgeAmount}</Td>
         </Tr>
         <Tr>
-          <Td>{"Era period".toUpperCase()}</Td>
+          <Td>{"Era period"}</Td>
           <Td> {donateDataObj.eraBasis + " " + (donateDataObj.eraBasis > 1 ? 'hours' : 'hour')} </Td>
         </Tr>
         <Tr>
-          <Td>{"Donation amount".toUpperCase()}</Td>
+          <Td>{"Donation amount"}</Td>
           <Td>{donateDataObj.lowest} - {donateDataObj.higest} BNB</Td>
         </Tr>
         <Tr>
-          <Td>{"Redeem allowd".toUpperCase()}</Td>
+          <Td>{"Redeem allowd"}</Td>
           <Td>{donateData === undefined ? "" : donateData.allowRedeem ? "true" : "false"}</Td>
         </Tr>
         <Tr>
-          <Td>{"Over cap allowed".toUpperCase()}</Td>
+          <Td>{"Over cap allowed"}</Td>
           <Td>{donateData === undefined ? "" : donateData.acceptOverCap ? "true" : "false"}</Td>
         </Tr>
         {/* <Tr>
-          <Td>{"CPT address".toUpperCase()}</Td>
+          <Td>{"CPT address"}</Td>
           <Td>{TOKEN_ADDRESS}</Td>
         </Tr> */}
-        <Tr>
-          <Td>{"Vesting contract".toUpperCase()}</Td>
-          <Td>{TOKEN_VESTING_ADDRESS}</Td>
-        </Tr>
       </Tbody>}
     </Table>
     </Box>
