@@ -50,8 +50,9 @@ export default function DonateComponent() {
   } = useDonate();
 
 	// ###### To enter into public sale directly, if cancel, it'll show a menu
+	const defaultParticipantID = 2;
 	useEffect(() => {
-		setParticipantID(2); // Default is public sale #2
+		setParticipantID(defaultParticipantID); // Default is public sale #2
 	}, [])
 
   useEffect(() => {
@@ -59,7 +60,7 @@ export default function DonateComponent() {
       const crowdParams = await loadCrowdFundingParams(participantID);
       setDataDonate(crowdParams);
     }
-    fetchCrowd();
+    if(participantID === defaultParticipantID) fetchCrowd();
   }, [currentAccount,participantID,setDataDonate]);
 
   useEffect(() => {
@@ -73,8 +74,11 @@ export default function DonateComponent() {
       const beneficiaryCount = await loadBeneficiaryCount(participantID);
       setBeneficiaryCount(beneficiaryCount);
     }
-    BeneficiaryData();
-    beneficiaryCount();
+		
+    if(participantID === defaultParticipantID) {
+			BeneficiaryData();
+			beneficiaryCount();	
+		}
   },[participantID, setBeneficiaryCount, setParticipantReleased])
 
   useEffect(() => {
@@ -82,7 +86,7 @@ export default function DonateComponent() {
       let priceRange = await loadParticipantPriceRange(participantID);
       setParticipantPriceRange(priceRange);
     }
-    fetchPriceData();
+    if(participantID === defaultParticipantID) fetchPriceData();
   },[participantID, setParticipantPriceRange])
 
   useEffect(() => {
@@ -92,7 +96,6 @@ export default function DonateComponent() {
     }
     async function fetchTotalParticipants() {
       const totalParticipants = await loadTotalParticipant(participantID);
-			console.log("+++", totalParticipants.toString());
       setTotalParticipant(totalParticipants);
     }
 		async function getPriceForAmount() {
@@ -100,12 +103,13 @@ export default function DonateComponent() {
 			const price = await loadPriceForAmount(participantID, totalParticipants);
 			setPriceForAmount(price);
 		}
-    fetchTotalDonate();
-    fetchTotalParticipants();
-		getPriceForAmount();
+		if(participantID === defaultParticipantID) {
+			fetchTotalDonate();
+			fetchTotalParticipants();
+			getPriceForAmount();	
+		}
   }, [ participantID, setTotal, setTotalParticipant, setPriceForAmount]);
 
-  
   useEffect(() => {
     async function Index() {
       const reponseIndex = await loadIndex(participantID, currentAccount);
@@ -113,8 +117,7 @@ export default function DonateComponent() {
       setUserIndex(reponseIndex[1]);
       if(reponseIndex[0]) setBeneficiaryData(await loadBeneficiary(reponseIndex[1]));
     }
-    
-    Index();
+    if(participantID === defaultParticipantID) Index();
   },[currentAccount, participantID,  setUserIndex, setBeneficiaryData])
 
   useEffect(() => {
@@ -122,7 +125,7 @@ export default function DonateComponent() {
       const releasable = await loadReleasable(participantID, currentAccount);
       setReleasable(releasable);
     }
-    getReleasable();
+    if(participantID === defaultParticipantID) getReleasable();
   }, [participantID, setReleasable, currentAccount])
 
   return (
@@ -130,12 +133,6 @@ export default function DonateComponent() {
       <Container 
         color={useColorModeValue("gray.800", "inherit")}
         maxW='container.lg'
-       
-        // columns={{ base: 1, md: 1 }}
-        // spacing={{ base: 10, lg: 32 }}
-        // py={{ base: 10, sm: 20, lg: 32 }}
-        // justify={'center'}
-        // align={'center'}
         >
         {participantID === 0 ? <CardParticipantType />
          : participantID > 0 ? 

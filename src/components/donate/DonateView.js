@@ -43,6 +43,7 @@ import { TOKEN_VESTING_ADDRESS } from "constants";
 import Countdown from '../common/Countdown';
 import { AiTwotoneCheckCircle } from "react-icons/ai";
 import { getGlobalTime } from "../common/Worldtime";
+import { useAuth } from 'contexts/AuthContext';
 
 const formatThousands = require('format-thousands');
 
@@ -62,6 +63,7 @@ export const DonateView = () => {
 		const [ isDisabled, setIsDisabled ] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [ showRedeemButton, setShowRedeemButton ] = useState(false);
+    const { currentAccount, currentNetwork } = useAuth()
 		const [ modalOptions, setModalOptions ] = useState({
 			message: '', 
 			buttonName: 'Release', 
@@ -182,8 +184,50 @@ export const DonateView = () => {
 			const initCountdownOptions = async () => {
 				await countdownData();
 			};
+			const countdownData = async() => {
+				// Get phrase no, phrase name and timeTillDate
+				if(donateData === undefined) return;
+				const current = await getGlobalTime();
+				const donateStart = parseInt(donateData.startTimestamp);
+				const donateEnd = parseInt(donateData.endTimestamp);
+				const genesisStart = parseInt(donateData.genesisTimestamp);
+				const cliffEnd = parseInt(donateData.genesisTimestamp) + parseInt(donateData.cliff);
+				const releaseEnd = parseInt(donateData.genesisTimestamp) + parseInt(donateData.cliff) + parseInt(donateData.duration);
+	
+	
+				if(current < donateStart) setCountdownOptions({
+					circleColor: "#E53E3E",
+					title: "Time to start donating",
+					timeTillDate: donateStart
+				});
+				else if(current < donateEnd) setCountdownOptions({
+					circleColor: "#48BB78",
+					title: "Time to donation end",
+					timeTillDate: donateEnd,
+				});
+				else if(current < genesisStart) setCountdownOptions({
+					circleColor: "#E53E3E",
+					title: "Time to genesis start",
+					timeTillDate: genesisStart,
+				});
+				else if(current < cliffEnd) setCountdownOptions({
+					circleColor: "#E53E3E",
+					title: "Time to cliff end and start to release",
+					timeTillDate: cliffEnd,
+				});
+				else if(current < releaseEnd) setCountdownOptions({
+					circleColor: "#48BB78",
+					title: "Time to releasing end",
+					timeTillDate: releaseEnd,
+				});
+				else setCountdownOptions({
+					circleColor: "",
+					title: "",
+					timeTillDate: 0
+				})
+			}
 			initCountdownOptions();
-		}, [donateData, priceRange])
+		}, [donateData, priceRange, currentAccount])
 
 		useEffect(() => {
 			const initButtons = async () => {
@@ -192,14 +236,14 @@ export const DonateView = () => {
 				setShowRedeemButton(current < endDuration && current > parseInt(donateData.endTimestamp));	
 			};
 			if(donateData !== undefined) initButtons();
-		}, [donateData])
+		}, [donateData, currentAccount])
 
 		useEffect(() => {
 			const initPriceForAmount = () => {
 				setDonationPrice({index: priceForAmount[1], price: priceForAmount[0]});
 			}
 			if(priceForAmount !== undefined) initPriceForAmount();
-		}, [priceForAmount])
+		}, [priceForAmount, currentAccount])
 		
 		useEffect(() => {
 			if(participantTotal === undefined	
@@ -207,56 +251,13 @@ export const DonateView = () => {
 				|| priceRange.length === 0 
 				|| priceRange[priceRange.length - 1] === undefined
 			) return;
-			console.log('===', participantTotal.toString())
+			// console.log('===', participantID, participantTotal.toString())
 			setProgressRate({
 				sold: participantTotal, 
 				total: priceRange[priceRange.length - 1].fromAmount,
 				rate: participantTotal / priceRange[priceRange.length - 1].fromAmount * 100
 			});
-		}, [participantTotal, priceRange])
-
-		const countdownData = async() => {
-			// Get phrase no, phrase name and timeTillDate
-			if(donateData === undefined) return;
-			const current = await getGlobalTime();
-			const donateStart = parseInt(donateData.startTimestamp);
-			const donateEnd = parseInt(donateData.endTimestamp);
-			const genesisStart = parseInt(donateData.genesisTimestamp);
-			const cliffEnd = parseInt(donateData.genesisTimestamp) + parseInt(donateData.cliff);
-			const releaseEnd = parseInt(donateData.genesisTimestamp) + parseInt(donateData.cliff) + parseInt(donateData.duration);
-
-
-			if(current < donateStart) setCountdownOptions({
-				circleColor: "#E53E3E",
-				title: "Time to start donating",
-				timeTillDate: donateStart
-			});
-			else if(current < donateEnd) setCountdownOptions({
-				circleColor: "#48BB78",
-				title: "Time to donation end",
-				timeTillDate: donateEnd,
-			});
-			else if(current < genesisStart) setCountdownOptions({
-				circleColor: "#E53E3E",
-				title: "Time to genesis start",
-				timeTillDate: genesisStart,
-			});
-			else if(current < cliffEnd) setCountdownOptions({
-				circleColor: "#E53E3E",
-				title: "Time to cliff end and start to release",
-				timeTillDate: cliffEnd,
-			});
-			else if(current < releaseEnd) setCountdownOptions({
-				circleColor: "#48BB78",
-				title: "Time to releasing end",
-				timeTillDate: releaseEnd,
-			});
-			else setCountdownOptions({
-				circleColor: "",
-				title: "",
-				timeTillDate: 0
-			})
-		}
+		}, [participantTotal, priceRange, currentAccount, participantID])
 
 		const col = useColorModeValue("black", "white");
 
@@ -316,7 +317,7 @@ export const DonateView = () => {
 						fontSize={"md"}
 						fontWeight={600}
 						pb={3}
-					>Progress</Box>
+					>PROGRESS</Box>
 					<Progress
 						w={"80%"}
 						ml={"10%"}
@@ -333,7 +334,7 @@ export const DonateView = () => {
 						letterSpacing={'2px'}
 						fontSize={"md"}
 						mt={5}
-					>{`Current rate: ${format(donationPrice.price)} CPT/BNB`}</Box>
+					>{`CURRENT RATE: ${format(donationPrice.price)} CPT/BNB`}</Box>
 				</Card>
 
         <Stack
@@ -350,13 +351,13 @@ export const DonateView = () => {
             gap="6"
           >
             <Card textAlign={'center'} justifyContent={'center'}>
-              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px'>Your benefit(CPT)</Heading>
+              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px'>YOUR BENEFIT (CPT)</Heading>
               <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.totalAmount))}</Text>
               <Text fontSize={'md'} color={useColorModeValue("gray.400", "gray.600")} mt={5} mb={5}>{'Benefit amount includes released, releasable and vesting CPT'}</Text>
             </Card>
             
             <Card textAlign={'center'} justifyContent={'center'}>
-              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px'>Releasable(CPT)</Heading>
+              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px'>RELEASABLE (CPT)</Heading>
               <Text mt={-10} ml={10}>{beneficiaryData === undefined ? <AiTwotoneCheckCircle color={"gray"}/> : beneficiaryData.status === 1 ? <AiTwotoneCheckCircle color={"#48BB78"}/> : <AiTwotoneCheckCircle color={"#E53E3E"}/>}</Text>
               <Text mt={5} fontSize={'4xl'}>{format(ethers.utils.formatEther(releasable === undefined ? 0 : releasable))}</Text>
               {releasable > 0 ? 
@@ -372,7 +373,7 @@ export const DonateView = () => {
             </Card>
 
             <Card textAlign={'center'} justifyContent={'center'}>
-              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px'>Released(CPT)</Heading>
+              <Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px'>RELEASED (CPT)</Heading>
               <Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.releasedAmount))}</Text>
               {beneficiaryData === undefined || beneficiaryData.totalAmount.eq(beneficiaryData.releasedAmount) || !showRedeemButton ? <></> : 
 							<Button mt={5} mb={5} onClick={() => {
@@ -493,13 +494,13 @@ export const DonateView = () => {
           justifyContent={"center"}
           textAlign={"center"}
           as={"form"}
-          mt={5}
-          ml={20}
-          mr={20}
-          borderRight={20}
-          mb={10}
+					p={5}
+					pl={"10%"}
+					pr={"10%"}
         >
-          <Heading mb={10}>Donate</Heading>
+          <Heading 
+						mb={5}
+					>DONATION</Heading>
           <HStack maxW="full">
             <Button {...dec}>-</Button>
             <Input {...input} />
@@ -508,6 +509,7 @@ export const DonateView = () => {
           <Button
             fontFamily={"heading"}
             mt={8}
+						mb={8}
             w={"full"}
             bgGradient="linear(to-r, red.400,pink.400)"
             color={"white"}

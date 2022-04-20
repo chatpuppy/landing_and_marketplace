@@ -15,7 +15,6 @@ class Countdown extends React.Component {
 		labelColor: undefined,
 		fontColor: undefined,
 	}
-	
 
 	async componentDidMount() {
 		const start = await getGlobalTime();
@@ -55,7 +54,7 @@ class Countdown extends React.Component {
 		const labelStyle = {color: labelColor, fontSize: "0.65rem", fontWeight: "600", textTransform: "uppercase"};
 		const fontStyle = {color: fontColor}
 		const countdownWrapper = {display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap"}
-		const h1Style = {fontSize: "1rem", fontWeight: "600", letterSpacing: '2px', textAlign: "center", marginBottom:"10px"};
+		const h1Style = {fontSize: "1rem", fontWeight: "600", textTransform: "uppercase", letterSpacing: '2px', textAlign: "center", marginBottom:"10px"};
 
 		const countdownItem = {
 			color: "#111",
