@@ -43,6 +43,7 @@ import Countdown from '../common/Countdown';
 import { AiTwotoneCheckCircle } from "react-icons/ai";
 import { getGlobalTime } from "../common/Worldtime";
 import { useAuth } from 'contexts/AuthContext';
+import { DateTime } from "luxon";
 
 export const DonateView = () => {
 	const formatThousands = require('format-thousands');
@@ -55,12 +56,14 @@ export const DonateView = () => {
 		setReleasable, 
 		donateData, 
 		participantTotal,
-		priceForAmount
+		priceForAmount,
+		redeemable
 	} = useDonate();
 	const [ isLoading, setIsLoading ] = useState(false);
 	const [ isDisabled, setIsDisabled ] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [ showRedeemButton, setShowRedeemButton ] = useState(false);
+	const [ showReleaseButton, setShowReleaseButton ] = useState(false);
 	const { currentAccount } = useAuth()
 	const [ modalOptions, setModalOptions ] = useState({
 		message: '', 
@@ -107,6 +110,7 @@ export const DonateView = () => {
 					isClosable: true,
 				})
 				setReleasable(0);
+				setShowReleaseButton(false);
 				setBeneficiaryData({
 					...beneficiaryData,
 					releasedAmount: beneficiaryData.releasedAmount.add(releasable),
@@ -228,13 +232,15 @@ export const DonateView = () => {
 	}, [donateData, priceRange, currentAccount])
 
 	useEffect(() => {
-		const initButtons = async () => {
-			const current = await getGlobalTime();
-			const endDuration = parseInt(donateData.genesisTimestamp) + parseInt(donateData.cliff) + parseInt(donateData.duration);
-			setShowRedeemButton(current < endDuration && current > parseInt(donateData.endTimestamp));	
-		};
-		if(donateData !== undefined) initButtons();
-	}, [donateData, currentAccount])
+		if(redeemable !== undefined) setShowRedeemButton(redeemable[0]);
+		const setReleaseButton = async () => {
+			const timestamp = await getGlobalTime();
+			const releaseStart = parseInt(donateData.genesisTimestamp);
+			const releaseEnd = parseInt(donateData.genesisTimestamp) + parseInt(donateData.cliff) + parseInt(donateData.duration);
+			if(timestamp >= releaseStart && timestamp <= releaseEnd) setShowReleaseButton(true);
+		}
+		if(donateData !== undefined) setReleaseButton();
+	}, [donateData, currentAccount, redeemable])
 
 	useEffect(() => {
 		const initPriceForAmount = () => {
@@ -346,22 +352,38 @@ export const DonateView = () => {
 				<SimpleGrid
 					columns={{
 						base: 1,
-						md: 3,
+						md: 2,
 					}}
 					gap="6"
 				>
 					<Card textAlign={'center'} justifyContent={'center'}>
 						<Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px' textTransform='uppercase'>YOUR BENEFIT (CPT)</Heading>
-						<Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.totalAmount))}</Text>
-						<Text fontSize={'md'} color={useColorModeValue("gray.400", "gray.600")} mt={5} mb={5} ml={"10%"} mr={"10%"}>Benefit amount includes claimed, claimable and vesting CPT</Text>
+						<Text fontSize={'3xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.totalAmount))}</Text>
+						<Text fontSize={'md'} color={useColorModeValue("gray.400", "gray.600")} mt={2} mb={1} ml={"5%"} mr={"5%"}>{"Donated " + (beneficiaryData === undefined ? '' : ethers.utils.formatEther((beneficiaryData.totalAmount).div(beneficiaryData.price)) + " BNB x " + format(beneficiaryData.price)) + " CPT/BNB"}</Text>
+						<Text fontSize={'md'} color={useColorModeValue("gray.400", "gray.600")} mt={2} mb={4} ml={"5%"} mr={"5%"}>{"on " + (beneficiaryData === undefined ? '' : DateTime.fromSeconds(parseInt(beneficiaryData.timestamp)).toFormat('F'))}</Text>
+						{beneficiaryData === undefined || beneficiaryData.totalAmount.eq(beneficiaryData.releasedAmount) || !showRedeemButton ? <></> : 
+						<Button mb={5} onClick={() => {
+							setModalOptions({
+								message: `Do you want to redeem the unreleased tokens? After redeemed, you will be refund the balance BNBs, and can not claim any CPTs.`,
+								buttonName: 'Redeem',
+								fun: "redeem",
+							})
+							onOpen();
+						}}>
+							Redeem
+						</Button>}
 					</Card>
 					
 					<Card textAlign={'center'} justifyContent={'center'}>
-						<Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px' textTransform='uppercase'>claimable (CPT)</Heading>
-						<Text mt={-10} ml={10}>{beneficiaryData === undefined ? <AiTwotoneCheckCircle color={"gray"}/> : beneficiaryData.status === 1 ? <AiTwotoneCheckCircle color={"#48BB78"}/> : <AiTwotoneCheckCircle color={"#E53E3E"}/>}</Text>
-						<Text mt={5} fontSize={'4xl'}>{format(ethers.utils.formatEther(releasable === undefined ? 0 : releasable))}</Text>
-						{releasable > 0 ? 
-						<Button mt={5} mb={5} onClick={() => {
+						<Heading alignItems={'center'} justifyContent={'center'} mt={5} fontSize='md' letterSpacing='2px' textTransform='uppercase'>Claimed (CPT)</Heading>
+						<Text mt={-3} ml={8}>{beneficiaryData === undefined ? <AiTwotoneCheckCircle color={"gray"}/> : beneficiaryData.status === 1 ? <AiTwotoneCheckCircle color={"#48BB78"}/> : <AiTwotoneCheckCircle color={"#E53E3E"}/>}</Text>
+						
+						<Text mt={2} fontSize={'3xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.releasedAmount))}</Text>
+						<Heading alignItems={'center'} justifyContent={'center'} m={3} fontSize='md' letterSpacing='2px' textTransform='uppercase'>claimable (CPT)</Heading>
+						<Text mt={0} mb={2} fontSize={'3xl'}>{format(ethers.utils.formatEther(releasable === undefined ? 0 : releasable))}</Text>
+
+						{releasable > 0 && showReleaseButton ? 
+						<Button mb={5} onClick={() => {
 							setModalOptions({
 								message:`Do you want to claim ${format(ethers.utils.formatEther(releasable === undefined ? 0 : releasable))} CPT?`, 
 								buttonName: 'Claim', 
@@ -370,22 +392,6 @@ export const DonateView = () => {
 							onOpen();
 						}}>Claim
 						</Button> : ''}
-					</Card>
-
-					<Card textAlign={'center'} justifyContent={'center'}>
-						<Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px' textTransform='uppercase'>Claimed (CPT)</Heading>
-						<Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.releasedAmount))}</Text>
-						{beneficiaryData === undefined || beneficiaryData.totalAmount.eq(beneficiaryData.releasedAmount) || !showRedeemButton ? <></> : 
-						<Button mt={5} mb={5} onClick={() => {
-							setModalOptions({
-								message: `Do you want to redeem the unreleased tokens? After redeemed, you will be refund the balance BNB, and only have the current claimed CPT.`,
-								buttonName: 'Redeem',
-								fun: "redeem",
-							})
-							onOpen();
-						}}>
-							Redeem
-						</Button>}
 					</Card>
 
 				</SimpleGrid>
@@ -410,10 +416,13 @@ export const DonateView = () => {
 				<InfoTableComponent />
 			</Card>
 			{donateData === undefined ? <></> :
-			donateData.endTimestamp * 1000 < new Date().getTime() ? 
+			donateData.endTimestamp * 1000 < (new Date()).getTime() ? 
 			<Card>
 				<DonotedBox message={"Donation is end!"}/>					
-			</Card> : beneficiaryData !== undefined ? 
+			</Card> : (new Date()).getTime() < donateData.startTimestamp * 1000 ? 
+			<Card>
+				<DonotedBox message={"Donation has not started!"}/>					
+			</Card> : beneficiaryData !== undefined && beneficiaryData.timestamp > 0 ? 
 			<Card>
 				<DonotedBox message={"This account has donated!"}/>
 			</Card> :

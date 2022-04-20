@@ -108,6 +108,14 @@ export const loadReleasable = async (participant, address) => {
 }
 
 /**
+ * Get redeemable
+ */
+export const loadRedeemable = async (participant, address) => {
+	if(address === undefined) return;
+	return await tokenVestingContract.redeemable(participant, address);
+}
+
+/**
  * Get redeemFee
  * @returns 
  */

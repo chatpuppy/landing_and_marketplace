@@ -20,6 +20,7 @@ import {
   loadBeneficiaryCount,
   loadBeneficiary,
   loadReleasable,
+	loadRedeemable,
 	loadPriceForAmount,
   loadCrowdFundingParams,
   loadIndex,
@@ -43,6 +44,7 @@ export default function DonateComponent() {
     setBeneficiaryCount,
     setBeneficiaryData,
     setReleasable,
+		setRedeemable,
     setUserIndex,
     userIndex,
     participantID,
@@ -127,6 +129,14 @@ export default function DonateComponent() {
     }
     if(participantID === defaultParticipantID) getReleasable();
   }, [participantID, setReleasable, currentAccount])
+
+	useEffect(() => {
+		async function getRedeemable() {
+			const redeemable = await loadRedeemable(participantID, currentAccount);
+			setRedeemable(redeemable);
+		}
+		if(participantID === defaultParticipantID) getRedeemable();
+	}, [currentAccount, participantID, setRedeemable])
 
   return (
     <Box as="section" height="100vh" overflowY="auto">
