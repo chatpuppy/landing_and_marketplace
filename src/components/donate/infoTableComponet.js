@@ -94,7 +94,7 @@ export const InfoTableComponent = () => {
           <Td>{donateData === undefined ? "" : donateData.cliff === 0 ? `NO` : `${donateDataObj.genesisTimestamp} - ${donateDataObj.cliffTimeStamp}`}</Td>
         </Tr>
         <Tr>
-          <Td>{"Release duration"}</Td>
+          <Td>{"Claim duration"}</Td>
           <Td>{`${donateDataObj.cliffTimeStamp} - ${donateDataObj.endDuration}`}</Td>
         </Tr>
         <Tr>

@@ -53,8 +53,8 @@ export const BeneficiaryView = () => {
       try {
         await tokenVestingContract.release(participant)
         toast({
-          title: 'Release',
-          description: `Release now`,
+          title: 'Claim',
+          description: `Claim now`,
           status: 'sucess',
           duration: 4000,
           isClosable: true,
@@ -89,7 +89,7 @@ export const BeneficiaryView = () => {
         // }}
         onClick={actionRelease}
       >
-        Release
+        Claim
       </Button>
       <Button
         fontFamily={"heading"}

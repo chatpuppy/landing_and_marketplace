@@ -64,7 +64,7 @@ export const DonateView = () => {
 	const { currentAccount } = useAuth()
 	const [ modalOptions, setModalOptions ] = useState({
 		message: '', 
-		buttonName: 'Release', 
+		buttonName: 'Claim', 
 		fun: "release",
 	});
 	const [ countdownOptions, setCountdownOptions ] = useState({
@@ -91,7 +91,7 @@ export const DonateView = () => {
 			try {
 				const tx = await TokenVestingContract.release(uint8[0], {})
 				toast({
-						title: 'Release',
+						title: 'Claim',
 						description: `Waiting for confirmation, hash: ${tx.hash}`,
 						status: 'warning',
 						duration: 4000,
@@ -100,8 +100,8 @@ export const DonateView = () => {
 
 				await tx.wait(2);
 				toast({
-					title: 'Release tokens',
-					description: `Release successfully, you can release every one minute.`,
+					title: 'Claim',
+					description: `Claim successfully, you can claim every one minute.`,
 					status: 'success',
 					duration: 4000,
 					isClosable: true,
@@ -117,7 +117,7 @@ export const DonateView = () => {
 			} catch(err) {
 					console.log(err)
 					toast({
-						title: 'Release tokens error',
+						title: 'Claim error',
 						description: `${err.data.message}`,
 						status: 'error',
 						duration: 4000,
@@ -126,7 +126,7 @@ export const DonateView = () => {
 					setIsLoading(false);
 			}
 		} catch(err) {
-				console.log('Error Release', err)
+				console.log('Error Claim', err)
 		}
 	}
 
@@ -210,7 +210,7 @@ export const DonateView = () => {
 			});
 			else if(current < cliffEnd) setCountdownOptions({
 				circleColor: "#E53E3E",
-				title: "Time to cliff end and start to release",
+				title: "Time to cliff end and start to claim",
 				timeTillDate: cliffEnd,
 			});
 			else if(current < releaseEnd) setCountdownOptions({
@@ -353,32 +353,32 @@ export const DonateView = () => {
 					<Card textAlign={'center'} justifyContent={'center'}>
 						<Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px' textTransform='uppercase'>YOUR BENEFIT (CPT)</Heading>
 						<Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.totalAmount))}</Text>
-						<Text fontSize={'md'} color={useColorModeValue("gray.400", "gray.600")} mt={5} mb={5}>Benefit amount includes released, releasable and vesting CPT</Text>
+						<Text fontSize={'md'} color={useColorModeValue("gray.400", "gray.600")} mt={5} mb={5}>Benefit amount includes claimed, claimable and vesting CPT</Text>
 					</Card>
 					
 					<Card textAlign={'center'} justifyContent={'center'}>
-						<Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px' textTransform='uppercase'>RELEASABLE (CPT)</Heading>
+						<Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px' textTransform='uppercase'>claimable (CPT)</Heading>
 						<Text mt={-10} ml={10}>{beneficiaryData === undefined ? <AiTwotoneCheckCircle color={"gray"}/> : beneficiaryData.status === 1 ? <AiTwotoneCheckCircle color={"#48BB78"}/> : <AiTwotoneCheckCircle color={"#E53E3E"}/>}</Text>
 						<Text mt={5} fontSize={'4xl'}>{format(ethers.utils.formatEther(releasable === undefined ? 0 : releasable))}</Text>
 						{releasable > 0 ? 
 						<Button mt={5} mb={5} onClick={() => {
 							setModalOptions({
-								message:`Do you want to release ${format(ethers.utils.formatEther(releasable === undefined ? 0 : releasable))} CPT?`, 
-								buttonName: 'Release', 
+								message:`Do you want to claim ${format(ethers.utils.formatEther(releasable === undefined ? 0 : releasable))} CPT?`, 
+								buttonName: 'Claim', 
 								fun: "release", 
 							}); 
 							onOpen();
-						}}>Release
+						}}>Claim
 						</Button> : ''}
 					</Card>
 
 					<Card textAlign={'center'} justifyContent={'center'}>
-						<Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px' textTransform='uppercase'>RELEASED (CPT)</Heading>
+						<Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px' textTransform='uppercase'>Claimed (CPT)</Heading>
 						<Text fontSize={'4xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.releasedAmount))}</Text>
 						{beneficiaryData === undefined || beneficiaryData.totalAmount.eq(beneficiaryData.releasedAmount) || !showRedeemButton ? <></> : 
 						<Button mt={5} mb={5} onClick={() => {
 							setModalOptions({
-								message: `Do you want to redeem the unreleased tokens? After redeemed, you will be refund the balance BNB, and only have the current released CPT.`,
+								message: `Do you want to redeem the unreleased tokens? After redeemed, you will be refund the balance BNB, and only have the current claimed CPT.`,
 								buttonName: 'Redeem',
 								fun: "redeem",
 							})

@@ -48,19 +48,19 @@ const Feature = ({ title, desc, onClick, status, ...rest }) => {
         />
         <Feature
           title="Team"
-          desc="Team members release vesting tokens"
+          desc="Team members claim vesting tokens"
           onClick={() => setParticipantID(3)}
           status={false}
         />
         <Feature
           title="Advisor"
-          desc="Advisors release vesting tokens"
+          desc="Advisors claim vesting tokens"
           onClick={() => setParticipantID(4)}
           status={false}
         />
         <Feature
           title="Marketing"
-          desc="Marketing release vesting tokens"
+          desc="Marketing claim vesting tokens"
           onClick={() => setParticipantID(7)}
           status={false}
         />
