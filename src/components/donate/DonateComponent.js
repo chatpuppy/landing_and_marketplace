@@ -160,7 +160,7 @@ export default function DonateComponent() {
               thickness="4px"
               speed="0.65s"
               emptyColor="gray.200"
-              color="blue.500"
+              color="green.500"
               alignItems="center"
               alignContent="center"
               size="xl"

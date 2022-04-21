@@ -85,6 +85,9 @@ export const DonateView = () => {
 	const signer = provider.getSigner(); 
 	const TokenVestingContract = new ethers.Contract(TOKEN_VESTING_ADDRESS, donateABI, signer);
 	
+	console.log('===', beneficiaryData)
+	console.log('+++', releasable);
+
 	const release = async () => {
 		setIsLoading(true);
 		try {
@@ -359,10 +362,19 @@ export const DonateView = () => {
 					<Card textAlign={'center'} justifyContent={'center'}>
 						<Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px' textTransform='uppercase'>YOUR BENEFIT (CPT)</Heading>
 						<Text fontSize={'3xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.totalAmount))}</Text>
-						<Text fontSize={'md'} color={useColorModeValue("gray.400", "gray.600")} mt={2} mb={1} ml={"5%"} mr={"5%"}>{"Donated " + (beneficiaryData === undefined ? '' : ethers.utils.formatEther((beneficiaryData.totalAmount).div(beneficiaryData.price)) + " BNB x " + format(beneficiaryData.price)) + " CPT/BNB"}</Text>
-						<Text fontSize={'md'} color={useColorModeValue("gray.400", "gray.600")} mt={2} mb={4} ml={"5%"} mr={"5%"}>{"on " + (beneficiaryData === undefined ? '' : DateTime.fromSeconds(parseInt(beneficiaryData.timestamp)).toFormat('F'))}</Text>
+						<Text fontSize={'md'} color={useColorModeValue("gray.400", "gray.600")} mt={2} mb={1} ml={"5%"} mr={"5%"}>
+							{(beneficiaryData === undefined ? 
+								<InputDonate/> : 
+								"Donated " + ethers.utils.formatEther((beneficiaryData.totalAmount).div(beneficiaryData.price)) + " BNB x " + format(beneficiaryData.price) + " CPT/BNB")}</Text>
+						<Text fontSize={'md'} color={useColorModeValue("gray.400", "gray.600")} mt={2} mb={4} ml={"5%"} mr={"5%"}>
+							{(beneficiaryData === undefined ? '' : "on " + DateTime.fromSeconds(parseInt(beneficiaryData.timestamp)).toFormat('F'))}</Text>
 						{beneficiaryData === undefined || beneficiaryData.totalAmount.eq(beneficiaryData.releasedAmount) || !showRedeemButton ? <></> : 
-						<Button mb={5} onClick={() => {
+						<Button 
+							mb={5} 
+							bg={"green.500"}
+							_hover={{bg: 'green.600'}}
+							_active={{bg: 'green.600'}}
+							onClick={() => {
 							setModalOptions({
 								message: `Do you want to redeem the unreleased tokens? After redeemed, you will be refund the balance BNBs, and can not claim any CPTs.`,
 								buttonName: 'Redeem',
@@ -383,7 +395,12 @@ export const DonateView = () => {
 						<Text mt={0} mb={2} fontSize={'3xl'}>{format(ethers.utils.formatEther(releasable === undefined ? 0 : releasable))}</Text>
 
 						{releasable > 0 && showReleaseButton ? 
-						<Button mb={5} onClick={() => {
+						<Button 
+							mb={5} 
+							bg={"green.500"}
+							_hover={{bg: 'green.600'}}
+							_active={{bg: 'green.600'}}
+							onClick={() => {
 							setModalOptions({
 								message:`Do you want to claim ${format(ethers.utils.formatEther(releasable === undefined ? 0 : releasable))} CPT?`, 
 								buttonName: 'Claim', 
@@ -425,10 +442,10 @@ export const DonateView = () => {
 			</Card> : beneficiaryData !== undefined && beneficiaryData.timestamp > 0 ? 
 			<Card>
 				<DonotedBox message={"This account has donated!"}/>
-			</Card> :
-			<Card>
-				<InputDonate />
-			</Card>
+			</Card> : <></>
+			// <Card>
+			// 	<InputDonate />
+			// </Card>
 			}
 			</Box> : ""}
 			<Box height={5}></Box>
@@ -449,7 +466,10 @@ export const DonateView = () => {
 							mb={2}
 							mt={5}
 							w={'full'}
-							bgGradient="linear(to-r, red.400,pink.400)"
+							bg={"green.500"}
+							// bgGradient="linear(to-r, red.400,pink.400)"
+							_hover={{bg: "green.600"}}
+							_active={{bg: "green.600"}}
 							color={'white'}
 							onClick={modalOptions.fun === "release" ? release : redeem}
 							isLoading={isLoading}
@@ -503,29 +523,31 @@ const InputDonate = () => {
 				justifyContent={"center"}
 				textAlign={"center"}
 				as={"form"}
-				p={5}
-				pl={"10%"}
-				pr={"10%"}
+				// p={5}
+				mt={5}
+				pl={"5%"}
+				pr={"5%"}
 			>
-				<Heading 
+				{/* <Heading 
 					mb={5}
-				>DONATION</Heading>
-				<HStack maxW="full">
+				>DONATION</Heading> */}
+				<HStack 
+					maxW="full"
+					color={useColorModeValue('black', '#dcdcdc')}
+				>
 					<Button {...dec}>-</Button>
 					<Input {...input} />
 					<Button {...inc}>+</Button>
 				</HStack>
 				<Button
 					fontFamily={"heading"}
-					mt={8}
-					mb={8}
+					mt={5}
+					mb={3}
 					w={"full"}
-					bgGradient="linear(to-r, red.400,pink.400)"
+					bg={"green.500"}
+					_hover={{bg: "green.600"}}
+					_active={{bg: "green.600"}}
 					color={"white"}
-					// _hover={{
-					//   bgGradient: "linear(to-r, red.400,pink.400)",
-					//   boxShadow: "xl",
-					// }}
 					onClick={onOpen}
 				>
 					Donate

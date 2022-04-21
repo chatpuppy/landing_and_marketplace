@@ -112,16 +112,11 @@ const DonateModal = (props) => {
                 fontFamily={'heading'}
                 mb={2}
                 w={'full'}
-                bgGradient="linear(to-r, red.400,pink.400)"
+								bg={"green.500"}
+                // bgGradient="linear(to-r, red.400,pink.400)"
                 color={'white'}
-                // _hover={{
-                //     bgGradient: 'linear(to-r, red.400,pink.400)',
-                //     boxShadow: 'xl',
-                // }}
-                // _active={{
-                //     bgGradient: 'linear(to-r, red.200,pink.200)',
-                //     boxShadow: 'xl',
-                // }}
+                _hover={{bg: "green.600"}}
+                _active={{bg: "green.600"}}
                 onClick={sendDonate}
                 isLoading={isLoading}
                 isDisabled={isDonated}
