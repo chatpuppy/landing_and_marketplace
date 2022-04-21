@@ -64,6 +64,7 @@ export const DonateView = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [ showRedeemButton, setShowRedeemButton ] = useState(false);
 	const [ showReleaseButton, setShowReleaseButton ] = useState(false);
+	const [ showDonateButton, setShowDonateButton ] = useState(false);
 	const { currentAccount } = useAuth()
 	const [ modalOptions, setModalOptions ] = useState({
 		message: '', 
@@ -85,9 +86,6 @@ export const DonateView = () => {
 	const signer = provider.getSigner(); 
 	const TokenVestingContract = new ethers.Contract(TOKEN_VESTING_ADDRESS, donateABI, signer);
 	
-	console.log('===', beneficiaryData)
-	console.log('+++', releasable);
-
 	const release = async () => {
 		setIsLoading(true);
 		try {
@@ -238,9 +236,12 @@ export const DonateView = () => {
 		if(redeemable !== undefined) setShowRedeemButton(redeemable[0]);
 		const setReleaseButton = async () => {
 			const timestamp = await getGlobalTime();
+			const donateStart = parseInt(donateData.startTimestamp);
+			const donateEnd = parseInt(donateData.endTimestamp);
 			const releaseStart = parseInt(donateData.genesisTimestamp);
 			const releaseEnd = parseInt(donateData.genesisTimestamp) + parseInt(donateData.cliff) + parseInt(donateData.duration);
 			if(timestamp >= releaseStart && timestamp <= releaseEnd) setShowReleaseButton(true);
+			if(timestamp >= donateStart && timestamp <= donateEnd) setShowDonateButton(true);
 		}
 		if(donateData !== undefined) setReleaseButton();
 	}, [donateData, currentAccount, redeemable])
@@ -267,6 +268,7 @@ export const DonateView = () => {
 	}, [participantTotal, priceRange, currentAccount, participantID])
 
 	const col = useColorModeValue("black", "white");
+	const textColor = useColorModeValue("gray.400", "gray.600");
 
 	return (
 		<Stack
@@ -362,11 +364,15 @@ export const DonateView = () => {
 					<Card textAlign={'center'} justifyContent={'center'}>
 						<Heading alignItems={'center'} justifyContent={'center'} m={5} fontSize='md' letterSpacing='2px' textTransform='uppercase'>YOUR BENEFIT (CPT)</Heading>
 						<Text fontSize={'3xl'}>{format(ethers.utils.formatEther(beneficiaryData === undefined ? 0 : beneficiaryData.totalAmount))}</Text>
-						<Text fontSize={'md'} color={useColorModeValue("gray.400", "gray.600")} mt={2} mb={1} ml={"5%"} mr={"5%"}>
-							{(beneficiaryData === undefined ? 
-								<InputDonate/> : 
-								"Donated " + ethers.utils.formatEther((beneficiaryData.totalAmount).div(beneficiaryData.price)) + " BNB x " + format(beneficiaryData.price) + " CPT/BNB")}</Text>
-						<Text fontSize={'md'} color={useColorModeValue("gray.400", "gray.600")} mt={2} mb={4} ml={"5%"} mr={"5%"}>
+						{beneficiaryData === undefined ? 
+							showDonateButton ? 
+							<InputDonate/> :
+							<></>
+							: 
+							<Text fontSize={'md'} color={textColor} mt={2} mb={1} ml={"5%"} mr={"5%"}>
+							{"Donated " + ethers.utils.formatEther((beneficiaryData.totalAmount).div(beneficiaryData.price)) + " BNB x " + format(beneficiaryData.price) + " CPT/BNB"}
+							</Text>}
+						<Text fontSize={'md'} color={textColor} mt={2} mb={4} ml={"5%"} mr={"5%"}>
 							{(beneficiaryData === undefined ? '' : "on " + DateTime.fromSeconds(parseInt(beneficiaryData.timestamp)).toFormat('F'))}</Text>
 						{beneficiaryData === undefined || beneficiaryData.totalAmount.eq(beneficiaryData.releasedAmount) || !showRedeemButton ? <></> : 
 						<Button 
@@ -443,9 +449,6 @@ export const DonateView = () => {
 			<Card>
 				<DonotedBox message={"This account has donated!"}/>
 			</Card> : <></>
-			// <Card>
-			// 	<InputDonate />
-			// </Card>
 			}
 			</Box> : ""}
 			<Box height={5}></Box>
@@ -522,15 +525,12 @@ const InputDonate = () => {
 			<Box
 				justifyContent={"center"}
 				textAlign={"center"}
-				as={"form"}
-				// p={5}
 				mt={5}
 				pl={"5%"}
 				pr={"5%"}
-			>
-				{/* <Heading 
-					mb={5}
-				>DONATION</Heading> */}
+				// as={"form"}
+				// p={5}
+				>
 				<HStack 
 					maxW="full"
 					color={useColorModeValue('black', '#dcdcdc')}
