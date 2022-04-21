@@ -373,7 +373,7 @@ export const DonateView = () => {
 							{"Donated " + ethers.utils.formatEther((beneficiaryData.totalAmount).div(beneficiaryData.price)) + " BNB x " + format(beneficiaryData.price) + " CPT/BNB"}
 							</Text>}
 						<Text fontSize={'md'} color={textColor} mt={2} mb={4} ml={"5%"} mr={"5%"}>
-							{(beneficiaryData === undefined ? '' : "on " + DateTime.fromSeconds(parseInt(beneficiaryData.timestamp)).toFormat('F'))}</Text>
+							{(beneficiaryData === undefined ? '' : "at " + DateTime.fromSeconds(parseInt(beneficiaryData.timestamp)).toFormat('F'))}</Text>
 						{beneficiaryData === undefined || beneficiaryData.totalAmount.eq(beneficiaryData.releasedAmount) || !showRedeemButton ? <></> : 
 						<Button 
 							mb={5} 
