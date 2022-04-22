@@ -101,8 +101,7 @@ export default function DonateComponent() {
       setTotalParticipant(totalParticipants);
     }
 		async function getPriceForAmount() {
-      const totalParticipants = await loadTotalParticipant(participantID);
-			const price = await loadPriceForAmount(participantID, totalParticipants);
+			const price = await loadPriceForAmount(participantID, '100000000000000000');
 			setPriceForAmount(price);
 		}
 		if(participantID === defaultParticipantID) {
