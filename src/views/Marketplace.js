@@ -214,7 +214,7 @@ export default function Marketplace() {
 
   return (
       <>
-      <NavBar />
+      <NavBar action="/marketplace" />
       {/* <PageName name="Marketplace" pic="./images/banner_marketplace.jpg"/> */}
       {
         currentAccount ? 

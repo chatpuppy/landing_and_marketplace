@@ -1,10 +1,10 @@
 /**
  * BSC testnet
  */
-export const TOKEN_VESTING_ADDRESS = "0x3Fcf6Acb258B863c32533932d5FcFae2B51d03f8";
-export const CPT_TOKEN_ADDRESS = "0x6adb30205dd2D2902f32E40e0f2CE15c728F9492";
+export const TOKEN_VESTING_ADDRESS = "0x105D5a0c53e00E89814d0aEeBB1b3D3F30bBbDd8";
+export const CPT_TOKEN_ADDRESS = "0xa747Ba9BbF79E165Cd71c4376B72eBc06CA735CB";
 
-export const supportedChainIds = [1, 56, 97];
+export const supportedChainIds = [1, 56];
 
 export const netWorkConfig = [{
 	chainId: 1,
@@ -127,7 +127,7 @@ export const netWorkConfig = [{
 		marketplaceMenu: {
 			url: "/marketplace",
 			label: "Marketplace",
-			visible: true,	
+			visible: false,	
 		},
 		mintMenu: {
 			url: "/mint",
@@ -137,22 +137,22 @@ export const netWorkConfig = [{
 		accountMenu: {
 			url: "/account",
 			label: "Account",
-			visible: true,
+			visible: false,
 		},
 		governanceMenu: {
 			url: "https://snapshot.org/#/chatpuppy.eth",
 			label: "Governance",
-			visible: true,
+			visible: false,
 		},
 		donateMenu: {
 			url: "/donate",
 			label: "Donate",
-			visible: false,
+			visible: true,
 		},
 		bridgeMenu: {
 			url: "https://portalbridge.com/#/nft",
 			label: "Send NFT to Ethereum",
-			visible: true,
+			visible: false,
 		},
 		mint: {
 			url: null,

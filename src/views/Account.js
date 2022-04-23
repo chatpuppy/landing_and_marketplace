@@ -306,7 +306,7 @@ export default function Account() {
 
     return (
         <>
-        <NavBar />
+        <NavBar action="/account"/>
         {/* <PageName name="My NFTs" pic="./images/banner_list.jpg" /> */}
         {
         currentAccount ?

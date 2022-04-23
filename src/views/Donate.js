@@ -7,7 +7,7 @@ import DonateComponent from 'components/donate/DonateComponent'
 export default function Donate() {
   return (
     <>
-      <NavBar />
+      <NavBar action="/donate" />
       <DonateComponent />
 			{/* <AddressFooter
         chainId={97}

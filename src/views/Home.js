@@ -13,7 +13,7 @@ import { Box, Center, Image, chakra, useColorModeValue } from '@chakra-ui/react'
 export default function Home() {
   return (
     <>
-        <NavBar />
+        <NavBar action="/" />
         <Hero />
         <FeaturesLeftRight />
         <SupportedNetworks />

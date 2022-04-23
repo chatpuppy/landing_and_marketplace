@@ -12,7 +12,7 @@ import { useAuth } from "contexts/AuthContext";
 import LoginButton from "components/LoginButton";
 import { supportedChainNames, supportedChainIds, getNetworkConfig } from '../constants';
 
-export default function NavBar() {
+export default function NavBar(props) {
   const bg = useColorModeValue("white", "gray.800");
   const mobileNav = useDisclosure();
 
@@ -28,13 +28,13 @@ export default function NavBar() {
   };
 
   useEffect(() => {
-    
-    setPath(window.location.pathname)
+		setPath(window.location.pathname)
+		// setPath(props.action);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
         window.removeEventListener('scroll', handleScroll);
     };
-  }, [setPath]);
+  }, [props.action, setPath]);
 
   return (
     
@@ -147,7 +147,7 @@ export default function NavBar() {
 								{networkConfig.buttons.governanceMenu.label}
 							</Button>}
 
-							{networkConfig === undefined || !networkConfig.buttons.bridgeMenu ? <></> : 
+							{networkConfig === undefined || !networkConfig.buttons.bridgeMenu.visible ? <></> : 
               <Button as="a" href={networkConfig.buttons.bridgeMenu.url} target="_blank" variant="ghost" rightIcon={<ExternalLinkIcon />}>
 								{networkConfig.buttons.bridgeMenu.label}
 							</Button>}
@@ -229,7 +229,7 @@ export default function NavBar() {
                   </Button>
                 </RouterLink>}
 
-								{networkConfig === undefined || !networkConfig.buttons.accountMenu ? <></> :
+								{networkConfig === undefined || !networkConfig.buttons.accountMenu.visible ? <></> :
                 <RouterLink to={networkConfig.buttons.accountMenu.url} style={{textDecoration: 'none'}}>
                   <Button w="full" variant={path===networkConfig.buttons.accountMenu.url ? "solid" : "ghost"}>
                     {networkConfig.buttons.accountMenu.label}
@@ -258,7 +258,7 @@ export default function NavBar() {
 									{networkConfig.buttons.governanceMenu.label}
 								</Button>}
 
-								{networkConfig === undefined || !networkConfig.buttons.bridgeMenu ? <></> : 
+								{networkConfig === undefined || !networkConfig.buttons.bridgeMenu.visible ? <></> : 
 								<Button w="full" as="a" href={networkConfig.buttons.bridgeMenu.url} target="_blank" variant="ghost" rightIcon={<ExternalLinkIcon />}>
 									{networkConfig.buttons.bridgeMenu.label}
 								</Button>}

@@ -9,7 +9,7 @@ export default function Mint() {
   const { currentNetwork } = useAuth();
   return (
         <>
-        <NavBar />
+        <NavBar action="/mint" />
         <MintGrid 
           chainId={currentNetwork}
         />
