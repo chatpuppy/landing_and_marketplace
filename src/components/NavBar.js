@@ -27,6 +27,8 @@ export default function NavBar(props) {
       } else setShadow("")
   };
 
+	const color = useColorModeValue("gray.800", "inherit");
+
   useEffect(() => {
 		setPath(window.location.pathname)
 		// setPath(props.action);
@@ -85,6 +87,7 @@ export default function NavBar(props) {
                 </HStack>
             </RouterLink>
           </Flex>
+					{props.showMenu ? 
           <HStack display="flex" alignItems="center" spacing={1}>
             <HStack
               spacing={1}
@@ -179,7 +182,7 @@ export default function NavBar(props) {
                 display={{ base: "flex", md: "none" }}
                 aria-label="Open menu"
                 fontSize="20px"
-                color={useColorModeValue("gray.800", "inherit")}
+                color={color}
                 variant="ghost"
                 icon={<HamburgerIcon />}
                 onClick={mobileNav.onOpen}
@@ -270,7 +273,7 @@ export default function NavBar(props) {
                 <ToggleTheme />
               </VStack>
             </Box>
-          </HStack>
+          </HStack> : <></>}
         </Flex>
       </chakra.header>
     </React.Fragment>

@@ -15,6 +15,7 @@ import { useAuth } from "contexts/AuthContext";
 import { useDonate } from "contexts/DonateContext";
 import { DonateView } from "./DonateView";
 import { BeneficiaryView } from "./BeneficiaryView";
+import NavBar from 'components/NavBar'
 
 import {
   loadBeneficiaryCount,
@@ -32,7 +33,7 @@ import {
 } from "utils/tokenVestingsInteract";
 
 export default function DonateComponent() {
-  const { currentAccount } = useAuth();
+  const { currentAccount, currentNetwork} = useAuth();
 
   const {
     setTotal,
@@ -51,7 +52,8 @@ export default function DonateComponent() {
 		setParticipantID,
   } = useDonate();
 
-	// ###### To enter into public sale directly, if cancel, it'll show a menu
+	const color = useColorModeValue("gray.800", "inherit");
+	// To enter into public sale directly, if cancel, it'll show a menu
 	const defaultParticipantID = 2;
 	useEffect(() => {
 		setParticipantID(defaultParticipantID); // Default is public sale #2
@@ -137,10 +139,38 @@ export default function DonateComponent() {
 		if(participantID === defaultParticipantID) getRedeemable();
 	}, [currentAccount, participantID, setRedeemable])
 
+	useEffect(() => {
+		if(currentNetwork !== 56) {
+			window.ethereum.request({
+				method: "wallet_addEthereumChain",
+				params: [{
+						chainId: "0x38",
+						rpcUrls: ["https://bsc-dataseed1.binance.org"],
+						chainName: "Binance Smart Chain",
+						nativeCurrency: {
+								name: "BNB",
+								symbol: "BNB",
+								decimals: 18
+						},
+						blockExplorerUrls: ["https://bscscan.com/"]
+				}]
+			});
+		}
+	}, [currentNetwork, currentAccount])
+
   return (
-    <Box as="section" height="100vh" overflowY="auto">
+		<>
+			{currentNetwork !== 56 ? 
+			<>
+			<Box as="section" height="80vh" overflowY="auto">
+      <NavBar action="/donate" showMenu={false}/>
+			</Box>
+			</> :
+			<>
+			<Box as="section" height="100vh" overflowY="auto">
+      <NavBar action="/donate" showMenu={true}/>
       <Container 
-        color={useColorModeValue("gray.800", "inherit")}
+        color={color}
         maxW='container.lg'
         >
         {participantID === 0 ? <CardParticipantType />
@@ -166,7 +196,9 @@ export default function DonateComponent() {
             />
           </Stack>
         )}
-        </Container>
-      </Box>
+      </Container>
+			</Box>
+			</>}
+		</>
   );
 }
