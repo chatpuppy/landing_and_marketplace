@@ -2,7 +2,8 @@ import {useEffect, useState} from "react";
 import { useDonate } from "contexts/DonateContext";
 import { DateTime } from "luxon";
 import { ethers } from "ethers";
-import { TOKEN_VESTING_ADDRESS, CPT_TOKEN_ADDRESS } from "constants";
+import { TOKEN_VESTING_ADDRESS, CPT_TOKEN_ADDRESS, SCAN_BASE_URL } from "constants";
+import { HamburgerIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 
 import { 
     Box,
@@ -75,11 +76,11 @@ export const InfoTableComponent = () => {
       <Tbody>
         <Tr>
           <Td>{"Token address"}</Td>
-          <Td textTransform={"none"}>{CPT_TOKEN_ADDRESS}</Td>
+          <Td textTransform={"none"}><a href={SCAN_BASE_URL + CPT_TOKEN_ADDRESS} target="_blank" rel="noreferrer">{CPT_TOKEN_ADDRESS + " "}<ExternalLinkIcon/></a></Td>
         </Tr>
         <Tr>
           <Td>{"Vesting contract"}</Td>
-          <Td textTransform={"none"}>{TOKEN_VESTING_ADDRESS}</Td>
+          <Td textTransform={"none"}><a href={SCAN_BASE_URL + TOKEN_VESTING_ADDRESS} target="_blank" rel="noreferrer">{TOKEN_VESTING_ADDRESS + " "}<ExternalLinkIcon /></a></Td>
         </Tr>
         <Tr>
           <Td>{"Donate duration"}</Td>
