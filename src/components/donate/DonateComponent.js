@@ -32,6 +32,8 @@ import {
 
 } from "utils/tokenVestingsInteract";
 
+import {CHAIN_ID} from '../../constants/index';
+
 export default function DonateComponent() {
   const { currentAccount, currentNetwork} = useAuth();
 
@@ -140,7 +142,7 @@ export default function DonateComponent() {
 	}, [currentAccount, participantID, setRedeemable])
 
 	useEffect(() => {
-		if(currentNetwork !== 56) {
+		if(currentNetwork !== CHAIN_ID) {
 			window.ethereum.request({
 				method: "wallet_addEthereumChain",
 				params: [{
@@ -160,7 +162,7 @@ export default function DonateComponent() {
 
   return (
 		<>
-			{currentNetwork !== 56 ? 
+			{currentNetwork !== CHAIN_ID ? 
 			<>
 			<Box as="section" height="80vh" overflowY="auto">
       <NavBar action="/donate" showMenu={false}/>

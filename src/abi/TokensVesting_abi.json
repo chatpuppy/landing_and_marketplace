@@ -385,6 +385,11 @@
 						"internalType": "uint256",
 						"name": "price",
 						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "redeemable",
+						"type": "bool"
 					}
 				],
 				"internalType": "struct TokensVesting.VestingInfo",
@@ -521,6 +526,11 @@
 						"internalType": "uint256",
 						"name": "price",
 						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "redeemable",
+						"type": "bool"
 					}
 				],
 				"internalType": "struct TokensVesting.VestingInfo[]",
@@ -864,6 +874,11 @@
 				"internalType": "uint256",
 				"name": "price_",
 				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "redeemable_",
+				"type": "bool"
 			}
 		],
 		"name": "addBeneficiary",
@@ -1213,6 +1228,11 @@
 						"internalType": "uint256",
 						"name": "price",
 						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "redeemable",
+						"type": "bool"
 					}
 				],
 				"internalType": "struct TokensVesting.VestingInfo",

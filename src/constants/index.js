@@ -1,11 +1,21 @@
 /**
  * BSC testnet
  */
-export const TOKEN_VESTING_ADDRESS = "0x757F671d84560D4Bb5d39A66d6dC1b63D9504D65";
+// export const TOKEN_VESTING_ADDRESS = "0x6Ca49e6fF9278c981734293cb077Af8198d125Ae";
+// export const CPT_TOKEN_ADDRESS = "0x6adb30205dd2D2902f32E40e0f2CE15c728F9492";
+// export const CHAIN_ID = 97;
+
+/**
+ * BSC mainnet
+ */
+// export const TOKEN_VESTING_ADDRESS = "0x757F671d84560D4Bb5d39A66d6dC1b63D9504D65";
+export const TOKEN_VESTING_ADDRESS = '0x41Aacd3cF89235EB40757964A702d8A199dF81b0'; // updated on 4-25
 export const CPT_TOKEN_ADDRESS = "0xa747Ba9BbF79E165Cd71c4376B72eBc06CA735CB";
+export const CHAIN_ID = 56;
+
 export const SCAN_BASE_URL = 'https://bscscan.com/address/';
 
-export const supportedChainIds = [1, 56];
+export const supportedChainIds = [1, 56, 97];
 
 export const netWorkConfig = [{
 	chainId: 1,
