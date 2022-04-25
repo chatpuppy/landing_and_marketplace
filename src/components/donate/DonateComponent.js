@@ -164,13 +164,13 @@ export default function DonateComponent() {
 		<>
 			{currentNetwork !== CHAIN_ID ? 
 			<>
-			<Box as="section" height="80vh" overflowY="auto">
       <NavBar action="/donate" showMenu={false}/>
+			<Box as="section" height="100vh" overflowY="auto">
 			</Box>
 			</> :
 			<>
-			<Box as="section" height="100vh" overflowY="auto">
       <NavBar action="/donate" showMenu={true}/>
+			<Box as="section" height="100vh" overflowY="auto">
       <Container 
         color={color}
         maxW='container.lg'

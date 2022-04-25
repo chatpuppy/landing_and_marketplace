@@ -273,7 +273,8 @@ export default function NavBar(props) {
                 <ToggleTheme />
               </VStack>
             </Box>
-          </HStack> : <></>}
+          </HStack> 
+					: <></>}
         </Flex>
       </chakra.header>
     </React.Fragment>
