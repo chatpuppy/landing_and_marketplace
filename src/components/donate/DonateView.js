@@ -512,7 +512,7 @@ const InputDonate = () => {
 			step: 0.01, 
 			defaultValue: 0.5,
 			min: 0.3,
-			max: 0.5,
+			max: 0.6,
 			precision: 2,
 		});
 
