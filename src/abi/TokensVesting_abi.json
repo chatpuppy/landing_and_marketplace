@@ -372,12 +372,12 @@
 						"type": "address"
 					},
 					{
-						"internalType": "enum TokensVesting.Participant",
+						"internalType": "enum TokensVestingV2.Participant",
 						"name": "participant",
 						"type": "uint8"
 					},
 					{
-						"internalType": "enum TokensVesting.Status",
+						"internalType": "enum TokensVestingV2.Status",
 						"name": "status",
 						"type": "uint8"
 					},
@@ -392,7 +392,7 @@
 						"type": "bool"
 					}
 				],
-				"internalType": "struct TokensVesting.VestingInfo",
+				"internalType": "struct TokensVestingV2.VestingInfo",
 				"name": "",
 				"type": "tuple"
 			}
@@ -513,12 +513,12 @@
 						"type": "address"
 					},
 					{
-						"internalType": "enum TokensVesting.Participant",
+						"internalType": "enum TokensVestingV2.Participant",
 						"name": "participant",
 						"type": "uint8"
 					},
 					{
-						"internalType": "enum TokensVesting.Status",
+						"internalType": "enum TokensVestingV2.Status",
 						"name": "status",
 						"type": "uint8"
 					},
@@ -533,7 +533,7 @@
 						"type": "bool"
 					}
 				],
-				"internalType": "struct TokensVesting.VestingInfo[]",
+				"internalType": "struct TokensVestingV2.VestingInfo[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -677,7 +677,7 @@
 						"type": "bool"
 					}
 				],
-				"internalType": "struct TokensVesting.CrowdFundingParams",
+				"internalType": "struct TokensVestingV2.CrowdFundingParams",
 				"name": "",
 				"type": "tuple"
 			}
@@ -731,7 +731,7 @@
 						"type": "uint256"
 					}
 				],
-				"internalType": "struct TokensVesting.PriceRange[]",
+				"internalType": "struct TokensVestingV2.PriceRange[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -831,57 +831,79 @@
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "beneficiary_",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "genesisTimestamp_",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "totalAmount_",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tgeAmount_",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "cliff_",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "duration_",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint8",
-				"name": "participant_",
-				"type": "uint8"
-			},
-			{
-				"internalType": "uint256",
-				"name": "eraBasis_",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "price_",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bool",
-				"name": "redeemable_",
-				"type": "bool"
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "genesisTimestamp",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "totalAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tgeAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "cliff",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "duration",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "releasedAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "eraBasis",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "beneficiary",
+						"type": "address"
+					},
+					{
+						"internalType": "enum TokensVestingV2.Participant",
+						"name": "participant",
+						"type": "uint8"
+					},
+					{
+						"internalType": "enum TokensVestingV2.Status",
+						"name": "status",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "redeemable",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct TokensVestingV2.VestingInfo",
+				"name": "info_",
+				"type": "tuple"
 			}
 		],
-		"name": "addBeneficiary",
+		"name": "crowdFundingBatch",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -1215,12 +1237,12 @@
 						"type": "address"
 					},
 					{
-						"internalType": "enum TokensVesting.Participant",
+						"internalType": "enum TokensVestingV2.Participant",
 						"name": "participant",
 						"type": "uint8"
 					},
 					{
-						"internalType": "enum TokensVesting.Status",
+						"internalType": "enum TokensVestingV2.Status",
 						"name": "status",
 						"type": "uint8"
 					},
@@ -1235,7 +1257,7 @@
 						"type": "bool"
 					}
 				],
-				"internalType": "struct TokensVesting.VestingInfo",
+				"internalType": "struct TokensVestingV2.VestingInfo",
 				"name": "",
 				"type": "tuple"
 			}
@@ -1259,6 +1281,43 @@
 	{
 		"inputs": [],
 		"name": "redeemFee",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint8",
+				"name": "participant_",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount_",
+				"type": "uint256"
+			}
+		],
+		"name": "updateTotalAmount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint8",
+				"name": "participant_",
+				"type": "uint8"
+			}
+		],
+		"name": "totalAmount",
 		"outputs": [
 			{
 				"internalType": "uint256",
