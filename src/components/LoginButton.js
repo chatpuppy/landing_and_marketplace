@@ -28,6 +28,7 @@ export default function LoginButton() {
         }
         return;
       }
+			console.log("handleLogin")
       const addr = await connectWallet();
       setCurrentAccount(addr)
   }

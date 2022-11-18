@@ -7,7 +7,7 @@ export const checkIfWalletIsConnected = async () => {
         alert("Make sure you have metamask!");
         return;
     }
-
+		console.log("checkIfWalletIsConnected")
     //gets list of accounts/addresses
     const accounts = await ethereum.request({ method: 'eth_accounts' });
 
@@ -21,7 +21,7 @@ export const checkIfWalletIsConnected = async () => {
 
 export const connectWallet = async () => {
     const instance = await web3modal.connect();
-
+		console.log("Connected to")
     const provider = new ethers.providers.Web3Provider(instance);
     const signer = provider.getSigner();
     return signer.getAddress();

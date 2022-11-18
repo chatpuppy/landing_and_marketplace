@@ -22,9 +22,12 @@ function App() {
       try {
         const chainId = await window.ethereum.request({ method: 'eth_chainId' });
         setCurrentNetwork(parseInt(chainId, 16))
-  
+				const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+        if (accounts.length > 0) setCurrentAccount(accounts[0]);
+
         window.ethereum.on('accountsChanged', function (accounts) {
           // Time to reload your interface with accounts[0]!
+					console.log("accounts", accounts[0])
           setCurrentAccount(accounts[0]);
           window.location.reload()
         })

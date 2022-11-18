@@ -15,7 +15,7 @@ export const CHAIN_ID = 56;
 
 export const SCAN_BASE_URL = 'https://bscscan.com/address/';
 
-export const supportedChainIds = [1, 56, 97];
+export const supportedChainIds = [1, 56, 80001];
 
 export const netWorkConfig = [{
 	chainId: 1,
