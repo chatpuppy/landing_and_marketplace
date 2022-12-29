@@ -68,8 +68,9 @@ import Logo from "assets/logo.png"
             spacing={4}
             justify={{ base: 'center', md: 'space-between' }}
             align={{ base: 'center', md: 'center' }}>
-            <Text>© 2022 ChatPuppy. All rights reserved</Text>
+            <Text>© 2022 ByteConnect PET Ltd. </Text>
             <Stack direction={'row'} spacing={6}>
+							<a href="/privacy">Privacy Policy</a>
               <SocialButton label={'Twitter'} href={'https://twitter.com/chatpuppynft'}>
                 <FaTwitter />
               </SocialButton>

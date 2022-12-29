@@ -4,6 +4,7 @@ import Mint from "views/Mint";
 import Marketplace from "views/Marketplace"
 import Account from "views/Account";
 import Donate from "views/Donate";
+import Privacy from "views/Privacy";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useAuth } from "contexts/AuthContext";
 // import { tokenVestingContract } from "./utils/tokenVestingsInteract";
@@ -130,6 +131,7 @@ function App() {
           <Route path="/marketplace" element={<Marketplace />}/>
           <Route path="/account" element={<Account />}/>
           <Route path="/donate" element={<Donate />}/>
+					<Route path="/privacy" element={<Privacy />}/>
 					{/* <Route path={component.path} element={component.app} /> */}
         </Routes>
     </Router>

@@ -101,16 +101,12 @@ export default function Marketplace() {
   }, [currentAccount, currentNetwork, setListedNFTs])
 
 	const getOnsaleCount = async (chainId, nftAddress) => {
-		console.log(chainId, nftAddress, currentAccount);
 		const url = API_BASE_URI + 'onsaleCount';
-		console.log(url);
 		const _totalOnsale = await call(url , {
 			chainId,
 			nftAddress, 
 			address: currentAccount
 		});
-		// ###### api onsaleCount无效，导致从链上下载
-		console.log("getOnsaleCount", _totalOnsale)
 		if(_totalOnsale.status !== 200 || !_totalOnsale.data.success) return false;
 		return _totalOnsale.data.data;
 	}

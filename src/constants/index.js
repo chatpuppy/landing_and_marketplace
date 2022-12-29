@@ -349,10 +349,12 @@ export const netWorkConfig = [{
 	}, {
 		address: '0xc517b043a398EcD3cFB4b4A476837743b2Cb9e69',
 		symbol: 'CPT2',
-	}, {
-		address: '0xb5b73661407f1b41c628bb806725d9629a466109',
-		symbol: 'CPT3'
-	}],
+	}, 
+	// {
+	// 	address: '0xb5b73661407f1b41c628bb806725d9629a466109',
+	// 	symbol: 'CPT3'
+	// }
+	],
 	nftTokenAddress: '0xA28D90320005C8c043Ee79ae59e82fDd5f983f30',
 	nftManagerAddress: '0xCCAcc7F68bC4498CeA4Ee4D71e0AC0d824ca4513',
 	nftManagerV2Address: '', // polygon not support v2

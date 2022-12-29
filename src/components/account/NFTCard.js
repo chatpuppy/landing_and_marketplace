@@ -86,6 +86,7 @@ const NFTCard = (props) => {
       const NFTCoreConnectedContract = new ethers.Contract(NFT_core_contract_address, nft_core_abi, signer);
       const NFTManagerConnectedContract = new ethers.Contract(NFT_manager_contract_address, nft_manager_v2_abi, signer);
       const _type = await NFTManagerConnectedContract.boxStatus(number);
+
 			// console.log("box type", number, _type);
       if(_type === 2) {
         toast({
@@ -96,13 +97,16 @@ const NFTCard = (props) => {
           isClosable: true,
         })
         setIsLoading(false);
-      } else if(_type===0) {
+      } else if(_type === 0) {
         try {
           setHiddenConfirmationProgress(false);
           setConfirmationProgressData({step: '1/4', value: 25, message: 'Start...'});
 
           try {
-            const tx = await NFTManagerConnectedContract.unboxV2(number);
+						let tx;
+						// If mumbai testnet, use unbox(with chainlink), else using unboxV2(without chainlink)
+						if(currentNetwork === 80001) tx = await NFTManagerConnectedContract.unbox(number);
+						else tx = await NFTManagerConnectedContract.unboxV2(number);
             setConfirmationProgressData({step: '2/4', value: 50, message: 'Unboxing...'});
             await tx.wait(networkConfig.confirmationNumbers);
             setConfirmationProgressData({step: '3/4', value: 75, message: `Generating random NFT metadata by ChainLink, it will take around ${needSeconds}"`});
