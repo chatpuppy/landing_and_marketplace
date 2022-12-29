@@ -7,7 +7,7 @@ export default function Donate() {
   return (
     <>
 			<NavBar action="/account"/>
-			<Box mx={20} fontSize={20}>
+			<Box mx={40} fontSize={20} lineHeight={10}>
 			<p>This privacy policy (“<strong>Policy</strong>”) describes how ByteConnect PTE Ltd. (“<strong>Company</strong>”, “<strong>we</strong>”, “<strong>our</strong>”, or “<strong>us</strong>”) collects, uses, shares, and stores personal information of users of its websites, <a href="https://chatpuppy.com/">https://chatpuppy.com/</a> and Android/ios Apps. This Policy applies to the Sites, applications, products and services (collectively, “<strong>Services</strong>”) on or in which it is posted, linked, or referenced. </p>
 <p>By using the Services, you accept the terms of this Policy and our Terms of Use, and consent to our collection, use, disclosure, and retention of your information as described in this Policy.  If you have not done so already, please also review our terms of use. The terms of use contain provisions that limit our liability to you and require you to resolve any dispute with us on an individual basis and not as part of any class or representative action. IF YOU DO NOT AGREE WITH ANY PART OF THIS PRIVACY POLICY OR OUR TERMS OF USE, THEN PLEASE DO NOT USE ANY OF THE SERVICES.</p>
 <p><strong>WHAT WE COLLECT</strong></p>
