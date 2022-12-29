@@ -7,11 +7,9 @@ import Donate from "views/Donate";
 import Privacy from "views/Privacy";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useAuth } from "contexts/AuthContext";
-// import { tokenVestingContract } from "./utils/tokenVestingsInteract";
 import './App.css'
 
 function App() {
-	// const [component, setComponent] = useState({path: '/', comp: <Home/>});
   const { 
     setCurrentAccount, 
     setCurrentNetwork, 
