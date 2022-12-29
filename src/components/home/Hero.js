@@ -51,7 +51,7 @@ const Hero = () => {
               backgroundColor: "brand.200"
             }}
           >
-            <Link href='http://test.puppy.chat:9200' isExternal
+            <Link href='https://puppy.chat' isExternal
               style={{textDecoration: 'none'}}>
               Demo
               <Icon boxSize={4} ml={1} viewBox="0 0 20 20" fill="currentColor">
