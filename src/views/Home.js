@@ -15,6 +15,7 @@ import {
   chakra,
   useColorModeValue,
 } from '@chakra-ui/react';
+import FAQ from 'components/FAQ';
 
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
       <FeaturesLeftRight />
       <SupportedNetworks />
       <FeaturesBox />
+      <FAQ />
       <Center my="20">
         <chakra.p
           fontSize={{ base: '3xl', sm: '4xl' }}

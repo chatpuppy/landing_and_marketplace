@@ -11,7 +11,7 @@ import {
   Link,
 } from '@chakra-ui/react';
 import Design1 from 'assets/design1.png';
-import { ExternalLinkIcon } from '@chakra-ui/icons';
+// import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { Blur } from '../common/Blur';
 
 const Hero = () => {
@@ -73,7 +73,7 @@ const Hero = () => {
               href="https://puppy.chat"
               isExternal
               style={{ textDecoration: 'none' }}>
-              Demo
+              App
               <Icon boxSize={4} ml={1} viewBox="0 0 20 20" fill="currentColor">
                 <path
                   fillRule="evenodd"
@@ -83,7 +83,7 @@ const Hero = () => {
               </Icon>
             </Link>
           </Button>
-          <Button
+          {/* <Button
             as="a"
             href="https://discord.gg/QN658sJWkk"
             target="_blank"
@@ -97,7 +97,7 @@ const Hero = () => {
             cursor="pointer"
             rightIcon={<ExternalLinkIcon />}>
             Discord
-          </Button>
+          </Button> */}
         </Stack>
       </Box>
       <Box w={{ base: 'full', md: 10 / 12 }} mx="auto" textAlign="center">
