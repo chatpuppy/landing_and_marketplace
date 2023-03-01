@@ -1,12 +1,9 @@
-import Web3Modal from "web3modal";
+import Web3Modal from 'web3modal';
 
-const providerOptions = {
-
-};
+const providerOptions = {};
 
 const web3Modal = new Web3Modal({
-  providerOptions // required
+  providerOptions, // required
 });
 
 export default web3Modal;
-

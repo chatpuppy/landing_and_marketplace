@@ -1,26 +1,29 @@
-import {itemParams, boxTypes} from './config.js';
+import { itemParams, boxTypes } from './config.js';
 
 export const mergeLayers = (sortedLayers) => {
-	let layers = [];
-	let images = [];
-	try {
-		for(let i = 0; i < sortedLayers.length; i++) {
-			const l = sortedLayers[i];
-			for(let j = 0; j < itemParams.length; j++) {
-				if(l.boxType === itemParams[j].boxType && l.itemId === itemParams[j].itemId) {
-					layers.push(itemParams[j]);
-					break;
-				}
-			}
-		}
-		for(let i = 0; i < layers.length; i++) {
-			images.push(`./avatar/${layers[i].boxName}/${layers[i].itemName}.png`);
-		}
-	} catch(err) {
-		console.log('error: ' + sortedLayers);
-	}
-	return {layers, images};
-}
+  const layers = [];
+  const images = [];
+  try {
+    for (let i = 0; i < sortedLayers.length; i++) {
+      const l = sortedLayers[i];
+      for (let j = 0; j < itemParams.length; j++) {
+        if (
+          l.boxType === itemParams[j].boxType &&
+          l.itemId === itemParams[j].itemId
+        ) {
+          layers.push(itemParams[j]);
+          break;
+        }
+      }
+    }
+    for (let i = 0; i < layers.length; i++) {
+      images.push(`./avatar/${layers[i].boxName}/${layers[i].itemName}.png`);
+    }
+  } catch (err) {
+    // console.log('error: ' + sortedLayers);
+  }
+  return { layers, images };
+};
 
 /**
  * Ex. 02030a020501
@@ -31,63 +34,67 @@ export const mergeLayers = (sortedLayers) => {
  * boxType: 5, Head, 0a
  * boxType: 6, Fur, 03
  * boxType: 7, Mouth, 02
- * 
- * After sorting the layers, the output will be: Background -> Fur -> Body -> Mouth -> Eyes -> Head, 
+ *
+ * After sorting the layers, the output will be: Background -> Fur -> Body -> Mouth -> Eyes -> Head,
  * Boxtype: 2, 6, 3, 7, 4, 5 => itemId: 01, 03, 05, 02, 02, 0a
- * 
+ *
  */
 export const sortLayer = (itemIds) => {
-	let sortedArray = [0, 0, 0, 0, 0, 0];
-	let orignalArray = [];
-	for(let i = itemIds.length - 2; i >= 0; i = i - 2) orignalArray.push({boxType: boxTypes[boxTypes.length - 1 - i / 2], itemId: parseInt(itemIds.substr(i, 2), 16)});
-	sortedArray[0] = orignalArray[0];
-	sortedArray[1] = orignalArray[4];
-	sortedArray[2] = orignalArray[1];
-	sortedArray[3] = orignalArray[5];
-	sortedArray[4] = orignalArray[2];
-	sortedArray[5] = orignalArray[3];
-	return sortedArray;
-}
+  const sortedArray = [0, 0, 0, 0, 0, 0];
+  const orignalArray = [];
+  for (let i = itemIds.length - 2; i >= 0; i = i - 2)
+    orignalArray.push({
+      boxType: boxTypes[boxTypes.length - 1 - i / 2],
+      itemId: parseInt(itemIds.substr(i, 2), 16),
+    });
+  sortedArray[0] = orignalArray[0];
+  sortedArray[1] = orignalArray[4];
+  sortedArray[2] = orignalArray[1];
+  sortedArray[3] = orignalArray[5];
+  sortedArray[4] = orignalArray[2];
+  sortedArray[5] = orignalArray[3];
+  return sortedArray;
+};
 
 export const parseMetadata = (md) => {
-	let mdStr = md.toHexString();
-	if(mdStr.length === 20) mdStr = '0x00' + mdStr.substr(2, 18);
-	const sortedLayers = sortLayer(mdStr.substr(10, 12));
-	const mergedLayers = mergeLayers(sortedLayers);
-	if(mergedLayers.images.length === 0) return null;
+  let mdStr = md.toHexString();
+  if (mdStr.length === 20) mdStr = '0x00' + mdStr.substr(2, 18);
+  const sortedLayers = sortLayer(mdStr.substr(10, 12));
+  const mergedLayers = mergeLayers(sortedLayers);
+  if (mergedLayers.images.length === 0) return null;
 
-	let level = 0;
-	let experience = 0;
-	let rarity = 1;
-	let properties = [];
-	for(let i = 0; i < mergedLayers.layers.length; i++) {
-		level = level + mergedLayers.layers[i].level;
-		experience = experience + mergedLayers.layers[i].experience;
-		rarity = rarity * mergedLayers.layers[i].rarity / 1000000;
-		properties.push({
-			trait_type: mergedLayers.layers[i].boxName,
-			value: mergedLayers.layers[i].itemName,
-			level: mergedLayers.layers[i].level,
-			experience: mergedLayers.layers[i].experience,
-			rarity: mergedLayers.layers[i].rarity
-		})
-	}
+  let level = 0;
+  let experience = 0;
+  let rarity = 1;
+  const properties = [];
+  for (let i = 0; i < mergedLayers.layers.length; i++) {
+    level = level + mergedLayers.layers[i].level;
+    experience = experience + mergedLayers.layers[i].experience;
+    rarity = (rarity * mergedLayers.layers[i].rarity) / 1000000;
+    properties.push({
+      trait_type: mergedLayers.layers[i].boxName,
+      value: mergedLayers.layers[i].itemName,
+      level: mergedLayers.layers[i].level,
+      experience: mergedLayers.layers[i].experience,
+      rarity: mergedLayers.layers[i].rarity,
+    });
+  }
 
-	return {
-		artifacts: md.toHexString(),
-		properties,
-		level,
-		experience,
-		rarity: (rarity * 1000000).toFixed(4),
-		images: mergedLayers.images,
-		layers: mergedLayers.layers
-	}
-}
+  return {
+    artifacts: md.toHexString(),
+    properties,
+    level,
+    experience,
+    rarity: (rarity * 1000000).toFixed(4),
+    images: mergedLayers.images,
+    layers: mergedLayers.layers,
+  };
+};
 
 export const getBackgroundId = (md) => {
-	const mdStr = md.toHexString();
-	return mdStr.substr(-2);
-}
+  const mdStr = md.toHexString();
+  return mdStr.substr(-2);
+};
 
 // Following function is for testing only
 // const probability = () => {

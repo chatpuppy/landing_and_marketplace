@@ -1,4 +1,5 @@
-import React, {useState} from "react";
+/* eslint-disable react/prop-types */
+import React, { useState } from 'react';
 
 import {
   Flex,
@@ -10,46 +11,45 @@ import {
   NumberInputField,
   NumberInputStepper,
   NumberIncrementStepper,
-  NumberDecrementStepper
-} from "@chakra-ui/react";
+  NumberDecrementStepper,
+} from '@chakra-ui/react';
 import {
   ArrowRightIcon,
   ArrowLeftIcon,
   ChevronRightIcon,
-  ChevronLeftIcon
-} from "@chakra-ui/icons";
+  ChevronLeftIcon,
+} from '@chakra-ui/icons';
 
 export const Pagination = (props) => {
-	const [pageIndex, setPageIndex] = useState(0);
-	const [pageSize, setPageSize] = useState(12);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(12);
 
-	const pageCount = props.pageCount;
-	const canPreviousPage = props.canPreviousPage;
-	const canNextPage = props.canNextPage;
+  const pageCount = props.pageCount;
+  const canPreviousPage = props.canPreviousPage;
+  const canNextPage = props.canNextPage;
 
-	const gotoPage = (page) => {
-		if(page >= 0 && page < pageCount) {
-			setPageIndex(page);
-			props.changePageTo(page);	
-		}
-	}
+  const gotoPage = (page) => {
+    if (page >= 0 && page < pageCount) {
+      setPageIndex(page);
+      props.changePageTo(page);
+    }
+  };
 
-	const nextPage = () => {
-		if(pageIndex < pageCount - 1) {
-			setPageIndex(pageIndex + 1);
-			props.changePageTo(pageIndex + 1);
-		}
-	}
+  const nextPage = () => {
+    if (pageIndex < pageCount - 1) {
+      setPageIndex(pageIndex + 1);
+      props.changePageTo(pageIndex + 1);
+    }
+  };
 
-	const previousPage = () => {
-		if(pageIndex > 0) {
-			setPageIndex(pageIndex - 1);
-			props.changePageTo(pageIndex - 1);
-		}
-	}
+  const previousPage = () => {
+    if (pageIndex > 0) {
+      setPageIndex(pageIndex - 1);
+      props.changePageTo(pageIndex - 1);
+    }
+  };
 
-
-	return(
+  return (
     <>
       <Flex justifyContent="space-between" m={4} alignItems="center">
         <Flex>
@@ -71,24 +71,24 @@ export const Pagination = (props) => {
         </Flex>
 
         <Flex alignItems="center">
-					<Text flexShrink="0" mr={8}>
-            Total{" "}
+          <Text flexShrink="0" mr={8}>
+            Total{' '}
             <Text fontWeight="bold" as="span">
               {props.totalRecords}
-            </Text>{" "}
-						NFTs
+            </Text>{' '}
+            NFTs
           </Text>
           <Text flexShrink="0" mr={8}>
-            Page{" "}
+            Page{' '}
             <Text fontWeight="bold" as="span">
               {pageIndex + 1}
-            </Text>{" "}
-            of{" "}
+            </Text>{' '}
+            of{' '}
             <Text fontWeight="bold" as="span">
               {pageCount}
             </Text>
           </Text>
-          <Text flexShrink="0">Go to page:</Text>{" "}
+          <Text flexShrink="0">Go to page:</Text>{' '}
           <NumberInput
             ml={2}
             mr={8}
@@ -99,8 +99,7 @@ export const Pagination = (props) => {
               const page = value ? value - 1 : 0;
               gotoPage(page);
             }}
-            defaultValue={pageIndex + 1}
-          >
+            defaultValue={pageIndex + 1}>
             <NumberInputField />
             <NumberInputStepper>
               <NumberIncrementStepper />
@@ -111,11 +110,10 @@ export const Pagination = (props) => {
             w={32}
             value={pageSize}
             onChange={(e) => {
-							setPageIndex(0);
-							props.changePageSize(Number(e.target.value));
+              setPageIndex(0);
+              props.changePageSize(Number(e.target.value));
               setPageSize(Number(e.target.value));
-            }}
-          >
+            }}>
             {[8, 12, 16, 24, 32, 40].map((pageSize) => (
               <option key={pageSize} value={pageSize}>
                 Show {pageSize}
@@ -143,5 +141,5 @@ export const Pagination = (props) => {
         </Flex>
       </Flex>
     </>
-	)
-}
+  );
+};

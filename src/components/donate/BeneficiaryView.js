@@ -1,187 +1,200 @@
-import { Stack, Heading, SimpleGrid, Text, Button, Box , useBreakpointValue,  useToast} from '@chakra-ui/react'
+import React from 'react';
+import {
+  Stack,
+  Heading,
+  SimpleGrid,
+  Text,
+  Button,
+  Box,
+  useBreakpointValue,
+  useToast,
+} from '@chakra-ui/react';
 import { Card } from '../common/Card';
-import { useAuth } from "contexts/AuthContext";
-import { useDonate } from "contexts/DonateContext";
-import { getNameSaleById } from "utils/getNameSaleById";
-import PriceRangeComponent  from "./PriceRangeComponent";
-import {getNetworkConfig} from '../../constants';
+import { useAuth } from 'contexts/AuthContext';
+import { useDonate } from 'contexts/DonateContext';
+import { getNameSaleById } from 'utils/getNameSaleById';
+import PriceRangeComponent from './PriceRangeComponent';
+// import {getNetworkConfig} from '../../constants';
 
-import { ethers } from "ethers";
+import { ethers } from 'ethers';
 
 export const BeneficiaryView = () => {
-    const {participantID, totalAmount, beneficiaryCount, priceRange} = useDonate()
-    // const [ isLoading, setIsLoading ] = useState(false);
-    const { currentAccount, currentNetwork, tokenVestingContract } = useAuth()
-    const toast = useToast()
+  const { participantID, totalAmount, beneficiaryCount, priceRange } =
+    useDonate();
+  // const [ isLoading, setIsLoading ] = useState(false);
+  const { currentAccount, currentNetwork, tokenVestingContract } = useAuth();
+  const toast = useToast();
 
-    let uint8 = new Uint8Array(2);
-    uint8[0] = participantID;
-    let participant = uint8[0];
+  const uint8 = new Uint8Array(2);
+  uint8[0] = participantID;
+  const participant = uint8[0];
 
-		
-    const actionRedeem = async() => {
-			if (!currentAccount || !currentNetwork) return;
-			const networkConfig = getNetworkConfig(currentNetwork);
-			console.log('network config 1: ' + networkConfig);
+  const actionRedeem = async () => {
+    if (!currentAccount || !currentNetwork) return;
+    // const networkConfig = getNetworkConfig(currentNetwork);
+    // console.log('network config 1: ' + networkConfig);
 
-			// setIsLoading(true);
-      try {
-        await tokenVestingContract.redeem(participant)
-        toast({
-          title: 'Redeem',
-          description: `Redeem now`,
-          status: 'sucess',
-          duration: 4000,
-          isClosable: true,
-      })
-      setTimeout(()=>{
-          window.location.reload();
-      }, 5000)
-      } catch(err) {
-        console.log(err)
-        // setIsLoading(false);
-      }
+    // setIsLoading(true);
+    try {
+      await tokenVestingContract.redeem(participant);
+      toast({
+        title: 'Redeem',
+        description: `Redeem now`,
+        status: 'sucess',
+        duration: 4000,
+        isClosable: true,
+      });
+      setTimeout(() => {
+        window.location.reload();
+      }, 5000);
+    } catch (err) {
+      // console.log(err);
+      // setIsLoading(false);
     }
+  };
 
-    const actionRelease = async() => {
+  const actionRelease = async () => {
+    if (!currentAccount || !currentNetwork) return;
+    // const networkConfig = getNetworkConfig(currentNetwork);
+    // console.log('network config 2: ' + networkConfig);
 
-      if (!currentAccount || !currentNetwork) return;
-			const networkConfig = getNetworkConfig(currentNetwork);
-			console.log('network config 2: ' + networkConfig);
-
-      // setIsLoading(true);
-      try {
-        await tokenVestingContract.release(participant)
-        toast({
-          title: 'Claim',
-          description: `Claim now`,
-          status: 'sucess',
-          duration: 4000,
-          isClosable: true,
-      })
-      setTimeout(()=>{
-          window.location.reload();
-      }, 5000)
-      } catch(err) {
-        console.log(err)
-        // setIsLoading(false);
-      }
+    // setIsLoading(true);
+    try {
+      await tokenVestingContract.release(participant);
+      toast({
+        title: 'Claim',
+        description: `Claim now`,
+        status: 'sucess',
+        duration: 4000,
+        isClosable: true,
+      });
+      setTimeout(() => {
+        window.location.reload();
+      }, 5000);
+    } catch (err) {
+      // console.log(err);
+      // setIsLoading(false);
     }
+  };
 
-    const DonatedButtons = () => (
-      <Box
-      justifyContent={"center"}
-      textAlign={"center"}
-      as={"form"}
+  const DonatedButtons = () => (
+    <Box
+      justifyContent={'center'}
+      textAlign={'center'}
+      as={'form'}
       mt={10}
       mr={10}
-      borderRight={20}
-    >
+      borderRight={20}>
       <Button
-        fontFamily={"heading"}
+        fontFamily={'heading'}
         mt={8}
-        w={"full"}
+        w={'full'}
         bgGradient="linear(to-r, red.400,pink.400)"
-        color={"white"}
+        color={'white'}
         // _hover={{
         //   bgGradient: "linear(to-r, red.400,pink.400)",
         //   boxShadow: "xl",
         // }}
-        onClick={actionRelease}
-      >
+        onClick={actionRelease}>
         Claim
       </Button>
       <Button
-        fontFamily={"heading"}
+        fontFamily={'heading'}
         mt={8}
-        w={"full"}
+        w={'full'}
         bgGradient="linear(to-r, red.400,pink.400)"
-        color={"white"}
+        color={'white'}
         // _hover={{
         //   bgGradient: "linear(to-r, red.400,pink.400)",
         //   boxShadow: "xl",
         // }}
-        onClick={actionRedeem}
-      >
+        onClick={actionRedeem}>
         Redeem
       </Button>
     </Box>
-    )
-
-    return (
-        <Stack
-          spacing={{
-            base: "8",
-            lg: "6",
-          }}
-        >
-          <Stack
-            spacing="4"
-            direction={{
-              base: "column",
-              lg: "row",
-            }}
-            justify="space-between"
-          >
-            <Stack spacing="1">
-              <Heading
-                size={useBreakpointValue({
-                  base: "xs",
-                  lg: "sm",
-                })}
-                fontWeight="medium"
-              ></Heading>
-            </Stack>
-          </Stack>
-          <Stack>
-            <Heading>Beneficiary on {participantID ? getNameSaleById(participantID) : ""}</Heading>
-          </Stack>
-          <Stack
-            spacing={{
-              base: "5",
-              lg: "6",
-            }}
-          >
-            <SimpleGrid
-              columns={{
-                base: 1,
-                md: 3,
-              }}
-              gap="6"
-            >
-              <Card>
-                <Text alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Total: {ethers.utils.formatEther(totalAmount)}</Text>
-              </Card>
-      
-              <Card>
-                <Text alignItems={'center'} justifyContent={'center'} m={5} fontSize='2xl'>Beneficiary: {ethers.utils.formatEther(beneficiaryCount)}</Text>
-              </Card>
-              <Card>
-                { priceRange && (participantID === 1 || participantID === 2)? <PriceRangeComponent /> : '' }
-              </Card>
-            </SimpleGrid>
-          </Stack>
-          <Stack>
-            <SimpleGrid
-              columns={{
-                base: 1,
-                md: 3,
-              }}
-              gap="6"
-            ></SimpleGrid>
-          </Stack>
-          <Card minH="xs">
-            <SimpleGrid columns={2} spacing={10}>
-              <Card>
-                {/* <TableDonated /> */}
-              </Card>
-              <Card>
-                 <DonatedButtons />
-              </Card>
-            </SimpleGrid>
-          </Card>
+  );
+  return (
+    <Stack
+      spacing={{
+        base: '8',
+        lg: '6',
+      }}>
+      <Stack
+        spacing="4"
+        direction={{
+          base: 'column',
+          lg: 'row',
+        }}
+        justify="space-between">
+        <Stack spacing="1">
+          <Heading
+            size={useBreakpointValue({
+              base: 'xs',
+              lg: 'sm',
+            })}
+            fontWeight="medium"></Heading>
         </Stack>
-          
-      )
-}
+      </Stack>
+      <Stack>
+        <Heading>
+          Beneficiary on {participantID ? getNameSaleById(participantID) : ''}
+        </Heading>
+      </Stack>
+      <Stack
+        spacing={{
+          base: '5',
+          lg: '6',
+        }}>
+        <SimpleGrid
+          columns={{
+            base: 1,
+            md: 3,
+          }}
+          gap="6">
+          <Card>
+            <Text
+              alignItems={'center'}
+              justifyContent={'center'}
+              m={5}
+              fontSize="2xl">
+              Total: {ethers.utils.formatEther(totalAmount)}
+            </Text>
+          </Card>
 
+          <Card>
+            <Text
+              alignItems={'center'}
+              justifyContent={'center'}
+              m={5}
+              fontSize="2xl">
+              Beneficiary: {ethers.utils.formatEther(beneficiaryCount)}
+            </Text>
+          </Card>
+          <Card>
+            {priceRange && (participantID === 1 || participantID === 2) ? (
+              <PriceRangeComponent />
+            ) : (
+              ''
+            )}
+          </Card>
+        </SimpleGrid>
+      </Stack>
+      <Stack>
+        <SimpleGrid
+          columns={{
+            base: 1,
+            md: 3,
+          }}
+          gap="6"></SimpleGrid>
+      </Stack>
+      <Card minH="xs">
+        <SimpleGrid columns={2} spacing={10}>
+          <Card>{/* <TableDonated /> */}</Card>
+          <Card>
+            <DonatedButtons />
+          </Card>
+        </SimpleGrid>
+      </Card>
+    </Stack>
+  );
+};
