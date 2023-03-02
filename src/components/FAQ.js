@@ -79,7 +79,7 @@ export default function FAQ() {
     {
       title: 'How does Chatpuppy handle spam or inappropriate content?',
       paragraph:
-        'As an end-to-end encrypted chat app, Chatpuppy cannot access or monitor the contents of user conversations. To address spam or inappropriate content, Chatpuppy uses NFT-based group creation and moderation. Users can create groups with NFTs, which are unique digital assets that act as a proof of ownership and can only be owned by one user at a time. By limiting group creation to users who own specific NFTs, Chatpuppy can help ensure that only legitimate users are creating groups. Additionally, NFTs can be used to create moderation tools that allow group owners to manage their groups and remove users who engage in spam or inappropriate behavior.',
+        'As an end-to-end encryption chat app, Chatpuppy cannot access or monitor the contents of user conversations. To address spam or inappropriate content, Chatpuppy uses NFT-based group creation and moderation. Users can create groups with NFTs, which are unique digital assets that act as a proof of ownership and can only be owned by one user at a time. By limiting group creation to users who own specific NFTs, Chatpuppy can help ensure that only legitimate users are creating groups. Additionally, NFTs can be used to create moderation tools that allow group owners to manage their groups and remove users who engage in spam or inappropriate behavior.',
     },
   ];
 
