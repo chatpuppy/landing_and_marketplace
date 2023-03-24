@@ -40,13 +40,13 @@ export const CardParticipantType = () => {
       />
       <Feature
         title="Private sale"
-        desc="Private sale for ChatPuppy"
+        desc="Private sale for Chatpuppy"
         onClick={() => setParticipantID(1)}
         status={true}
       />
       <Feature
         title="Public sale"
-        desc="Public sale for ChatPuppy"
+        desc="Public sale for Chatpuppy"
         onClick={() => setParticipantID(2)}
         status={false}
       />

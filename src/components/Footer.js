@@ -61,7 +61,7 @@ export default function Footer() {
           <HStack>
             <Image src={Logo} h="60px" />
             <chakra.h1 fontSize="xl" fontWeight="medium" ml="2">
-              ChatPuppy
+              Chatpuppy
             </chakra.h1>
           </HStack>
         </RouterLink>

@@ -126,7 +126,7 @@ export default function MintGrid(props) {
               color={'gray.800'}
               lineHeight={1.1}
               fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}>
-              Mint ChatPuppy NFT
+              Mint Chatpuppy NFT
               {/* <Text
                     as={'span'}
                     bgGradient="linear(to-r, red.400,pink.400)"
@@ -139,7 +139,7 @@ export default function MintGrid(props) {
               fontSize={{ base: 'sm', sm: 'md' }}
               textAlign="left">
               {`Get a NFT for avatar, with which you can get premium access to
-              ChatPuppy Dapp's exclusive features!`}
+              Chatpuppy Dapp's exclusive features!`}
             </Text>
           </Stack>
           <Box as={'form'} mt={10}>

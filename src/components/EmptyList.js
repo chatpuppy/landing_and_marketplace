@@ -36,7 +36,7 @@ const EmptyList = () => {
           roundedTop="lg"
           fit="cover"
           src={BoxImageSrc}
-          alt="ChatPuppy NFT"
+          alt="Chatpuppy NFT"
         />
         <Box px={4} py={2}>
           <chakra.h1

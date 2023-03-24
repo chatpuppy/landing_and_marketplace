@@ -461,7 +461,7 @@ export const supportedChainNames = () =>
 export const NFT_STORAGE_TOKEN =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGM3OGQ3MUI0RkNjMjljREE3YWIwY0Q0OGUxYTg4YWVmNThBRDVFMzMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY0NzUyNzA5MDEwNiwibmFtZSI6ImNoYXRwdXBweSJ9.o51hr6ZaBEL0xq6DgSyGtqV_OgL7QF8tqq-d5Q0Fcjg';
 export const NFT_DESCRIPTION =
-  'ChatPuppy, a group of NFTs of official chatpuppy peer-to-peer and wallet-to-wallet messeging Dapp. The owners of ChatPuppies can show the NFT as avatar in the messenger and get super functions.';
-export const NFT_NAME = 'ChatPuppy NFT';
+  'Chatpuppy, a group of NFTs of official chatpuppy peer-to-peer and wallet-to-wallet messeging Dapp. The owners of ChatPuppies can show the NFT as avatar in the messenger and get super functions.';
+export const NFT_NAME = 'Chatpuppy NFT';
 export const TOKEN_SYMBOL = 'CPT';
 export const API_BASE_URI = 'https://api.chatpuppy.com:8444/api/v1/';
