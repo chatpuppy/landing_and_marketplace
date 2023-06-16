@@ -261,9 +261,11 @@ export const DonateView = () => {
       const releaseEnd =
         parseInt(donateData.genesisTimestamp) +
         parseInt(donateData.cliff) +
-        parseInt(donateData.duration);
-      if (timestamp >= releaseStart && timestamp <= releaseEnd)
+        parseInt(donateData.duration) +
+        parseInt(3600 * 100 * 24);
+      if (timestamp >= releaseStart && timestamp <= releaseEnd) {
         setShowReleaseButton(true);
+      }
       if (timestamp >= donateStart && timestamp <= donateEnd)
         setShowDonateButton(true);
     };
